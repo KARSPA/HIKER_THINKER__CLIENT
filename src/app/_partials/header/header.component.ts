@@ -3,7 +3,6 @@ import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
-  standalone: true,
   imports: [RouterLink],
   templateUrl: './header.component.html'
 })
@@ -11,6 +10,7 @@ export class HeaderComponent implements OnInit{
 
   // private authService : AuthService = inject(AuthService);
 
+  appLogoUrl : string = 'assets/logoApp.png';
   isLogged : boolean = false;
   // userInfos : UserInfos|null = null;
 

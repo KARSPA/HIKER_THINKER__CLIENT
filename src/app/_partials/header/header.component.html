@@ -1,10 +1,11 @@
 
 
 <header class="text-gray-400 bg-[#3A4D39] body-font">
-  <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-    <a class="flex title-font font-medium items-center text-white mb-4 md:mb-0">
+  <div class="container mx-auto flex flex-wrap flex-col md:flex-row items-center">
+    <a class="flex title-font font-medium items-center text-white mb-4 md:mb-0 cursor-pointer hover:opacity-90">
         <!-- LOGO -->
-      <span routerLink="/home" class="ml-3 text-xl cursor-pointer hover:opacity-90">HikerThinker</span>
+         <img [src]="appLogoUrl" alt="Logo HikerThinker" class="h-20 w-20">
+      <span routerLink="/home" class="text-xl ">HikerThinker</span>
     </a>
     <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
       <!-- <p class="mr-4">{{userInfos?.username}}</p> -->
