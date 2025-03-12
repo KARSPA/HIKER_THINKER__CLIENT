@@ -1,0 +1,94 @@
+
+
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col items-center bg-[#4F6F52] py-10 px-4 w-[700px] mx-auto rounded-lg shadow-xl">
+
+    <h2 class="form-title mb-3 text-white text-xl"> Inscrivez-vous</h2>
+
+    <div class="form-errors text-amber-300 h-[20px] mb-8 flex flex-col items-center">
+
+        <p class="text-red-600">{{registerHttpError}}</p>
+
+        @if ((registerForm.touched && registerForm.invalid) || hasBeenSubmitted) {
+            <p class="text-lg ">Vérifiez vos champs.</p>
+        }
+    
+    </div>
+
+    <div class="h-fit flex flex-col items-center min-w-[50%]">
+        <input type="text" formControlName="lastName" required placeholder="Nom" class="bg-[#F1F1F1] border border-slate-500 rounded-md px-1 py-2 w-full">
+
+        <div class="input-errors text-amber-300 h-8">
+            @if ((lastName?.touched || hasBeenSubmitted) && lastName?.hasError('required')) {
+                <p class="text-sm">{{getErrorMessage('required')}}</p>
+            }
+            @if ((lastName?.touched || (registerForm.touched && registerForm.invalid)) && lastName?.hasError('minlength')) {
+                <p class="text-sm">{{getErrorMessage('minlength',1)}}</p>
+            }
+        </div>
+
+    </div>
+
+    <div class="h-fit flex flex-col items-center min-w-[50%]">
+        <input type="text" formControlName="firstName" required placeholder="Prénom" class="bg-[#F1F1F1] border border-slate-500 rounded-md px-1 py-2 w-full">
+
+        <div class="input-errors text-amber-300 h-8">
+            @if ((firstName?.touched || hasBeenSubmitted) && firstName?.hasError('required')) {
+                <p class="text-sm">{{getErrorMessage('required')}}</p>
+            }
+            @if ((firstName?.touched || (registerForm.touched && registerForm.invalid)) && firstName?.hasError('minlength')) {
+                <p class="text-sm">{{getErrorMessage('minlength',1)}}</p>
+            }
+        </div>
+
+    </div>
+
+    
+
+    <div class="h-fit flex flex-col items-center min-w-[50%]">
+
+        <input type="email" formControlName="email" required placeholder="Email" class="bg-[#F1F1F1] border border-slate-500 rounded-md px-1 py-2 w-full">
+
+        <div class="input-errors text-amber-300 h-10">
+            @if ((email?.touched || hasBeenSubmitted) && email?.hasError('required')) {
+                <p class="text-sm">{{getErrorMessage('required')}}</p>
+            }
+            @if ((email?.touched || (registerForm.touched && registerForm.invalid)) && email?.hasError('email')) {
+                <p class="text-sm">{{getErrorMessage('email')}}</p>
+            }
+        </div>
+
+    </div>
+
+    <div class="h-fit flex flex-col items-center min-w-[50%] ">
+
+        <div class="passwords-errors text-amber-300 h-8 mb-2">
+            @if (registerForm.hasError('arePwdEqual') && ((password?.touched && confirmPassword?.touched) || hasBeenSubmitted)) {
+                <p>{{getErrorMessage('notSamePassword')}}</p>
+            }
+        </div>
+        
+        <input type="password" formControlName="password" required placeholder="Mot de passe" class="bg-[#F1F1F1] border border-slate-500 rounded-md px-1 py-2 w-full">
+
+        <div class="input-errors text-amber-300 h-8">
+            @if ((password?.touched || hasBeenSubmitted) && password?.hasError('required')) {
+                <p class="text-sm">{{getErrorMessage('required')}}</p>
+            }
+        </div>
+
+    </div>
+
+    <div class="h-fit flex flex-col items-center min-w-[50%]">
+
+        <input type="password" formControlName="confirmPassword" required placeholder="Confirmer le mot de passe" class="bg-[#F1F1F1] border border-slate-500 rounded-md px-1 py-2 w-full">
+
+        <div class="input-errors text-amber-300 h-8">
+            @if ((confirmPassword?.touched || hasBeenSubmitted) && confirmPassword?.hasError('required')) {
+                <p class="text-sm">{{getErrorMessage('required')}}</p>
+            }
+        </div>
+
+    </div>
+
+
+    <button type="submit" class="text-white mt-5 cursor-pointer hover:opacity-80 rounded-md bg-amber-500 px-2 py-3 shadow-md">Créer un compte</button>
+</form>
