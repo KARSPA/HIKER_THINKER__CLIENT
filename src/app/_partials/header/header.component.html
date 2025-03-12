@@ -9,20 +9,20 @@
     </a>
     <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
       <!-- <p class="mr-4">{{userInfos?.username}}</p> -->
-      <p class="mr-4">NOM UTILISATEUR</p>
+      <p class="mr-4">{{authService.currentUserSignal()?.firstName}} {{authService.currentUserSignal()?.lastName}}</p>
 
-      @if (!isLogged) {
-        <a routerLink="/home" class="mr-5 hover:text-white cursor-pointer">Home</a>
-        <a routerLink="/contact" class="mr-5 hover:text-white cursor-pointer">Contact</a>
-        <a routerLink="/login" class="mr-5 hover:text-white cursor-pointer">Se connecter</a>
-        <a routerLink="/register" class="mr-5 hover:text-white cursor-pointer">S'inscrire</a>
-      }
-      @else {
+      @if (isLogged()) {
         <a routerLink="/home" class="mr-5 hover:text-white cursor-pointer">Home</a>
         <a routerLink="/hikes" class="mr-5 hover:text-white cursor-pointer">Randonnées</a>
         <a routerLink="/models" class="mr-5 hover:text-white cursor-pointer">Modèles</a>
         <a routerLink="/contact" class="mr-5 hover:text-white cursor-pointer">Contact</a>
         <a routerLink="/logout" class="mr-5 hover:text-white cursor-pointer">Se déconnecter</a>
+      }
+      @else {
+        <a routerLink="/home" class="mr-5 hover:text-white cursor-pointer">Home</a>
+        <a routerLink="/contact" class="mr-5 hover:text-white cursor-pointer">Contact</a>
+        <a routerLink="/login" class="mr-5 hover:text-white cursor-pointer">Se connecter</a>
+        <a routerLink="/register" class="mr-5 hover:text-white cursor-pointer">S'inscrire</a>
       }
 
     </nav>

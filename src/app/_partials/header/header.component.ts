@@ -1,30 +1,24 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, computed, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
   imports: [RouterLink],
   templateUrl: './header.component.html'
 })
-export class HeaderComponent implements OnInit{
+export class HeaderComponent{
 
-  // private authService : AuthService = inject(AuthService);
+  protected authService : AuthService = inject(AuthService);
 
   appLogoUrl : string = 'assets/logoApp.png';
-  isLogged : boolean = false;
-  // userInfos : UserInfos|null = null;
+  isLogged = computed(() => {
+    const currentUser = this.authService.currentUserSignal();
+    return !(currentUser === null || currentUser === undefined);
+  });
 
-  //On s'abonne aux attributs observables de AuthService pour savoir si on est connecté ou non.
-  ngOnInit(): void {
-    
-    // this.authService.isLogged.subscribe(isLogged => {
-    //   this.isLogged = isLogged;
-    // })
-
-    // this.authService.userInfos.subscribe(userInfos => {
-    //   this.userInfos = userInfos;
-    // })
-    
+  testSignal(){
+    console.log(this.authService.currentUserSignal())
   }
 
 }

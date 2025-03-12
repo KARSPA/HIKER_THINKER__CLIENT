@@ -12,6 +12,8 @@ import { LoginInfos } from '../interfaces/LoginInfos';
 })
 export class AuthService {
 
+  private VERIFY_LOGIN : string = 'http://localhost:8000/api/v1/users/verify';
+
   private LOGIN_URL : string = 'http://localhost:8000/api/v1/auth/login';
   private REGISTER_URL : string = 'http://localhost:8000/api/v1/auth/register';
 
@@ -20,8 +22,21 @@ export class AuthService {
   //undefined si on sait pas encore, null si non, UserInterface si oui.
   currentUserSignal = signal<UserInterface | null | undefined>(undefined);
 
+
+
+  logout(){
+    localStorage.removeItem('HT_Token');
+    this.currentUserSignal.set(null);
+
+    console.log(this.currentUserSignal())
+  }
+
   login(credentials : LoginInfos) : Observable<ResponseModel<UserInterface>>{
     return this.httpClient.post<ResponseModel<UserInterface>>(this.LOGIN_URL, credentials);
+  }
+
+  verifyConnected() : Observable<ResponseModel<UserInterface>>{
+    return this.httpClient.get<ResponseModel<UserInterface>>(this.VERIFY_LOGIN);
   }
 
   register(registerInfos : RegisterInfos) : Observable<ResponseModel<RegisterResponse>>{
