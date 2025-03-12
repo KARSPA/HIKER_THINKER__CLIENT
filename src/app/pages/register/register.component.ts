@@ -7,6 +7,7 @@ import { samePasswordValidator } from '../../_helpers/validators/same-password';
 import { HttpClient } from '@angular/common/http';
 import { RegisterResponse } from '../../interfaces/RegisterResponse';
 import { ResponseModel } from '../../interfaces/ResponseModel';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -16,7 +17,8 @@ import { ResponseModel } from '../../interfaces/ResponseModel';
 export class RegisterComponent {
 
   private router : Router = inject(Router);
-  private http : HttpClient = inject(HttpClient);
+
+  private authService : AuthService = inject(AuthService);
 
   registerHttpError : string = '';
 
@@ -64,20 +66,14 @@ export class RegisterComponent {
      // Check si les mots de passes sont égaux.
       if(registerInfos.password === registerInfos.confirmPassword) {
         
-        this.http.post<ResponseModel<RegisterResponse>>("http://localhost:8000/api/v1/auth/register",{
-          email : registerInfos.email,
-          password : registerInfos.password,
-          firstName : registerInfos.firstName,
-          lastName : registerInfos.lastName,
-        })
-        .subscribe({
-          next: value => {
+        this.authService.register(registerInfos).subscribe({
+          next: (value) => {
             console.log(value);
             this.router.navigate(['login']);
           },
           error : error => {
             console.log(error);
-            this.registerHttpError = "Erreur lors de l'enregistrement. " + error.error.message;
+            this.registerHttpError = "Erreur lors de l'enregistrement. Pseudo ou email non disponible."
           }
         })
       }
