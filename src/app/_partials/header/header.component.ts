@@ -10,15 +10,8 @@ import { AuthService } from '../../services/auth.service';
 export class HeaderComponent{
 
   protected authService : AuthService = inject(AuthService);
+  isLogged = this.authService.isLogged;
 
   appLogoUrl : string = 'assets/logoApp.png';
-  isLogged = computed(() => {
-    const currentUser = this.authService.currentUserSignal();
-    return !(currentUser === null || currentUser === undefined);
-  });
-
-  testSignal(){
-    console.log(this.authService.currentUserSignal())
-  }
 
 }

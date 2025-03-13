@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 // import { AuthService } from '../../services/auth.service';
-import { RegisterInfos } from '../../interfaces/RegisterInfos';
+import { RegisterInfos } from '../../interfaces/auth/RegisterInfos';
 import { Router } from '@angular/router';
 import { samePasswordValidator } from '../../_helpers/validators/same-password';
 import { HttpClient } from '@angular/common/http';
-import { RegisterResponse } from '../../interfaces/RegisterResponse';
+import { RegisterResponse } from '../../interfaces/auth/RegisterResponse';
 import { ResponseModel } from '../../interfaces/ResponseModel';
 import { AuthService } from '../../services/auth.service';
 

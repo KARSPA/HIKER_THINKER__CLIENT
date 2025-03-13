@@ -15,11 +15,15 @@ export class AppComponent implements OnInit{
 
 
   ngOnInit(): void {
-    this.authService.verifyConnected().subscribe(response => {
-      this.authService.handleLoginSuccess(response.data);
-
-      //Si erreur, déconnecté l'utilisateur.
-      console.log(response);
+    this.authService.verifyConnected().subscribe({
+      next: (response) => {
+        this.authService.handleLoginSuccess(response.data);
+      },
+      error: (error) => {
+        //Si erreur, déconnecté l'utilisateur.
+        console.log(error);
+        this.authService.logout();
+      }
     });
   }
 }

@@ -1,11 +1,11 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { UserInterface } from '../interfaces/UserInterface';
-import { RegisterInfos } from '../interfaces/RegisterInfos';
-import { RegisterResponse } from '../interfaces/RegisterResponse';
+import { UserInterface } from '../interfaces/auth/UserInterface';
+import { RegisterInfos } from '../interfaces/auth/RegisterInfos';
+import { RegisterResponse } from '../interfaces/auth/RegisterResponse';
 import { ResponseModel } from '../interfaces/ResponseModel';
-import { LoginInfos } from '../interfaces/LoginInfos';
+import { LoginInfos } from '../interfaces/auth/LoginInfos';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,11 @@ export class AuthService {
 
   //undefined si on sait pas encore, null si non, UserInterface si oui.
   currentUserSignal = signal<UserInterface | null | undefined>(undefined);
-
+  
+  isLogged = computed(() => {
+    const currentUser = this.currentUserSignal();
+    return !(currentUser === null || currentUser === undefined);
+  });
 
 
   logout(){
