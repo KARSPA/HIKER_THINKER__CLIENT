@@ -16,21 +16,29 @@
       <p class="mb-8 leading-relaxed">
         Détaillez votre matériel de randonnée, obtenez des statistiques, astuces et recommandations sur votre équipement, ou générez une check-liste pour ne plus jamais rien oublier.
       </p>
-      <div class="flex justify-center">
+      <div class="w-full flex flex-col gap-5 justify-center">
 
         @if (isLogged()) {
+          <a routerLink="/inventory" class="inline-flex text-black bg-amber-500 border-0 py-2 px-6 focus:outline-none hover:opacity-80 rounded text-lg cursor-pointer shadow-md">
+            Mon inventaire
+          </a>
+
           <a routerLink="/hikes" class="inline-flex text-black bg-amber-500 border-0 py-2 px-6 focus:outline-none hover:opacity-80 rounded text-lg cursor-pointer shadow-md">
             Mes randonnées
           </a>
-          <a routerLink="/models" class="ml-4 inline-flex text-black bg-amber-500 border-0 py-2 px-6 focus:outline-none hover:opacity-80  rounded text-lg cursor-pointer shadow-md">
+          <a routerLink="/models" class="inline-flex text-black bg-amber-500 border-0 py-2 px-6 focus:outline-none hover:opacity-80 rounded text-lg cursor-pointer shadow-md">
             Mes modèles
           </a>
+          <a routerLink="/register" class="inline-flex text-black bg-amber-500 border-0 py-2 px-6 focus:outline-none hover:opacity-80 rounded text-lg cursor-pointer shadow-md">
+            S'inscrire
+          </a>
+          
         }
         @else {
           <a routerLink="/register" class="inline-flex text-black bg-amber-500 border-0 py-2 px-6 focus:outline-none hover:opacity-80 rounded text-lg cursor-pointer shadow-md">
             S'inscrire
           </a>
-          <a routerLink="/login" class="ml-4 inline-flex text-black bg-amber-500 border-0 py-2 px-6 focus:outline-none hover:opacity-80  rounded text-lg cursor-pointer shadow-md">
+          <a routerLink="/login" class="inline-flex text-black bg-amber-500 border-0 py-2 px-6 focus:outline-none hover:opacity-80 rounded text-lg cursor-pointer shadow-md">
             Se connecter
           </a>
         }
