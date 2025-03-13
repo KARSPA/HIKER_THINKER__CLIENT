@@ -1,15 +1,31 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { InventoryService } from '../../services/inventory.service';
+import { Inventory } from '../../interfaces/Inventory';
+import { EquipmentCardComponent } from '../../components/equipment-card/equipment-card.component';
+import { Category } from '../../interfaces/equipment/Category';
+import { Equipment } from '../../interfaces/equipment/Equipment';
 
 @Component({
   selector: 'app-inventory',
-  imports: [],
+  imports: [EquipmentCardComponent],
   templateUrl: './inventory.component.html',
 })
-export class InventoryComponent {
-
+export class InventoryComponent implements OnInit{
+  
   private inventoryService : InventoryService = inject(InventoryService)
 
-  // Récupérer l'inventaire de l'utilisateur connecté (avec son token)
+  inventory : Map<Category, Equipment[]> | null = null;
+
+  ngOnInit(): void {
+      this.inventoryService.getInventory().subscribe({
+        next :(response) => {
+          this.inventory = this.inventoryService.restructureInventory(response.data);
+          console.log(response)
+        },
+        error : (error)=> {
+          console.log(error)
+        }
+      })
+    }
 
 }

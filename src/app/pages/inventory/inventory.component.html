@@ -1,1 +1,22 @@
-<h1 class="text-xl text-center">Mes équipements</h1>
+<h1 class="text-xl text-center mb-10">Mes équipements</h1>
+
+
+<div class="">
+    @for (grouped of inventory; track $index) {
+
+        <div class="category-equipments-container bg-amber-200 mb-5">
+            <div class="category-container bg-stone-300">
+                {{grouped[0].name}}
+                {{grouped[0].icon}}
+            </div>
+
+            <div class="equipment-container flex gap-10">
+                @for(equipment of grouped[1]; track $index){
+                    <app-equipment-card [equipment]="equipment" />
+                }
+            </div>
+        </div>
+
+    }
+
+</div>

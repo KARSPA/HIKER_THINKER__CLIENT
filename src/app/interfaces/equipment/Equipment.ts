@@ -4,6 +4,7 @@ export interface Equipment{
     description : string;
     brand : string;
     weight : number;
-    sourceId : string;
+    
     categoryId : string;
+    sourceId : string;
 }
