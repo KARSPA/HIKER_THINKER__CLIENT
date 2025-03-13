@@ -6,6 +6,7 @@ import { routes } from './app.routes';
 import { authInterceptor } from './_helpers/interceptors/authInterceptor';
 import { AuthService } from './services/auth.service';
 import { firstValueFrom } from 'rxjs';
+import { errorInterceptor } from './_helpers/interceptors/errorInterceptor';
 
 
 
@@ -25,7 +26,7 @@ export const appConfig: ApplicationConfig = {
       deps: [AuthService],
       multi: true
     },
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes)]
 };

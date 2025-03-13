@@ -15,10 +15,12 @@ export class InventoryComponent implements OnInit{
   private inventoryService : InventoryService = inject(InventoryService)
 
   inventory : Map<Category, Equipment[]> | null = null;
+  rawInventory : Inventory | null = null;
 
   ngOnInit(): void {
       this.inventoryService.getInventory().subscribe({
         next :(response) => {
+          this.rawInventory = response.data;
           this.inventory = this.inventoryService.restructureInventory(response.data);
           console.log(response)
         },
@@ -26,6 +28,12 @@ export class InventoryComponent implements OnInit{
           console.log(error)
         }
       })
+    }
+
+
+
+    displayAddPopup(){
+
     }
 
 }
