@@ -2,7 +2,7 @@
 
 <div class="flex justify-end">
     <button class="mb-10 px-2 py-1 rounded-sm bg-amber-500 min-w-[100px] cursor-pointer hover:opacity-80"
-        (click)="displayAddPopup()">
+        (click)="testClic()">
         Ajouter un équipement
     </button>
 </div>
@@ -11,8 +11,8 @@
     @for (grouped of inventory; track $index) {
 
         <div class="category-equipments-container bg-amber-200 mb-5">
-            <div class="category-container bg-stone-300">
-                {{grouped[0].name}}
+            <div class="category-container px-4 py-2 rounded-sm bg-stone-300">
+                <p>{{grouped[0].name}}</p>
                 {{grouped[0].icon}}
             </div>
 
@@ -25,4 +25,20 @@
 
     }
 
+    <div class="category-container px-4 py-2 rounded-sm bg-stone-300 flex justify-between">
+        <div class="flex items-center gap-5">
+            <img src="assets/placeholder-image.jpg" alt="ICON CAT" class="h-8 aspect-square">
+            <p>Ajouter une catégorie</p>
+        </div>
+        <div class="">
+            <button 
+            (click)="openCategoryModal()"
+            class="h-8 aspect-square rounded-full bg-amber-500 font-semibold text-white cursor-pointer shadow-sm hover:opacity-80">
+                +
+            </button>
+        </div>
+    </div>
+
 </div>
+
+

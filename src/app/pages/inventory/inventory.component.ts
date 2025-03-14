@@ -1,9 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, TemplateRef } from '@angular/core';
 import { InventoryService } from '../../services/inventory.service';
 import { Inventory } from '../../interfaces/Inventory';
 import { EquipmentCardComponent } from '../../components/equipment-card/equipment-card.component';
 import { Category } from '../../interfaces/equipment/Category';
 import { Equipment } from '../../interfaces/equipment/Equipment';
+import { ModalService } from '../../services/modal.service';
+import { AddCategoryModalComponent } from '../../components/add-category-modal/add-category-modal.component';
 
 @Component({
   selector: 'app-inventory',
@@ -13,6 +15,7 @@ import { Equipment } from '../../interfaces/equipment/Equipment';
 export class InventoryComponent implements OnInit{
   
   private inventoryService : InventoryService = inject(InventoryService)
+  private modalService : ModalService = inject(ModalService);
 
   inventory : Map<Category, Equipment[]> | null = null;
   rawInventory : Inventory | null = null;
@@ -31,9 +34,16 @@ export class InventoryComponent implements OnInit{
     }
 
 
+    openCategoryModal(): void{
+      console.log("CLIC OK")
+      this.modalService.openModal({
+        component: AddCategoryModalComponent,
+        data: {title : 'Inventaire'}
+      })
+    }
 
-    displayAddPopup(){
-
+    testClic(){
+      console.log('TA GUEULE')
     }
 
 }
