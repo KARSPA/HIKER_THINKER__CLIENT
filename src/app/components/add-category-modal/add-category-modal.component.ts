@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CategoryService } from '../../services/category.service';
 
 @Component({
   selector: 'app-add-category-modal',
@@ -10,9 +11,12 @@ export class AddCategoryModalComponent {
 
   @Input() title : string | undefined;
 
+  private categoryService : CategoryService = inject(CategoryService);
+
+  categoryAddError : string = '';
 
   icons : string[] = [
-    'icon_empty',
+    'no_icon',
     'icon_backpack',
     'icon_bed',
     'icon_bier',
@@ -49,12 +53,33 @@ export class AddCategoryModalComponent {
 
   categoryForm: FormGroup = new FormGroup({
     name: new FormControl('',[Validators.required]),
-    icon: new FormControl('icon_empty',[Validators.required])
+    icon: new FormControl('no_icon',[Validators.required])
   })
 
 
   onSubmit(){
     console.log("SOUMIS !", this.categoryForm.value)
+
+    if(this.categoryForm.valid){ // Si tous les validateurs sont passés
+      this.categoryService.addInventoryCategory(this.categoryForm.value).subscribe({
+        next:(response)=>{
+          console.log(response)
+
+          // SI réponse valide, alors :
+
+            // Enlever la modale
+            // Transmettre ce retour de catégorie à la page/composant principal (inventory)
+            // Afficher cette nouvelle catégorie sur la page inventory
+        },
+        error: (err)=>{
+          console.log(err)
+
+          // SI erreur, l'affichée dans le formulaire
+          this.categoryAddError = err.error.message;
+        }
+      })
+    }
+
   }
 
 

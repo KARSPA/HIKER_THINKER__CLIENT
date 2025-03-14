@@ -11,9 +11,11 @@
     @for (grouped of inventory; track $index) {
 
         <div class="category-equipments-container bg-amber-200 mb-5">
-            <div class="category-container px-4 py-2 rounded-sm bg-stone-300">
+            <div class="category-container px-4 py-2 rounded-sm bg-stone-300 flex items-center gap-5">
+                @if(grouped[0].icon !== 'no_icon'){
+                    <img src="assets/category_icons/{{grouped[0].icon}}.svg" alt="ICON CAT" class="h-8 aspect-square">
+                }
                 <p>{{grouped[0].name}}</p>
-                {{grouped[0].icon}}
             </div>
 
             <div class="equipment-container flex gap-10">
