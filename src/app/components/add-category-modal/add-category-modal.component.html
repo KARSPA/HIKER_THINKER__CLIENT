@@ -31,7 +31,9 @@
     
             <div class="icons-container grid grid-cols-8 gap-3 p-4 border border-stone-700 rounded-md w-[90%] mt-2">
                 @for(icon of icons; track $index; let isFirst = $first){
-                    <button (click)="selectIcon(icon)"
+                    <button
+                    type="button"
+                    (click)="selectIcon(icon)"
                     [class.selectedIcon]="categoryForm.value.icon === icon"
                     class="{{isFirst ? '' : 'border'}} border-stone-300 p-1 rounded-md flex justify-center items-center h-10 aspect-square cursor-pointer"
                     >

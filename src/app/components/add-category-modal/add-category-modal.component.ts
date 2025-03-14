@@ -1,6 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CategoryService } from '../../services/category.service';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-add-category-modal',
@@ -12,6 +13,7 @@ export class AddCategoryModalComponent {
   @Input() title : string | undefined;
 
   private categoryService : CategoryService = inject(CategoryService);
+  private modalService : ModalService = inject(ModalService);
 
   categoryAddError : string = '';
 
@@ -58,8 +60,6 @@ export class AddCategoryModalComponent {
 
 
   onSubmit(){
-    console.log("SOUMIS !", this.categoryForm.value)
-
     if(this.categoryForm.valid){ // Si tous les validateurs sont passés
       this.categoryService.addInventoryCategory(this.categoryForm.value).subscribe({
         next:(response)=>{
@@ -67,9 +67,10 @@ export class AddCategoryModalComponent {
 
           // SI réponse valide, alors :
 
-            // Enlever la modale
-            // Transmettre ce retour de catégorie à la page/composant principal (inventory)
-            // Afficher cette nouvelle catégorie sur la page inventory
+          // Notifier l'inventoryService qu'une catégorie à été ajouté pour que le composant l'affiche.
+          
+          // Enlever la modale
+          this.modalService.closeModal();
         },
         error: (err)=>{
           console.log(err)

@@ -16,14 +16,25 @@ export class ModalContainerComponent implements OnInit, OnDestroy{
 
   isOpen = false;
 
-  private subscription!: Subscription;
+  private subscription: Subscription = new Subscription();
 
   private modalService : ModalService = inject(ModalService);
 
   ngOnInit(): void {
-      this.subscription = this.modalService.modal.subscribe((config: ModalConfig<any>) => {
+
+    //S'abonner pour ouvrir la modale
+    this.subscription.add(
+      this.modalService.modal.subscribe((config: ModalConfig<any>) => {
         this.open(config);
       })
+    )
+
+    //S'abonner également aux évènement de fermeture de cette modale
+    this.subscription.add(
+      this.modalService.modalClose.subscribe(()=>{
+        this.close();
+      })
+    )
   }
 
   open(config : ModalConfig<any>): void {
