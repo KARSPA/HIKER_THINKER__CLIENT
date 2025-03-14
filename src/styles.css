@@ -1,2 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
+
+.selectedIcon{
+    @apply outline-3 outline-green-700;
+}

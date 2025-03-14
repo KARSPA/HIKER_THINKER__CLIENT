@@ -1,25 +1,21 @@
-
-
-
-
 <!-- Modal container -->
 <div
   class="fixed inset-0 z-50 flex items-center justify-center"
   [hidden]="!isOpen"
-  (click)="close()"
 >
     <!-- Fond de la modale  -->
-    <div 
-    class="modal-overlay absolute w-full h-full bg-gray-900 opacity-80">
+    <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-80"
+    (click)="close()">
     </div>
+
   <!-- Contenu de la modale -->
-  <div
-    class="z-50 bg-white rounded-lg p-6 w-full max-w-lg"
-    (click)="$event.stopPropagation()"
-  >
-    <ng-container #modalContainer></ng-container>
-    <button (click)="close()" class="mt-4 px-4 py-2 bg-red-600 text-white rounded-md">
-      Fermer
+  <div class="relative z-50 bg-[#F1F1F1] rounded-lg p-6 w-full max-w-xl">
+
+    <button (click)="close()" class="absolute top-0 right-4 mt-4 px-4 py-2 bg-red-600 text-[#F1F1F1] rounded-md">
+        x
     </button>
+
+    <ng-container #modalContainer></ng-container>
+    
   </div>
 </div>
