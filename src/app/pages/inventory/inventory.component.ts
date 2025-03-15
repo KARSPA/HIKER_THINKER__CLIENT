@@ -6,6 +6,7 @@ import { Category } from '../../interfaces/equipment/Category';
 import { Equipment } from '../../interfaces/equipment/Equipment';
 import { ModalService } from '../../services/modal.service';
 import { InventoryCategoryModalComponent } from '../../components/inventory-category-modal/inventory-category-modal.component';
+import { InventoryEquipmentModalComponent } from '../../components/inventory-equipment-modal/inventory-equipment-modal.component';
 
 @Component({
   selector: 'app-inventory',
@@ -75,6 +76,14 @@ export class InventoryComponent implements OnInit{
     }
 
 
+    openEquipmentModal(equipment? : Equipment): void{
+      this.modalService.openModal({
+        component : InventoryEquipmentModalComponent,
+        data: {categories : this.rawInventory?.categories}
+      })
+    }
+
+
     loadInventory(){
       this.inventoryService.getInventory().subscribe({
         next :(response) => {
@@ -87,8 +96,6 @@ export class InventoryComponent implements OnInit{
         }
       })
     }
-
-
 
     placeholder(){
       console.log('oui.')
