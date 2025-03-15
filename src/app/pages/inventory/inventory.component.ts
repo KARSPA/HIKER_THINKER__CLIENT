@@ -21,6 +21,32 @@ export class InventoryComponent implements OnInit{
   rawInventory : Inventory | null = null;
 
   ngOnInit(): void {
+
+    // Charger l'inventaire depuis l'API
+    this.loadInventory();
+
+
+    // S'abonner aux évènements d'ajout de catégorie.
+    this.inventoryService.categoryAdded$.subscribe((category)=>{
+      this.inventory?.set(category, []);
+    })
+
+
+    // S'abonner aux évènements d'ajout d'équipement.
+      
+    }
+
+
+    openCategoryModal(): void{
+      console.log("CLIC OK")
+      this.modalService.openModal({
+        component: AddCategoryModalComponent,
+        data: {title : 'Inventaire'}
+      })
+    }
+
+
+    loadInventory(){
       this.inventoryService.getInventory().subscribe({
         next :(response) => {
           this.rawInventory = response.data;
@@ -34,16 +60,9 @@ export class InventoryComponent implements OnInit{
     }
 
 
-    openCategoryModal(): void{
-      console.log("CLIC OK")
-      this.modalService.openModal({
-        component: AddCategoryModalComponent,
-        data: {title : 'Inventaire'}
-      })
-    }
 
-    testClic(){
-      console.log('TA GUEULE')
+    placeholder(){
+      console.log('oui.')
     }
 
 }

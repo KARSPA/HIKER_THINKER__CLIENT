@@ -1,7 +1,7 @@
 import { inject, Injectable, OnInit, signal } from '@angular/core';
 import { Inventory } from '../interfaces/Inventory';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { ResponseModel } from '../interfaces/ResponseModel';
 import { Equipment } from '../interfaces/equipment/Equipment';
 import { Category } from '../interfaces/equipment/Category';
@@ -16,11 +16,21 @@ export class InventoryService{
   // inventorySignal = signal<Inventory>();
 
   private httpClient : HttpClient = inject(HttpClient);
+
+
+  private categoryAddedSubject = new Subject<Category>();
+  categoryAdded$ = this.categoryAddedSubject.asObservable();
   
 
 
   getInventory() : Observable<ResponseModel<Inventory>>{
     return this.httpClient.get<ResponseModel<Inventory>>(this.INVENTORY_URL);
+  }
+
+
+
+  notifyCategoryAdded(category : Category){
+    this.categoryAddedSubject.next(category);
   }
 
 

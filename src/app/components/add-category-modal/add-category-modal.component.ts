@@ -2,6 +2,7 @@ import { Component, inject, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CategoryService } from '../../services/category.service';
 import { ModalService } from '../../services/modal.service';
+import { InventoryService } from '../../services/inventory.service';
 
 @Component({
   selector: 'app-add-category-modal',
@@ -13,6 +14,7 @@ export class AddCategoryModalComponent {
   @Input() title : string | undefined;
 
   private categoryService : CategoryService = inject(CategoryService);
+  private inventoryService : InventoryService = inject(InventoryService);
   private modalService : ModalService = inject(ModalService);
 
   categoryAddError : string = '';
@@ -68,7 +70,8 @@ export class AddCategoryModalComponent {
           // SI réponse valide, alors :
 
           // Notifier l'inventoryService qu'une catégorie à été ajouté pour que le composant l'affiche.
-          
+          this.inventoryService.notifyCategoryAdded(response.data)
+
           // Enlever la modale
           this.modalService.closeModal();
         },
