@@ -1,4 +1,4 @@
-import { ComponentFactoryResolver, Injectable, TemplateRef } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs";
 import { ModalConfig } from "../interfaces/ModalConfig";
 

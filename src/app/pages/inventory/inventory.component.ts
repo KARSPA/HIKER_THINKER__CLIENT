@@ -5,7 +5,7 @@ import { EquipmentCardComponent } from '../../components/equipment-card/equipmen
 import { Category } from '../../interfaces/equipment/Category';
 import { Equipment } from '../../interfaces/equipment/Equipment';
 import { ModalService } from '../../services/modal.service';
-import { AddCategoryModalComponent } from '../../components/add-category-modal/add-category-modal.component';
+import { InventoryCategoryModalComponent } from '../../components/inventory-category-modal/inventory-category-modal.component';
 
 @Component({
   selector: 'app-inventory',
@@ -69,7 +69,7 @@ export class InventoryComponent implements OnInit{
 
 
       this.modalService.openModal({
-        component: AddCategoryModalComponent,
+        component: InventoryCategoryModalComponent,
         data: {requestType : requestType, category : category}
       })
     }

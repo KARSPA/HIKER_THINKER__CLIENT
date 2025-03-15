@@ -8,9 +8,9 @@ import { Category } from '../../interfaces/equipment/Category';
 @Component({
   selector: 'app-add-category-modal',
   imports: [ReactiveFormsModule],
-  templateUrl: './add-category-modal.component.html'
+  templateUrl: './inventory-category-modal.component.html'
 })
-export class AddCategoryModalComponent implements OnInit{
+export class InventoryCategoryModalComponent implements OnInit{
 
   @Input() requestType : string | undefined;
   @Input() category : Category | null = null;
