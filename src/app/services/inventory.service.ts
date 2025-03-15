@@ -38,6 +38,7 @@ export class InventoryService{
   restructureInventory(inventory : Inventory): Map<Category, Equipment[]>{
     const groupedEquipements = new Map<Category, Equipment[]>();
 
+    inventory.categories.sort((catA, catB)=>((catA.order ?? 0) - (catB.order ?? 0)))
 
     inventory.categories.forEach(category => {
       groupedEquipements.set(category, []);

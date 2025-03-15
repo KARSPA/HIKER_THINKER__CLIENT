@@ -21,7 +21,8 @@ export class CategoryService {
     console.log(category)
     return this.httpClient.post<ResponseModel<Category>>(this.INVENTORY_ADD_URL, {
       name : category.name,
-      icon : category.icon
+      icon : category.icon,
+      order : category.order
     });
 
   }
@@ -31,7 +32,8 @@ export class CategoryService {
 
     return this.httpClient.patch<ResponseModel<Category>>(this.INVENTORY_MODIFY_URL+`/${category.id}`, {
       name : category.name,
-      icon : category.icon
+      icon : category.icon,
+      order : category.order
     })
   }
 

@@ -88,6 +88,8 @@ export class AddCategoryModalComponent implements OnInit{
         this.category.name = this.categoryForm.get('name')?.value;
         this.category.icon = this.categoryForm.get('icon')?.value;
 
+        console.log('AVANT REQUETE : ', this.category)
+
         this.categoryService.modifyInventoryCategory(this.category).subscribe({
           next: (response)=>{
             //Si réponse valide : 
