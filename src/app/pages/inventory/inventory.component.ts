@@ -26,9 +26,20 @@ export class InventoryComponent implements OnInit{
     this.loadInventory();
 
 
-    // S'abonner aux évènements d'ajout de catégorie.
-    this.inventoryService.categoryAdded$.subscribe((category)=>{
-      this.inventory?.set(category, []);
+    // S'abonner aux évènements d'ajout/modification de catégorie.
+    this.inventoryService.categoryChange$.subscribe((category)=>{
+
+      console.log(category)
+      const previousCategory = Array.from(this.inventory?.keys() ?? []).find(cat => cat.id === category.id);
+
+      console.log('DANS INVENTAIRE :', previousCategory)
+      if(previousCategory){
+        const tempSave = this.inventory?.get(previousCategory);
+        this.inventory?.delete(previousCategory);
+        this.inventory?.set(category, tempSave ?? []);
+      }else{
+        this.inventory?.set(category, []);
+      }
     })
 
 
@@ -37,11 +48,15 @@ export class InventoryComponent implements OnInit{
     }
 
 
-    openCategoryModal(): void{
+    openCategoryModal(category? : Category): void{
       console.log("CLIC OK")
+
+      const requestType = category?.id ? 'Modification':'Ajout';
+
+
       this.modalService.openModal({
         component: AddCategoryModalComponent,
-        data: {title : 'Inventaire'}
+        data: {requestType : requestType, category : category}
       })
     }
 

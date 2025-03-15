@@ -10,6 +10,7 @@ import { ResponseModel } from '../interfaces/ResponseModel';
 export class CategoryService {
 
   private INVENTORY_ADD_URL = "http://localhost:8000/api/v1/inventory/categories";
+  private INVENTORY_MODIFY_URL = "http://localhost:8000/api/v1/inventory/categories";
 
 
   private httpClient : HttpClient = inject(HttpClient);
@@ -23,6 +24,15 @@ export class CategoryService {
       icon : category.icon
     });
 
+  }
+
+  modifyInventoryCategory(category : Category) : Observable<ResponseModel<Category>>{
+    console.log(category);
+
+    return this.httpClient.patch<ResponseModel<Category>>(this.INVENTORY_MODIFY_URL+`/${category.id}`, {
+      name : category.name,
+      icon : category.icon
+    })
   }
 
 }

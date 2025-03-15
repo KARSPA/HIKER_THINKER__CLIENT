@@ -18,8 +18,8 @@ export class InventoryService{
   private httpClient : HttpClient = inject(HttpClient);
 
 
-  private categoryAddedSubject = new Subject<Category>();
-  categoryAdded$ = this.categoryAddedSubject.asObservable();
+  private categoryChangeSubject = new Subject<Category>();
+  categoryChange$ = this.categoryChangeSubject.asObservable();
   
 
 
@@ -29,8 +29,8 @@ export class InventoryService{
 
 
 
-  notifyCategoryAdded(category : Category){
-    this.categoryAddedSubject.next(category);
+  notifyCategoryChange(category : Category){
+    this.categoryChangeSubject.next(category);
   }
 
 

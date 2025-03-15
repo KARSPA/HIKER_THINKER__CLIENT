@@ -1,14 +1,19 @@
 
 <div class="modal-content h-fit pb-4 w-full">
     <div class="modal-title text-lg text-center">
-        Ajouter une catégorie à votre {{title}}
+        @if(this.requestType === 'Modification'){
+            <p>Modifier cette catégorie dans votre inventaire</p>
+        }
+        @else if(this.requestType === 'Ajout'){
+            <p>Ajouter une catégorie à votre inventaire</p>
+        }
     </div>
 
     <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
     
         <div class="form-errors text-orange-400 h-[20px] mb-8 flex flex-col items-center">
     
-            <p class="text-red-600 text-lg">{{categoryAddError}}</p>
+            <p class="text-red-600 text-lg">{{categoryHttpError}}</p>
     
             @if (categoryForm.touched && categoryForm.invalid) {
                 <p class="text-lg ">Informations manquantes.</p>
@@ -18,7 +23,7 @@
     
     
         <div class="flex flex-col items-center w-full mb-10">
-            <input type="text" formControlName="name" placeholder="Le nom de votre catégorie" 
+            <input type="text" formControlName="name" placeholder="Le nom de votre catégorie"
             class="w-[90%] bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2">
     
             <div class="input-errors text-amber-300 h-8">
@@ -47,7 +52,7 @@
 
         <button type="submit" [disabled]="categoryForm.invalid" 
         class="block mx-auto text-white mt-10 disabled:cursor-not-allowed not-disabled:hover:opacity-80 rounded-md bg-amber-500 px-2 py-3 shadow-md disabled:bg-gray-500 cursor-pointer">
-            Créer la catégorie
+            {{requestType === 'Modification' ? 'Modifier la catégorie' : 'Créer la catégorie'}}
         </button>
     
     </form>

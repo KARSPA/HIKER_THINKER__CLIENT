@@ -1,23 +1,25 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CategoryService } from '../../services/category.service';
 import { ModalService } from '../../services/modal.service';
 import { InventoryService } from '../../services/inventory.service';
+import { Category } from '../../interfaces/equipment/Category';
 
 @Component({
   selector: 'app-add-category-modal',
   imports: [ReactiveFormsModule],
   templateUrl: './add-category-modal.component.html'
 })
-export class AddCategoryModalComponent {
+export class AddCategoryModalComponent implements OnInit{
 
-  @Input() title : string | undefined;
+  @Input() requestType : string | undefined;
+  @Input() category : Category | null = null;
 
   private categoryService : CategoryService = inject(CategoryService);
   private inventoryService : InventoryService = inject(InventoryService);
   private modalService : ModalService = inject(ModalService);
 
-  categoryAddError : string = '';
+  categoryHttpError : string = '';
 
   icons : string[] = [
     'no_icon',
@@ -60,28 +62,74 @@ export class AddCategoryModalComponent {
     icon: new FormControl('no_icon',[Validators.required])
   })
 
+  ngOnInit(): void {
+    this.categoryForm.patchValue({
+      name : this.category?.name ?? '',
+      icon: this.category?.icon ?? 'no_icon'
+    })
+      console.log(this.category, this.category?.name ?? '')
+  }
+
 
   onSubmit(){
+
+    //Différencier si identifiant présent ou non pour savoir si on modifie ou ajoute une catégorie.
+
+
+    //Si modification, alors les équipements vont être changés donc à voir comment gérer ça (même cas pour la suppression)
+
+
+
     if(this.categoryForm.valid){ // Si tous les validateurs sont passés
-      this.categoryService.addInventoryCategory(this.categoryForm.value).subscribe({
-        next:(response)=>{
-          console.log(response)
 
-          // SI réponse valide, alors :
+      if(this.category?.id){
 
-          // Notifier l'inventoryService qu'une catégorie à été ajouté pour que le composant l'affiche.
-          this.inventoryService.notifyCategoryAdded(response.data)
+        //Modifier la catégorie avec le name et icon :
+        this.category.name = this.categoryForm.get('name')?.value;
+        this.category.icon = this.categoryForm.get('icon')?.value;
 
-          // Enlever la modale
-          this.modalService.closeModal();
-        },
-        error: (err)=>{
-          console.log(err)
+        this.categoryService.modifyInventoryCategory(this.category).subscribe({
+          next: (response)=>{
+            //Si réponse valide : 
+            console.log(response);
 
-          // SI erreur, l'affichée dans le formulaire
-          this.categoryAddError = err.error.message;
-        }
-      })
+            // Mettre à jour l'affichage de la catégorie sur la page principale en notifiant le service
+            this.inventoryService.notifyCategoryChange(response.data)
+
+
+            //Fermer la modale
+            this.modalService.closeModal();
+
+          },
+          error: (err)=>{
+            console.log(err)
+
+            this.categoryHttpError = err.error.message;
+          }
+        })
+      }
+      else{
+
+        this.categoryService.addInventoryCategory(this.categoryForm.value).subscribe({
+          next:(response)=>{
+            console.log(response)
+  
+            // SI réponse valide, alors :
+  
+            // Notifier l'inventoryService qu'une catégorie à été ajouté pour que le composant l'affiche.
+            this.inventoryService.notifyCategoryChange(response.data)
+  
+            // Enlever la modale
+            this.modalService.closeModal();
+          },
+          error: (err)=>{
+            console.log(err)
+  
+            // SI erreur, l'affichée dans le formulaire
+            this.categoryHttpError = err.error.message;
+          }
+        })
+      }
     }
 
   }
