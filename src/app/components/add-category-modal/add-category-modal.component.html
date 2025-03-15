@@ -49,11 +49,21 @@
             </div>
         </div>
     
-
-        <button type="submit" [disabled]="categoryForm.invalid" 
-        class="block mx-auto text-white mt-10 disabled:cursor-not-allowed not-disabled:hover:opacity-80 rounded-md bg-amber-500 px-2 py-3 shadow-md disabled:bg-gray-500 cursor-pointer">
-            {{requestType === 'Modification' ? 'Modifier la catégorie' : 'Créer la catégorie'}}
-        </button>
+        <div class="btns-container flex justify-center items-center gap-10">
+            
+            <button type="submit" [disabled]="categoryForm.invalid" 
+                class="text-white mt-10 disabled:cursor-not-allowed not-disabled:hover:opacity-80 rounded-md bg-amber-500 px-2 py-3 shadow-md disabled:bg-gray-500 cursor-pointer">
+                {{requestType === 'Modification' ? 'Modifier la catégorie' : 'Créer la catégorie'}}
+            </button>
+            
+            @if(requestType === 'Modification'){
+                <button type="button"
+                (click)="removeCategory()"
+                class="text-white mt-10 disabled:cursor-not-allowed not-disabled:hover:opacity-80 rounded-md bg-red-700 px-2 py-3 shadow-md disabled:bg-gray-500 cursor-pointer">
+                    Supprimer
+                </button>
+            }
+        </div>
     
     </form>
 </div>

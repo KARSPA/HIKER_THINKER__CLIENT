@@ -9,8 +9,7 @@ import { ResponseModel } from '../interfaces/ResponseModel';
 })
 export class CategoryService {
 
-  private INVENTORY_ADD_URL = "http://localhost:8000/api/v1/inventory/categories";
-  private INVENTORY_MODIFY_URL = "http://localhost:8000/api/v1/inventory/categories";
+  private INVENTORY_BASE_URL = "http://localhost:8000/api/v1/inventory/categories";
 
 
   private httpClient : HttpClient = inject(HttpClient);
@@ -19,7 +18,7 @@ export class CategoryService {
   addInventoryCategory(category : Category) : Observable<ResponseModel<Category>>{
 
     console.log(category)
-    return this.httpClient.post<ResponseModel<Category>>(this.INVENTORY_ADD_URL, {
+    return this.httpClient.post<ResponseModel<Category>>(this.INVENTORY_BASE_URL, {
       name : category.name,
       icon : category.icon,
       order : category.order
@@ -30,11 +29,20 @@ export class CategoryService {
   modifyInventoryCategory(category : Category) : Observable<ResponseModel<Category>>{
     console.log(category);
 
-    return this.httpClient.patch<ResponseModel<Category>>(this.INVENTORY_MODIFY_URL+`/${category.id}`, {
+    return this.httpClient.patch<ResponseModel<Category>>(this.INVENTORY_BASE_URL+`/${category.id}`, {
       name : category.name,
       icon : category.icon,
       order : category.order
     })
+  }
+
+
+
+  removeInventoryCategory(categoryId : string) : Observable<ResponseModel<Category>>{
+    console.log('CategoryId (remove) : ', categoryId);
+
+    return this.httpClient.delete<ResponseModel<Category>>(this.INVENTORY_BASE_URL+`/${categoryId}`);
+    
   }
 
 }

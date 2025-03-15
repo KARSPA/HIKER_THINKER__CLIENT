@@ -20,6 +20,10 @@ export class InventoryService{
 
   private categoryChangeSubject = new Subject<Category>();
   categoryChange$ = this.categoryChangeSubject.asObservable();
+
+
+  private categoryRemoveSubject = new Subject<string>();
+  categoryRemove$ = this.categoryRemoveSubject.asObservable();
   
 
 
@@ -27,7 +31,9 @@ export class InventoryService{
     return this.httpClient.get<ResponseModel<Inventory>>(this.INVENTORY_URL);
   }
 
-
+  notifyCategoryRemove(categoryId : string){
+    this.categoryRemoveSubject.next(categoryId);
+  }
 
   notifyCategoryChange(category : Category){
     this.categoryChangeSubject.next(category);

@@ -40,16 +40,20 @@ export class InventoryComponent implements OnInit{
       }else{
         this.inventory?.set(category, []);
       }
-
-
       //Retrier la Map de l'inventaire pour afficher les catégories correctement
-
       if(this.inventory){
         this.inventory = new Map([...this.inventory.entries()].sort(
           ([catA], [catB]) => (catA.order ?? 0) - (catB.order ?? 0) 
         ))
       }
+    })
 
+    //S'abonner aux évènement de suppression d'un catégorie
+        // Si ça arrive : 
+    // Redemander l'inventaire à l'API car les équipements seront mis à jours.
+
+    this.inventoryService.categoryRemove$.subscribe((categoryId)=>{
+      this.loadInventory();
     })
 
 

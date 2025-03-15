@@ -141,4 +141,19 @@ export class AddCategoryModalComponent implements OnInit{
     this.categoryForm.get('icon')?.setValue(iconName);
   }
 
+
+  removeCategory(){
+    this.categoryService.removeInventoryCategory(this.category?.id ?? "").subscribe({
+      next: (response)=>{
+        console.log(response);
+
+        //Notifier l'inventoryService
+        this.inventoryService.notifyCategoryRemove(response.data?.id ?? "");
+
+
+        this.modalService.closeModal();
+      }
+    })
+  }
+
 }
