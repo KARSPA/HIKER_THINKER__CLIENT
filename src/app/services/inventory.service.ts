@@ -48,7 +48,6 @@ export class InventoryService{
   }
 
 
-
   restructureInventory(inventory : Inventory): Map<Category, Equipment[]>{
     const groupedEquipements = new Map<Category, Equipment[]>();
 

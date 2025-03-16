@@ -9,10 +9,15 @@ import { ResponseModel } from '../interfaces/ResponseModel';
 })
 export class EquipmentService {
 
-  private INVENTORY_BASE_URL = "http://localhost:8000/api/v1/inventory/equipments";
+  private INVENTORY_EQUIP_BASE_URL = "http://localhost:8000/api/v1/inventory/equipments";
 
 
   private httpClient : HttpClient = inject(HttpClient);
+
+
+  getEquipmentById(equipmentId : string) : Observable<ResponseModel<Equipment>>{
+    return this.httpClient.get<ResponseModel<Equipment>>(this.INVENTORY_EQUIP_BASE_URL+`/${equipmentId}`)
+  }
 
 
 
@@ -20,7 +25,7 @@ export class EquipmentService {
     console.log(equipmentFormValue);
 
 
-    return this.httpClient.post<ResponseModel<Equipment>>(this.INVENTORY_BASE_URL, {
+    return this.httpClient.post<ResponseModel<Equipment>>(this.INVENTORY_EQUIP_BASE_URL, {
       name : equipmentFormValue.name,
       weight : equipmentFormValue.weight,
       description : equipmentFormValue.description,

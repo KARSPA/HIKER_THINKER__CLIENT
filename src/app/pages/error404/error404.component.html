@@ -1,0 +1,14 @@
+
+
+
+<div class="card border border-stone-300 rounded-lg shadow-lg px-10 py-5 flex flex-col justify-center items-center max-w-[600px] mx-auto mt-20">
+
+    <h1 class="text-2xl h-10">{{message}}</h1>
+    <h1 class="text-lg">Désolé ...</h1>
+
+    <div class="mt-10 flex items-center gap-10">
+        <a [routerLink]="['/inventory']" class="py-2 px-3 rounded-md bg-green-900 text-white hover:opacity-80 cursor-pointer shadow-md ">Retour à l'inventaire</a>
+        <a [routerLink]="['/home']" class="py-2 px-3 rounded-md bg-amber-600 text-white hover:opacity-80 cursor-pointer shadow-md ">Retour à l'accueil</a>
+    </div>
+
+</div>
