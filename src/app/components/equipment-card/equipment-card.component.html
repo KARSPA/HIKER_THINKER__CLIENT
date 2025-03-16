@@ -9,10 +9,10 @@
             <p class="font-semibold italic">{{equipment?.weight}} g</p>
         </div>
     </div>
-    <div class="btns flex justify-around mt-3">
-        <button class="px-2 py-1 rounded-sm bg-green-900 text-white min-w-[100px] cursor-pointer hover:opacity-80 shadow-md">
+    <div class="links flex justify-around mt-3">
+        <a [routerLink]="['/inventory/equipments/', equipment?.id]" class="text-center px-2 py-1 rounded-sm bg-green-900 text-white min-w-[100px] cursor-pointer hover:opacity-80 shadow-md">
             Voir
-        </button>
+        </a>
         <button class="px-2 py-1 rounded-sm bg-red-700 text-white min-w-[100px] cursor-pointer hover:opacity-80 shadow-md">
             Retirer
         </button>
