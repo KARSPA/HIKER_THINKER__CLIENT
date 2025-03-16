@@ -25,6 +25,9 @@
                 @if ((name?.touched) && name?.hasError('required')) {
                     <p class="text-sm">{{getErrorMessage('required')}}</p>
                 }
+                @if ((name?.touched) && name?.hasError('maxLength')) {
+                    <p class="text-sm">{{getErrorMessage('maxLength', 30)}}</p>
+                }
             </div>
         </div>
 

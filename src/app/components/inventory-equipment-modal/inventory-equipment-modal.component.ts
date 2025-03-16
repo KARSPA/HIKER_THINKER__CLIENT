@@ -23,7 +23,7 @@ export class InventoryEquipmentModalComponent {
 
 
   equipmentForm = new FormGroup({
-    name : new FormControl('', [Validators.required]),
+    name : new FormControl('', [Validators.required, Validators.maxLength(30)]),
     weight : new FormControl('', [Validators.required, Validators.pattern("^(?:[1-9]\\d{0,3}|10000)$")]),
     description : new FormControl('', [Validators.maxLength(500)]),
     brand : new FormControl('', [Validators.required, Validators.maxLength(20)]),
