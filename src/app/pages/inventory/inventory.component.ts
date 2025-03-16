@@ -58,7 +58,22 @@ export class InventoryComponent implements OnInit{
     })
 
 
-    // S'abonner aux évènements d'ajout d'équipement. PLUS TARD
+    // S'abonner aux évènements d'ajout d'équipement.
+    this.inventoryService.equipmentChange$.subscribe((equipment)=>{
+
+      //Lors de l'ajout d'un nouvel équipement :
+        //On trouve la catégorie dans lequel il se situe et on l'ajoute aux tableau de la map
+      const category = Array.from(this.inventory?.keys() ?? []).find(cat => cat.id === equipment.categoryId);
+
+      if (category && this.inventory) {
+
+        const currentEquipments = this.inventory.get(category) ?? [];
+
+        currentEquipments.push(equipment);
+
+        this.inventory.set(category, currentEquipments);
+      }
+    })
       
     }
 

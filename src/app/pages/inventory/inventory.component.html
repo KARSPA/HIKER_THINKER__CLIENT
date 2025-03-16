@@ -10,8 +10,8 @@
 <div class="">
     @for (grouped of inventory; track $index) {
 
-        <div class="category-equipments-container bg-amber-200 mb-5">
-            <div class="category-container px-4 py-2 rounded-sm bg-stone-300 flex items-center justify-between ">
+        <div class="category-equipments-container mb-5">
+            <div class="category-container px-4 py-2 rounded-t-md bg-[#6b9430] flex items-center justify-between ">
                 <div class="icon-name-container flex items-center gap-5">
                     @if(grouped[0].icon !== 'no_icon'){
                         <img src="assets/category_icons/{{grouped[0].icon}}.svg" alt="?" class="h-8 aspect-square">
@@ -30,7 +30,7 @@
                 </div>
             </div>
 
-            <div class="equipment-container flex gap-10">
+            <div class="equipment-container grid grid-cols-4 gap-10 p-4 border border-stone-300 rounded-b-md">
                 @for(equipment of grouped[1]; track $index){
                     <app-equipment-card [equipment]="equipment" />
                 }

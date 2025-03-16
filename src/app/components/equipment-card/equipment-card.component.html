@@ -1,18 +1,19 @@
-<div class="mb-4 p-2 border border-amber-600">
-    <div class="flex justify-center items-center gap-5">
-        <img src="assets/placeholder-image.jpg" alt="" class="h-20 aspect-square">
-        <div>
-            <p>{{equipment?.name}}</p>
-            <p>{{equipment?.description}}</p>
+<div class="mb-4 pb-2 bg-stone-200 border border-stone-300 rounded-md shadow-md h-40">
+
+    <div class="flex items-center pl-2 gap-5 h-[70%]">
+        <img src="assets/placeholder-image.jpg" alt="" class="h-16 aspect-square">
+        <div class="grow">
+            <p class="font-semibold">{{equipment?.name}}</p>
+            <!-- <p>{{equipment?.description}}</p> -->
             <p>{{equipment?.brand}}</p>
-            <p>{{equipment?.weight}} g</p>
+            <p class="font-semibold italic">{{equipment?.weight}} g</p>
         </div>
     </div>
-    <div class="btns flex justify-around mt-4">
-        <button class="px-2 py-1 rounded-sm bg-green-900 text-white min-w-[100px] cursor-pointer hover:opacity-80">
+    <div class="btns flex justify-around mt-3">
+        <button class="px-2 py-1 rounded-sm bg-green-900 text-white min-w-[100px] cursor-pointer hover:opacity-80 shadow-md">
             Voir
         </button>
-        <button class="px-2 py-1 rounded-sm bg-red-700 text-white min-w-[100px] cursor-pointer hover:opacity-80">
+        <button class="px-2 py-1 rounded-sm bg-red-700 text-white min-w-[100px] cursor-pointer hover:opacity-80 shadow-md">
             Retirer
         </button>
     </div>

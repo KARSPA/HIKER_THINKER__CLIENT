@@ -24,6 +24,10 @@ export class InventoryService{
 
   private categoryRemoveSubject = new Subject<string>();
   categoryRemove$ = this.categoryRemoveSubject.asObservable();
+
+
+  private equipmentChangeSubject = new Subject<Equipment>();
+  equipmentChange$ = this.equipmentChangeSubject.asObservable();
   
 
 
@@ -37,6 +41,10 @@ export class InventoryService{
 
   notifyCategoryChange(category : Category){
     this.categoryChangeSubject.next(category);
+  }
+
+  notifyEquipmentChange(equipment : Equipment){
+    this.equipmentChangeSubject.next(equipment);
   }
 
 
