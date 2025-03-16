@@ -33,10 +33,12 @@ export class EquipmentService {
       categoryName : equipmentFormValue.categoryName,
       sourceId : null
     })
-
-
   }
 
+  removeInventoryEquipment(equipmentId : string) : Observable<ResponseModel<string>>{
+
+    return this.httpClient.delete<ResponseModel<string>>(this.INVENTORY_EQUIP_BASE_URL+`/${equipmentId}`)
+  }
 
 
 }

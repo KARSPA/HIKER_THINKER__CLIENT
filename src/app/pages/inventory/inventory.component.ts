@@ -58,7 +58,7 @@ export class InventoryComponent implements OnInit{
     })
 
 
-    // S'abonner aux évènements d'ajout d'équipement.
+    // S'abonner aux évènements d'ajout/modification d'équipement.
     this.inventoryService.equipmentChange$.subscribe((equipment)=>{
 
       //Lors de l'ajout d'un nouvel équipement :
@@ -74,6 +74,27 @@ export class InventoryComponent implements OnInit{
         this.inventory.set(category, currentEquipments);
       }
     })
+
+    //S'abonner aux évènement de suppression d'équipements
+    this.inventoryService.equipmentRemove$.subscribe({
+      next:(equipmentId)=>{
+
+        if (!this.inventory) return;
+
+        // Parcourir chaque entrée de la Map (chaque catégorie et son tableau d'équipements)
+        this.inventory.forEach((equipments, category) => {
+          // Rechercher l'index de l'équipement à supprimer dans le tableau
+          const index = equipments.findIndex(eq => eq.id === equipmentId);
+          if (index !== -1) {
+            
+            // Supprimer l'équipement du tableau
+            equipments.splice(index, 1);
+  
+          }
+        })
+      }
+    })
+
       
     }
 

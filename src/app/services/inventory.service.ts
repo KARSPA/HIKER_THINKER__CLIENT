@@ -29,6 +29,8 @@ export class InventoryService{
   private equipmentChangeSubject = new Subject<Equipment>();
   equipmentChange$ = this.equipmentChangeSubject.asObservable();
   
+  private equipmentRemoveSubject = new Subject<string>();
+  equipmentRemove$ = this.equipmentRemoveSubject.asObservable();
 
 
   getInventory() : Observable<ResponseModel<Inventory>>{
@@ -47,6 +49,9 @@ export class InventoryService{
     this.equipmentChangeSubject.next(equipment);
   }
 
+  notifyEquipmentRemove(equipmentId : string){
+    this.equipmentRemoveSubject.next(equipmentId);
+  }
 
   restructureInventory(inventory : Inventory): Map<Category, Equipment[]>{
     const groupedEquipements = new Map<Category, Equipment[]>();
