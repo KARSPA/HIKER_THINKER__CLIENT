@@ -30,7 +30,7 @@
                 </div>
             </div>
 
-            <div class="equipment-container grid grid-cols-4 gap-10 p-4 border border-stone-300 rounded-b-md">
+            <div class="equipment-container grid grid-cols-3 gap-10 p-4 border border-stone-300 rounded-b-md">
                 @for(equipment of grouped[1]; track $index){
                     <app-equipment-card [equipment]="equipment" />
                 }
