@@ -1,12 +1,12 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { Equipment } from '../../interfaces/equipment/Equipment';
 import { EquipmentService } from '../../services/equipment.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { EquipmentCardComponent } from '../../components/equipment-card/equipment-card.component';
 
 @Component({
   selector: 'app-equipment-details',
-  imports: [EquipmentCardComponent],
+  imports: [RouterLink],
   templateUrl: './equipment-details.component.html'
 })
 export class EquipmentDetailsComponent {
