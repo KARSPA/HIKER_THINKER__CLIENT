@@ -160,7 +160,15 @@ export class InventoryComponent implements OnInit{
         icon.classList.toggle('rotate-180')
         categoryContainer.classList.toggle('rounded-b-md')
       } else if (content) {
-        content.style.maxHeight = content.scrollHeight + 'px';
+        console.log(content.scrollHeight)
+
+        if(content.scrollHeight !== 0){
+          content.style.maxHeight = content.scrollHeight + 'px';
+        }
+        else{
+          content.style.maxHeight = categoryContainer.scrollHeight + 'px';
+          content.style.height = categoryContainer.scrollHeight + 'px';
+        }
         content.classList.toggle('border')
         content.classList.toggle('border-stone-300')
 
