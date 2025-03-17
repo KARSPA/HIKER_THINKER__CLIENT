@@ -11,7 +11,11 @@
     @for (grouped of inventory; track $index) {
 
         <div class="category-equipments-container mb-5">
-            <div class="category-container px-4 py-2 rounded-t-md bg-[#6b9430] flex items-center justify-between ">
+            <div 
+            id="category-container-{{$index}}"
+            class="category-container px-4 py-2 rounded-t-md rounded-b-md bg-[#6b9430] flex items-center justify-between"
+            (click)="toggleCategoryContainer($index)">
+
                 <div class="icon-name-container flex items-center gap-5">
                     @if(grouped[0].icon !== 'no_icon'){
                         <img src="assets/category_icons/{{grouped[0].icon}}.svg" alt="?" class="h-8 aspect-square">
@@ -24,13 +28,17 @@
                     (click)="openCategoryModal(grouped[0])">
                     <img src="assets/modifyIcon.svg" alt="" class="h-4 aspect-square">
                 </button>
-                <button>
-                    V
+                <button
+                    id="category-toggle-{{$index}}"
+                    class="p-2 rounded-full hover:outline-1 hover:outline-green-900 cursor-pointer ">
+                    <img src="assets/down-chevron.svg" alt="" class="h-4 aspect-square transition-all duration-300 ease-in-out">
                 </button>
                 </div>
             </div>
 
-            <div class="equipment-container grid grid-cols-3 gap-10 p-4 border border-stone-300 rounded-b-md">
+            <div
+            id="equipment-content-{{$index}}"
+            class="equipment-container grid grid-cols-3 gap-10 px-4 rounded-b-md max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
                 @for(equipment of grouped[1]; track $index){
                     <app-equipment-card [equipment]="equipment" />
                 }

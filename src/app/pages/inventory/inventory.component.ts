@@ -86,7 +86,7 @@ export class InventoryComponent implements OnInit{
           // Rechercher l'index de l'équipement à supprimer dans le tableau
           const index = equipments.findIndex(eq => eq.id === equipmentId);
           if (index !== -1) {
-            
+
             // Supprimer l'équipement du tableau
             equipments.splice(index, 1);
   
@@ -135,6 +135,39 @@ export class InventoryComponent implements OnInit{
 
     placeholder(){
       console.log('oui.')
+    }
+
+
+    toggleCategoryContainer(index : number){
+
+      const content = document.getElementById('equipment-content-'+index);
+      const icon = document.querySelector(`#category-toggle-${index} img`);
+
+      const categoryContainer = document.querySelector(`#category-container-${index}`)
+
+
+      console.log(content, icon)
+
+      if(!content || !icon || !categoryContainer){
+        return;
+      }
+
+      if (content && content.style.maxHeight && content.style.maxHeight !== '0px') {
+        content.style.maxHeight = '0';
+        content.classList.toggle('border')
+        content.classList.toggle('border-stone-300')
+        
+        icon.classList.toggle('rotate-180')
+        categoryContainer.classList.toggle('rounded-b-md')
+      } else if (content) {
+        content.style.maxHeight = content.scrollHeight + 'px';
+        content.classList.toggle('border')
+        content.classList.toggle('border-stone-300')
+
+        icon.classList.toggle('rotate-180')
+        categoryContainer.classList.toggle('rounded-b-md')
+      }
+
     }
 
 }
