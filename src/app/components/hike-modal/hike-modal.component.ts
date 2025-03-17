@@ -24,7 +24,7 @@ export class HikeModalComponent {
 
   hikeForm = new FormGroup({
     title: new FormControl('', [Validators.required, Validators.maxLength(30)]),
-    distance: new FormControl('', [Validators.required, Validators.pattern("^(?:[1-9]\\d{0,3}|10000)$")]),
+    distance: new FormControl('', [Validators.required, Validators.pattern("^(?:(?:[1-9]\\d{0,3}(?:\\.\\d{1,2})?)|(?:10000(?:\\.0{1,2})?))$")]),
     positive: new FormControl('', [Validators.required, Validators.pattern("^(?:[1-9]\\d{0,4}|100000)$")]),
     negative: new FormControl('', [Validators.required, Validators.pattern("^(?:[1-9]\\d{0,4}|100000)$")]),
     duration: new FormControl('', [Validators.required, Validators.pattern("^(?:[1-9]\\d{0,2}|1000)$")]),
@@ -105,7 +105,7 @@ export class HikeModalComponent {
     return this.hikeForm.get('date');
   }
 
-  getErrorMessage(reason : string, length : number = 0, unit ?: string) : string{
+  getErrorMessage(reason : string, length ?: number, format ?: string, unit ?: string) : string{
 
     let errorMessage : string = '';
 
@@ -116,8 +116,11 @@ export class HikeModalComponent {
       case 'maxLength':
         errorMessage = `Au plus ${length} caractères.`;
         break;
+      case 'numberFormat':
+        errorMessage = `Entrez une donnée valide. Il faut un nombre au format : ${format}.`;
+        break;
       case 'number':
-        errorMessage = `Entrez une donnée valide. Inférieur à ${length} (${unit}).`;
+        errorMessage = `Entrez une donnée valide. Maximum ${length} ${unit ? '('+unit+')' : ''}.`;
         break;
     }
 

@@ -16,16 +16,16 @@
             <div class="flex justify-between">
                 <div class="flex gap-2">
                     <img src="assets/hike_icons/path_icon.svg" alt="" class="h-6 aspect-square">
-                    <p><span class="font-semibold italic">{{hike?.distance}}</span> km</p>
+                    <p><span class="font-semibold italic">{{hike?.distance | numberFormat}}</span> km</p>
     
                 </div>
                 <div class="flex gap-2">
                     <img src="assets/hike_icons/up-trend-bis_icon.svg" alt="" class="h-6 aspect-square">
-                    <p><span class="font-semibold italic">{{hike?.positive}}</span> m</p>
+                    <p><span class="font-semibold italic">{{hike?.positive | numberFormat}}</span> m</p>
                 </div>
                 <div class="flex gap-2">
                     <img src="assets/hike_icons/down-trend-bis_icon.svg" alt="" class="h-6 aspect-square">
-                    <p><span class="font-semibold italic">{{hike?.negative}}</span> m</p>
+                    <p><span class="font-semibold italic">{{hike?.negative | numberFormat}}</span> m</p>
                 </div>
     
                 <div class="flex gap-2 w-[120px]">

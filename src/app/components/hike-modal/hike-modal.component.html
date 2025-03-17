@@ -36,14 +36,14 @@
                 <div class="flex flex-col  w-full mb-10">
                     <input id="hikeForm-distance" type="text" formControlName="distance" placeholder="Distance (en kilomètres)"
                     class="w-full bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2"
-                    maxLength="5">
+                    maxLength="8">
             
                     <div class="input-errors text-orange-500 h-8">
                         @if ((distance?.touched) && distance?.hasError('required')) {
                             <p class="text-sm text-center">{{getErrorMessage('required')}}</p>
                         }
                         @if ((distance?.touched) && distance?.hasError('pattern')) {
-                            <p class="text-sm text-center">{{getErrorMessage('number', 10000, 'km')}}</p>
+                            <p class="text-sm text-center">{{getErrorMessage('numberFormat', 0, "xxxx.xx")}}</p>
                         }
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                                 <p class="text-sm text-center">{{getErrorMessage('required')}}</p>
                             }
                             @if ((positive?.touched) && positive?.hasError('pattern')) {
-                                <p class="text-sm text-center">{{getErrorMessage('number', 100000, 'm')}}</p>
+                                <p class="text-sm text-center">{{getErrorMessage('number', 100000,'', 'm')}}</p>
                             }
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                                 <p class="text-sm text-center">{{getErrorMessage('required')}}</p>
                             }
                             @if ((negative?.touched) && negative?.hasError('pattern')) {
-                                <p class="text-sm text-center">{{getErrorMessage('number', 100000, 'm')}}</p>
+                                <p class="text-sm text-center">{{getErrorMessage('number',100000,'', 'm')}}</p>
                             }
                         </div>
                     </div>
@@ -89,7 +89,7 @@
                                 <p class="text-sm text-center">{{getErrorMessage('required')}}</p>
                             }
                             @if ((duration?.touched) && duration?.hasError('pattern')) {
-                                <p class="text-sm text-center">{{getErrorMessage('number', 1000)}}</p>
+                                <p class="text-sm text-center">{{getErrorMessage('number',1000,'')}}</p>
                             }
                         </div>
                     </div>
