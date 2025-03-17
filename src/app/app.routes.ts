@@ -7,6 +7,7 @@ import { LogoutComponent } from './pages/logout/logout.component';
 import { InventoryComponent } from './pages/inventory/inventory.component';
 import { EquipmentDetailsComponent } from './pages/equipment-details/equipment-details.component';
 import { Error404Component } from './pages/error404/error404.component';
+import { HikesComponent } from './pages/hikes/hikes.component';
 
 export const routes: Routes = [
     {path:'home', component: HomeComponent},
@@ -16,7 +17,7 @@ export const routes: Routes = [
     {path:'error404', component: Error404Component},
     {path:'inventory', component: InventoryComponent, canActivate: [authGuard], data: {requiresAuth : true}},
     {path:'inventory/equipments/:equipmentId', component: EquipmentDetailsComponent, canActivate: [authGuard], data: {requiresAuth : true}},
-    // {path:'hikes', component: HikesComponent, canActivate: [authGuard]},
+    {path:'hikes', component: HikesComponent, canActivate: [authGuard], data: {requiresAuth : true}},
     // {path:'hikes/create', component: CreateHikeComponent, canActivate: [authGuard]},
     // {path:'models', component: ModelsComponent, canActivate: [authGuard]},
     // {path:'contact', component: ContactComponent},

@@ -1,0 +1,60 @@
+
+<div class="border border-stone-300 bg-stone-100 rounded-md px-4 py-2 shadow-md">
+
+    <div class="infos-container grid grid-cols-[7fr_1fr_1fr] gap-10">
+
+        <div class="flex flex-col gap-4">
+
+            <div class="flex justify-between items-center">
+                <p class="font-semibold text-lg">{{hike?.title}}</p>
+                <div class="flex gap-2">
+                    <img src="assets/hike_icons/calendar_icon.svg" alt="" class="h-6 aspect-square">
+                    <p>{{hike?.date | date:'dd/MM/yyyy'}}</p>
+                </div>
+            </div>
+
+            <div class="flex justify-between">
+                <div class="flex gap-2">
+                    <img src="assets/hike_icons/path_icon.svg" alt="" class="h-6 aspect-square">
+                    <p><span class="font-semibold">{{hike?.distance}}</span> km</p>
+    
+                </div>
+                <div class="flex gap-2">
+                    <img src="assets/hike_icons/up-trend-bis_icon.svg" alt="" class="h-6 aspect-square">
+                    <p><span class="font-semibold">{{hike?.positive}}</span> m</p>
+                </div>
+                <div class="flex gap-2">
+                    <img src="assets/hike_icons/down-trend-bis_icon.svg" alt="" class="h-6 aspect-square">
+                    <p><span class="font-semibold">{{hike?.negative}}</span> m</p>
+                </div>
+    
+                <div class="flex gap-2 mr-[37px]">
+                    <img src="assets/hike_icons/clock_icon.svg" alt="" class="h-6 aspect-square">
+                    <p>{{hike?.duration}} {{hike?.durationUnit}}</p>
+                </div>
+            </div>          
+
+            
+        </div>
+        <div class="flex items-center justify-center">
+            <div class="flex gap-2">
+                <img src="assets/hike_icons/weight-bis_icon.png" alt="" class="h-6 aspect-square">
+
+                <p>12.6 kg</p>
+            </div>
+        </div>
+        <div class="flex justify-center items-center">
+            <button
+            class="px-6 py-3 rounded-sm bg-green-900 text-white cursor-pointer hover:opacity-80 shadow-md">
+                Voir
+            </button>
+        </div>
+    </div>
+    
+
+        
+
+        
+
+    
+</div>

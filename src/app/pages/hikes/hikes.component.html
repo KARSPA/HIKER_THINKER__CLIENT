@@ -1,0 +1,18 @@
+<h1 class="text-xl text-center mb-10">Mes randonnées</h1>
+
+<div class="flex justify-end">
+    <button class="mb-10 px-3 py-2 rounded-sm bg-amber-500 text-white min-w-[100px] cursor-pointer hover:opacity-80 shadow-md absolute top-0 right-0"
+        (click)="placeholder()">
+        Nouvelle randonnée
+    </button>
+</div>
+
+<div class="">
+    
+    @for(hike of hikes; track $index){
+        <app-hike-card [hike]="hike"></app-hike-card>
+    }
+
+</div>
+
+

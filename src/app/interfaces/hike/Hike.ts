@@ -8,5 +8,7 @@ export interface Hike{
     date : Date;
     duration : number;
     durationUnit : string;
+
+    weightCorrection : number;
     
 }
