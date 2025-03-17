@@ -13,7 +13,7 @@
         <div class="category-equipments-container mb-5">
             <div 
             id="category-container-{{$index}}"
-            class="category-container px-4 py-2 rounded-t-md rounded-b-md bg-[#6b9430] flex items-center justify-between"
+            class="category-container px-4 py-2 rounded-t-md rounded-b-md bg-[#6b9430] flex items-center justify-between transition-all duration-300 ease-in-out"
             (click)="toggleCategoryContainer($index)">
 
                 <div class="icon-name-container flex items-center gap-5">
@@ -24,13 +24,13 @@
                 </div>
                 <div class="btns-container flex gap-5">
                     <button
-                    class="p-2 rounded-full hover:outline-1 hover:outline-green-900 cursor-pointer"
+                    class="p-2 rounded-full hover:outline-1 hover:outline-amber-500 cursor-pointer"
                     (click)="openCategoryModal(grouped[0])">
                     <img src="assets/modifyIcon.svg" alt="" class="h-4 aspect-square">
                 </button>
                 <button
                     id="category-toggle-{{$index}}"
-                    class="p-2 rounded-full hover:outline-1 hover:outline-green-900 cursor-pointer ">
+                    class="p-2 rounded-full hover:outline-1 hover:outline-white cursor-pointer ">
                     <img src="assets/down-chevron.svg" alt="" class="h-4 aspect-square transition-all duration-300 ease-in-out">
                 </button>
                 </div>
@@ -48,8 +48,7 @@
     }
 
     <div class="category-container px-4 py-2 rounded-sm bg-stone-300 flex justify-between">
-        <div class="flex items-center gap-5">
-            <img src="assets/placeholder-image.jpg" alt="ICON CAT" class="h-8 aspect-square">
+        <div class="flex items-center">
             <p class="font-semibold">Ajouter une catégorie</p>
         </div>
         <div class="">
