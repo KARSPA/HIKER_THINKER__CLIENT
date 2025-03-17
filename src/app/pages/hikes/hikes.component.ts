@@ -2,6 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { HikeService } from '../../services/hike.service';
 import { Hike } from '../../interfaces/hike/Hike';
 import { HikeCardComponent } from '../../components/hike-card/hike-card.component';
+import { ModalService } from '../../services/modal.service';
+import { HikeModalComponent } from '../../components/hike-modal/hike-modal.component';
 
 @Component({
   selector: 'app-hikes',
@@ -12,6 +14,7 @@ export class HikesComponent implements OnInit{
  
 
   private hikeService : HikeService = inject(HikeService);
+  private modalService : ModalService = inject(ModalService);
 
   hikes : Hike[] = [];
 
@@ -29,8 +32,12 @@ export class HikesComponent implements OnInit{
   }
 
 
-  placeholder(){
-    console.log(this.hikes)
+  openHikeModal(hike?: Hike){
+    this.modalService.openModal({
+      component : HikeModalComponent,
+      data: {hike : hike}
+    })
+
   }
 
 }

@@ -1,0 +1,134 @@
+<div class="modal-content h-fit pb-4 w-4xl">
+    <div class="modal-title text-lg text-center">
+        <p>Créer une randonnée</p>
+    </div>
+
+    <form [formGroup]="hikeForm" (ngSubmit)="onSubmit()">
+    
+        <div class="form-errors text-orange-400 h-[20px] mb-8 flex flex-col items-center">
+    
+            <p class="text-red-600 text-lg"></p>
+    
+            @if (this.allFieldsTouched() && hikeForm.invalid) {
+                <p class="text-lg ">Informations manquantes.</p>
+            }
+        
+        </div>
+    
+        <div class="grid grid-cols-2 gap-14">
+            <div class="left-side">
+
+                <div class="flex flex-col  w-full mb-10">
+                    <input type="text" formControlName="title" placeholder="Le nom de la randonnée"
+                    class="w-full bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2">
+            
+                    <div class="input-errors text-orange-500 h-8">
+                        @if ((title?.touched) && title?.hasError('required')) {
+                            <p class="text-sm text-center">{{getErrorMessage('required')}}</p>
+                        }
+                        @if ((title?.touched) && title?.hasError('maxLength')) {
+                            <p class="text-sm text-center">{{getErrorMessage('maxLength', 30)}}</p>
+                        }
+                    </div>
+                </div>
+
+                <div class="flex flex-col  w-full mb-10">
+                    <input type="text" formControlName="distance" placeholder="La distance (en kilomètres)"
+                    class="w-full bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2"
+                    maxLength="5">
+            
+                    <div class="input-errors text-orange-500 h-8">
+                        @if ((distance?.touched) && distance?.hasError('required')) {
+                            <p class="text-sm text-center">{{getErrorMessage('required')}}</p>
+                        }
+                        @if ((distance?.touched) && distance?.hasError('pattern')) {
+                            <p class="text-sm text-center">{{getErrorMessage('number', 10000, 'km')}}</p>
+                        }
+                    </div>
+                </div>
+
+                <div class="flex gap-2 w-full">
+                    <div class="flex flex-col  w-full mb-10">
+                        <input type="text" formControlName="positive" placeholder="La dénivelé positif (en m)"
+                        class="w-full bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2"
+                        maxLength="6">
+                        <div class="input-errors text-orange-500 h-8">
+                            @if ((positive?.touched) && positive?.hasError('required')) {
+                                <p class="text-sm text-center">{{getErrorMessage('required')}}</p>
+                            }
+                            @if ((positive?.touched) && positive?.hasError('pattern')) {
+                                <p class="text-sm text-center">{{getErrorMessage('number', 100000, 'm')}}</p>
+                            }
+                        </div>
+                    </div>
+                    <div class="flex flex-col  w-full mb-10">
+                        <input type="text" formControlName="negative" placeholder="La dénivelé négatif (en m)"
+                        class="w-full bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2"
+                        maxLength="6">
+                        <div class="input-errors text-orange-500 h-8">
+                            @if ((negative?.touched) && negative?.hasError('required')) {
+                                <p class="text-sm text-center">{{getErrorMessage('required')}}</p>
+                            }
+                            @if ((negative?.touched) && negative?.hasError('pattern')) {
+                                <p class="text-sm text-center">{{getErrorMessage('number', 100000, 'm')}}</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-side">
+                <div class="flex gap-5">
+                    <div class="flex flex-col  w-full mb-10">
+                        <input type="text" formControlName="duration" placeholder="La durée estimée"
+                        class="w-full bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2"
+                        maxLength="4">
+                        <div class="input-errors text-orange-500 h-8">
+                            @if ((duration?.touched) && duration?.hasError('required')) {
+                                <p class="text-sm text-center">{{getErrorMessage('required')}}</p>
+                            }
+                            @if ((duration?.touched) && duration?.hasError('pattern')) {
+                                <p class="text-sm text-center">{{getErrorMessage('number', 1000)}}</p>
+                            }
+                        </div>
+                    </div>
+                    <div class="flex flex-col w-full mb-10">
+                        <select formControlName="durationUnit" class="mt-1 w-full bg-[#F1F1F1] outline-1 rounded-md outline-slate-300 px-1 py-2">
+                            @for(unit of durationUnits; track $index){
+                                <option value="{{unit}}">
+                                    {{unit}}
+                                </option>
+                            }
+                        </select>
+                        <div class="input-errors text-orange-500 h-8">
+                    
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col  w-full mb-10">
+                    <label for="">Date prévue : </label>
+                    <input type="date" formControlName="date"
+                    class="bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2">
+            
+                    <div class="input-errors text-orange-500 h-8">
+                        @if ((date?.touched) && date?.hasError('required')) {
+                            <p class="text-sm text-center">{{getErrorMessage('required')}}</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    
+        <div class="btns-container flex justify-center items-center gap-10">
+            
+            <button type="submit" [disabled]="this.hikeForm.invalid" 
+                class="text-white mt-10 disabled:cursor-not-allowed not-disabled:hover:opacity-80 rounded-md bg-amber-500 px-2 py-3 shadow-md disabled:bg-gray-500 cursor-pointer">
+                Créer la randonnée
+            </button>
+            
+        </div>
+    
+    </form>
+</div>
