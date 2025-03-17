@@ -7,10 +7,11 @@ import { Equipment } from '../../interfaces/equipment/Equipment';
 import { ModalService } from '../../services/modal.service';
 import { InventoryCategoryModalComponent } from '../../components/inventory-category-modal/inventory-category-modal.component';
 import { InventoryEquipmentModalComponent } from '../../components/inventory-equipment-modal/inventory-equipment-modal.component';
+import { ClickStopPropagationDirective } from '../../_helpers/directives/click-stop-propagation.directive';
 
 @Component({
   selector: 'app-inventory',
-  imports: [EquipmentCardComponent],
+  imports: [EquipmentCardComponent, ClickStopPropagationDirective],
   templateUrl: './inventory.component.html',
 })
 export class InventoryComponent implements OnInit{
@@ -153,22 +154,26 @@ export class InventoryComponent implements OnInit{
       }
 
       if (content && content.style.maxHeight && content.style.maxHeight !== '0px') {
+
         content.style.maxHeight = '0';
         content.classList.toggle('border-stone-300')
         content.classList.toggle('border')
         
         icon.classList.toggle('rotate-180')
         categoryContainer.classList.toggle('rounded-b-md')
+
       } else if (content) {
         console.log(content.scrollHeight)
 
         if(content.scrollHeight !== 0){
           content.style.maxHeight = content.scrollHeight + 'px';
+          content.style.removeProperty('height')
         }
         else{
           content.style.maxHeight = categoryContainer.scrollHeight + 'px';
           content.style.height = categoryContainer.scrollHeight + 'px';
         }
+
         content.classList.toggle('border-stone-300')
         content.classList.toggle('border')
 
