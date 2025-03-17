@@ -1,13 +1,13 @@
 <div class="modal-content h-fit pb-4 w-4xl">
     <div class="modal-title text-lg text-center">
-        <p>Créer une randonnée</p>
+        <p>Vous partez en rando ?</p>
     </div>
 
     <form [formGroup]="hikeForm" (ngSubmit)="onSubmit()">
     
         <div class="form-errors text-orange-400 h-[20px] mb-8 flex flex-col items-center">
     
-            <p class="text-red-600 text-lg"></p>
+            <p class="text-red-600 text-lg">{{hikeHttpError}}</p>
     
             @if (this.allFieldsTouched() && hikeForm.invalid) {
                 <p class="text-lg ">Informations manquantes.</p>
@@ -18,9 +18,10 @@
         <div class="grid grid-cols-2 gap-14">
             <div class="left-side">
 
-                <div class="flex flex-col  w-full mb-10">
-                    <input type="text" formControlName="title" placeholder="Le nom de la randonnée"
-                    class="w-full bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2">
+                <div class="flex flex-col w-full mb-10">
+                    <input id="hikeForm-title" type="text" formControlName="title" placeholder="Titre de la randonnée"
+                    class="w-full bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2"
+                    maxlength="30">
             
                     <div class="input-errors text-orange-500 h-8">
                         @if ((title?.touched) && title?.hasError('required')) {
@@ -33,7 +34,7 @@
                 </div>
 
                 <div class="flex flex-col  w-full mb-10">
-                    <input type="text" formControlName="distance" placeholder="La distance (en kilomètres)"
+                    <input id="hikeForm-distance" type="text" formControlName="distance" placeholder="Distance (en kilomètres)"
                     class="w-full bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2"
                     maxLength="5">
             
@@ -49,7 +50,7 @@
 
                 <div class="flex gap-2 w-full">
                     <div class="flex flex-col  w-full mb-10">
-                        <input type="text" formControlName="positive" placeholder="La dénivelé positif (en m)"
+                        <input id="hikeForm-positive" type="text" formControlName="positive" placeholder="Dénivelé positif (en m)"
                         class="w-full bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2"
                         maxLength="6">
                         <div class="input-errors text-orange-500 h-8">
@@ -62,7 +63,7 @@
                         </div>
                     </div>
                     <div class="flex flex-col  w-full mb-10">
-                        <input type="text" formControlName="negative" placeholder="La dénivelé négatif (en m)"
+                        <input id="hikeForm-negative" type="text" formControlName="negative" placeholder="Dénivelé négatif (en m)"
                         class="w-full bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2"
                         maxLength="6">
                         <div class="input-errors text-orange-500 h-8">
@@ -80,7 +81,7 @@
             <div class="right-side">
                 <div class="flex gap-5">
                     <div class="flex flex-col  w-full mb-10">
-                        <input type="text" formControlName="duration" placeholder="La durée estimée"
+                        <input id="hikeForm-duration" type="text" formControlName="duration" placeholder="Durée estimée"
                         class="w-full bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2"
                         maxLength="4">
                         <div class="input-errors text-orange-500 h-8">
@@ -93,7 +94,7 @@
                         </div>
                     </div>
                     <div class="flex flex-col w-full mb-10">
-                        <select formControlName="durationUnit" class="mt-1 w-full bg-[#F1F1F1] outline-1 rounded-md outline-slate-300 px-1 py-2">
+                        <select id="hikeForm-durationUnit" formControlName="durationUnit" class="mt-1 w-full bg-[#F1F1F1] outline-1 rounded-md outline-slate-300 px-1 py-2">
                             @for(unit of durationUnits; track $index){
                                 <option value="{{unit}}">
                                     {{unit}}
@@ -107,8 +108,8 @@
                 </div>
 
                 <div class="flex flex-col  w-full mb-10">
-                    <label for="">Date prévue : </label>
-                    <input type="date" formControlName="date"
+                    <label for="hikeForm-date">Date prévue : </label>
+                    <input id="hikeForm-date"  type="date" formControlName="date"
                     class="bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2">
             
                     <div class="input-errors text-orange-500 h-8">
@@ -117,13 +118,21 @@
                         }
                     </div>
                 </div>
+
+                <div class="flex flex-col  w-full mb-10">
+                    <label for="">MODÈLES .... </label>
+                    <div class="input-errors text-orange-500 h-8">
+                        
+                    </div>
+                </div>
             </div>
         </div>
 
     
         <div class="btns-container flex justify-center items-center gap-10">
             
-            <button type="submit" [disabled]="this.hikeForm.invalid" 
+            <button type="submit"
+                [disabled]="hikeForm.invalid"
                 class="text-white mt-10 disabled:cursor-not-allowed not-disabled:hover:opacity-80 rounded-md bg-amber-500 px-2 py-3 shadow-md disabled:bg-gray-500 cursor-pointer">
                 Créer la randonnée
             </button>

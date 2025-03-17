@@ -7,13 +7,8 @@ import { DatePipe } from '@angular/common';
   imports: [DatePipe],
   templateUrl: './hike-card.component.html'
 })
-export class HikeCardComponent implements OnInit{
+export class HikeCardComponent{
 
   @Input() hike : Hike|null = null;
-
-  ngOnInit(): void {
-    console.log(this.hike)
-  }
-
 
 }

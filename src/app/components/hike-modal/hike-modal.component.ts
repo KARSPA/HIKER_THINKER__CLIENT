@@ -1,7 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { Hike } from '../../interfaces/hike/Hike';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { validDurationUnit } from '../../_helpers/validators/durationUnit';
+import { HikeService } from '../../services/hike.service';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-hike-modal',
@@ -12,7 +14,12 @@ export class HikeModalComponent {
 
   @Input() hike : Hike|null = null;
 
+  private hikeService : HikeService = inject(HikeService);
+  private modalService : ModalService = inject(ModalService);
+
   durationUnits = ["jours", "heures"]
+
+  hikeHttpError : string = '';
 
 
   hikeForm = new FormGroup({
@@ -29,7 +36,36 @@ export class HikeModalComponent {
 
 
   onSubmit(){
-    console.log("SUBMIT")
+
+    if(this.hikeForm.valid){
+      const formValue = this.hikeForm.value;
+
+      const newHike : Hike = {
+        id: null,
+        title: formValue.title ?? '',
+        distance: Number(formValue.distance),       
+        positive: Number(formValue.positive),       
+        negative: Number(formValue.negative),       
+        duration: Number(formValue.duration),       
+        durationUnit: formValue.durationUnit ?? '',
+        date: new Date(formValue.date ?? 'now'), 
+        weightCorrection: 0
+      }
+
+      this.hikeService.addHike(newHike).subscribe({
+        next:(response)=>{
+          console.log(response)
+
+          this.hikeService.notifyHikeChange(response.data);
+
+          this.modalService.closeModal();
+        },
+        error:(err)=>{
+          console.log(err)
+          this.hikeHttpError = err.error.message
+        }
+      })
+    }
   }
 
 
@@ -77,7 +113,7 @@ export class HikeModalComponent {
       case 'required':
         errorMessage = 'Champ requis.';
         break;
-      case 'maxlength':
+      case 'maxLength':
         errorMessage = `Au plus ${length} caractères.`;
         break;
       case 'number':

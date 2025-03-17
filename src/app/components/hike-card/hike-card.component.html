@@ -1,5 +1,5 @@
 
-<div class="border border-stone-300 bg-stone-100 rounded-md px-4 py-2 shadow-md">
+<div class="border border-stone-300 bg-stone-100 rounded-md px-4 py-2 shadow-md my-5">
 
     <div class="infos-container grid grid-cols-[7fr_1fr_1fr] gap-10">
 
@@ -7,7 +7,7 @@
 
             <div class="flex justify-between items-center">
                 <p class="font-semibold text-lg">{{hike?.title}}</p>
-                <div class="flex gap-2">
+                <div class="flex gap-2 w-[120px]">
                     <img src="assets/hike_icons/calendar_icon.svg" alt="" class="h-6 aspect-square">
                     <p>{{hike?.date | date:'dd/MM/yyyy'}}</p>
                 </div>
@@ -28,7 +28,7 @@
                     <p><span class="font-semibold">{{hike?.negative}}</span> m</p>
                 </div>
     
-                <div class="flex gap-2 mr-[37px]">
+                <div class="flex gap-2 w-[120px]">
                     <img src="assets/hike_icons/clock_icon.svg" alt="" class="h-6 aspect-square">
                     <p>{{hike?.duration}} {{hike?.durationUnit}}</p>
                 </div>
