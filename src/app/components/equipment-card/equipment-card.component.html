@@ -1,8 +1,8 @@
-<div class="my-4 pb-2 bg-stone-200 border border-stone-300 rounded-md shadow-md h-40">
+<div class="my-4 pb-2 bg-[#7b4b2a] outline-1 outline-stone-300 rounded-md shadow-md shadow-stone-400 h-40">
 
     <div class="flex items-center pl-2 gap-5 h-[70%]">
         <img src="assets/placeholder-image.jpg" alt="" class="h-16 aspect-square">
-        <div class="grow">
+        <div class="grow text-white">
             <p class="font-semibold">{{equipment?.name}}</p>
             <!-- <p>{{equipment?.description}}</p> -->
             <p>{{equipment?.brand}}</p>
@@ -10,12 +10,12 @@
         </div>
     </div>
     <div class="links flex justify-around mt-3">
-        <a [routerLink]="['/inventory/equipments/', equipment?.id]" class="text-center px-2 py-1 rounded-sm bg-green-900 text-white min-w-[100px] cursor-pointer hover:opacity-80 shadow-md">
+        <a [routerLink]="['/inventory/equipments/', equipment?.id]" class="text-center px-2 py-1 rounded-sm bg-green-900 text-white min-w-[100px] cursor-pointer hover:opacity-80 shadow-md shadow-stone-500">
             Voir
         </a>
         <button 
         (click)="openRemoveEquipmentConfirmationModal()"
-        class="px-2 py-1 rounded-sm bg-red-700 text-white min-w-[100px] cursor-pointer hover:opacity-80 shadow-md">
+        class="px-2 py-1 rounded-sm bg-red-700 text-white min-w-[100px] cursor-pointer hover:opacity-80 shadow-md shadow-stone-500">
             Retirer
         </button>
     </div>

@@ -101,10 +101,8 @@ export class InventoryComponent implements OnInit{
 
 
     openCategoryModal(category? : Category): void{
-      console.log("CLIC OK")
 
       const requestType = category?.id ? 'Modification':'Ajout';
-
 
       this.modalService.openModal({
         component: InventoryCategoryModalComponent,
@@ -134,20 +132,12 @@ export class InventoryComponent implements OnInit{
       })
     }
 
-    placeholder(){
-      console.log('oui.')
-    }
-
 
     toggleCategoryContainer(index : number){
 
       const content = document.getElementById('equipment-content-'+index);
       const icon = document.querySelector(`#category-toggle-${index} img`);
-
       const categoryContainer = document.querySelector(`#category-container-${index}`)
-
-
-      console.log(content, icon)
 
       if(!content || !icon || !categoryContainer){
         return;
@@ -163,8 +153,6 @@ export class InventoryComponent implements OnInit{
         categoryContainer.classList.toggle('rounded-b-md')
 
       } else if (content) {
-        console.log(content.scrollHeight)
-
         if(content.scrollHeight !== 0){
           content.style.maxHeight = content.scrollHeight + 'px';
           content.style.removeProperty('height')
