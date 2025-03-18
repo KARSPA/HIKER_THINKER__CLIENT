@@ -30,7 +30,7 @@ export class EquipmentDetailsComponent implements OnInit{
       },
       error: (err)=>{
         console.log(err);
-        this.router.navigate(["/error404"], {state: {message: err.error.message}})
+        this.router.navigate(["/error404"], {state: {message: err.error?.message}})
       }
     });
   }

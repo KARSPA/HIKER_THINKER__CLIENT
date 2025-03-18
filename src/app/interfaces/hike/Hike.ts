@@ -1,3 +1,5 @@
+import { Inventory } from "../Inventory";
+
 export interface Hike{
 
     id : string|null;
@@ -10,5 +12,7 @@ export interface Hike{
     durationUnit : string;
 
     weightCorrection : number;
+
+    inventory : Inventory|null
     
 }

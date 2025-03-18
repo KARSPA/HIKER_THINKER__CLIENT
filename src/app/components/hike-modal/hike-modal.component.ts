@@ -49,7 +49,8 @@ export class HikeModalComponent {
         duration: Number(formValue.duration),       
         durationUnit: formValue.durationUnit ?? '',
         date: new Date(formValue.date ?? 'now'), 
-        weightCorrection: 0
+        weightCorrection: 0,
+        inventory : null
       }
 
       this.hikeService.addHike(newHike).subscribe({

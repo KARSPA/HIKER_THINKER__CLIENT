@@ -23,9 +23,4 @@ export class EquipmentCardComponent {
     })
   }
 
-
-  removeEquipment(){
-
-  }
-
 }

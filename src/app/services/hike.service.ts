@@ -38,4 +38,10 @@ export class HikeService {
   }
 
 
+
+  getHikeById(hikeId : string):  Observable<ResponseModel<Hike>>{
+    return this.httpClient.get<ResponseModel<Hike>>(this.HIKES_URL+`/${hikeId}`)
+  }
+
+
 }
