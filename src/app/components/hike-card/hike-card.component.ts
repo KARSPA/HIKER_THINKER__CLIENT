@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Hike } from '../../interfaces/hike/Hike';
 import { DatePipe } from '@angular/common';
 import { NumberFormatPipe } from '../../_helpers/pipes/number-format.pipe';
