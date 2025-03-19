@@ -10,6 +10,9 @@ import { InventoryEquipmentModalComponent } from '../../components/inventory-equ
 import { ClickStopPropagationDirective } from '../../_helpers/directives/click-stop-propagation.directive';
 import { CategoryEvent } from '../../interfaces/equipment/CategoryEvent';
 import { CategoryService } from '../../services/category.service';
+import { EquipmentService } from '../../services/equipment.service';
+import { EquipmentEvent } from '../../interfaces/equipment/EquipmentEvent';
+import { AddEquipment } from '../../interfaces/equipment/AddEquipment';
 
 @Component({
   selector: 'app-inventory',
@@ -20,6 +23,7 @@ export class InventoryComponent implements OnInit{
   
   private inventoryService : InventoryService = inject(InventoryService)
   private categoryService : CategoryService = inject(CategoryService)
+  private equipmentService : EquipmentService = inject(EquipmentService)
   private modalService : ModalService = inject(ModalService);
 
   inventory : Map<Category, Equipment[]> | null = null;
@@ -115,37 +119,18 @@ export class InventoryComponent implements OnInit{
           existingCategories : this.rawInventory?.categories}
       })
       .subscribe(({action, category})=>{
-        if(action === 'delete'){
-          this.categoryService.removeInventoryCategory(category?.id ?? '').subscribe({
-            next:(response)=>{
-              this.inventoryService.notifyCategoryRemove(category?.id ?? '')
-            },
-            error:(err)=>{
-              console.log(err.error)
-            }
-          })
-        }else{
-          let returnObs$;
-          if(action === 'create') returnObs$ = this.categoryService.addInventoryCategory(category)
-          else returnObs$ = this.categoryService.modifyInventoryCategory(category)
-
-            returnObs$.subscribe({
-              next:(response)=>{
-                this.inventoryService.notifyCategoryChange(response.data)
-              },
-              error:(err)=>{
-                console.log(err.error)
-              }
-            })
-          }
+        this.sendCategoryRequestAndNotify(action, category);
       });
     }
 
 
     openEquipmentModal(equipment? : Equipment): void{
-      this.modalService.openModal({
+      this.modalService.openModal<InventoryEquipmentModalComponent, EquipmentEvent>({
         component : InventoryEquipmentModalComponent,
         data: {categories : this.rawInventory?.categories}
+      })
+      .subscribe((event)=>{
+        this.sendEquipmentRequestAndNotify(event);
       })
     }
 
@@ -162,6 +147,63 @@ export class InventoryComponent implements OnInit{
         }
       })
     }
+
+
+
+    sendCategoryRequestAndNotify(action : string, category : Category ){
+
+      if(action === 'delete'){
+        this.categoryService.removeInventoryCategory(category?.id ?? '').subscribe({
+          next:(response)=>{
+            this.inventoryService.notifyCategoryRemove(category?.id ?? '')
+          },
+          error:(err)=>{
+            console.log(err.error)
+          }
+        })
+
+      }else{
+
+        let returnObs$;
+        if(action === 'create') returnObs$ = this.categoryService.addInventoryCategory(category)
+        else returnObs$ = this.categoryService.modifyInventoryCategory(category)
+
+          returnObs$.subscribe({
+            next:(response)=>{
+              this.inventoryService.notifyCategoryChange(response.data)
+            },
+            error:(err)=>{
+              console.log(err.error)
+            }
+          })
+        }
+    }
+
+    sendEquipmentRequestAndNotify(evt: EquipmentEvent) {
+      switch (evt.action) {
+        case 'create':
+          this.equipmentService.addInventoryEquipment(evt.equipment).subscribe({
+            next: response => this.inventoryService.notifyEquipmentChange(response.data),
+            error: err => console.error(err.error)
+          });
+          break;
+    
+        // case 'update':
+        //   this.equipmentService.modifyInventoryEquipment(evt.equipment).subscribe({
+        //     next: response => this.inventoryService.notifyEquipmentChange(response.data),
+        //     error: err => console.error(err.error)
+        //   });
+        //   break;
+    
+        case 'delete':
+          this.equipmentService.removeInventoryEquipment(evt.equipment.id).subscribe({
+            next: () => this.inventoryService.notifyEquipmentRemove(evt.equipment.id),
+            error: err => console.error(err.error)
+          });
+          break;
+      }
+    }
+    
 
 
     toggleCategoryContainer(index : number){

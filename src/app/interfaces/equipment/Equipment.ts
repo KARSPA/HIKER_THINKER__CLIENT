@@ -1,10 +1,6 @@
-export interface Equipment{
-    id : string;
-    name : string;
-    description : string;
-    brand : string;
-    weight : number;
-    
-    categoryId : string;
-    sourceId : string;
+import { AddEquipment } from "./AddEquipment";
+
+export interface Equipment extends AddEquipment{
+    id: string;
+    categoryId: string;
 }

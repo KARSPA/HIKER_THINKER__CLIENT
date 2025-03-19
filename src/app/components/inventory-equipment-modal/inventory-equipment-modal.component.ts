@@ -1,9 +1,11 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InventoryService } from '../../services/inventory.service';
 import { Category } from '../../interfaces/equipment/Category';
 import { EquipmentService } from '../../services/equipment.service';
 import { ModalService } from '../../services/modal.service';
+import { EquipmentEvent } from '../../interfaces/equipment/EquipmentEvent';
+import { AddEquipment } from '../../interfaces/equipment/AddEquipment';
 
 @Component({
   selector: 'app-inventory-equipment-modal',
@@ -14,9 +16,9 @@ export class InventoryEquipmentModalComponent {
 
   @Input() categories : Category[] = [];
 
+  @Output() result = new EventEmitter<EquipmentEvent>(); // Va remonter les évènements (au submit) pour déporter la logique métier
 
-  private inventoryService : InventoryService = inject(InventoryService);
-  private equipmentService : EquipmentService = inject(EquipmentService);
+  
   private modalService : ModalService = inject(ModalService);
 
   equipmentHttpError = null;
@@ -33,34 +35,34 @@ export class InventoryEquipmentModalComponent {
 
 
   onSubmit(){
-    console.log("SOUMIS EQUIPEMENT", this.equipmentForm.errors)
+    console.log("SOUMIS EQUIPEMENT")
 
-    if(this.equipmentForm.valid){
+    if(!this.equipmentForm.valid) return
 
-      // Requêter l'API pour ajouter l'équipement
-        this.equipmentService.addInventoryEquipment({
-          name : this.name?.value,
-          weight : this.weight?.value,
-          description : this.description?.value,
-          brand : this.brand?.value,
-          categoryName : this.categoryName?.value
-        }).subscribe({
-          next:(response)=>{
-            console.log(response)
+      //Remonter l'évènement au parent
+    
+      const formValue = this.equipmentForm.value;
 
-            // Notifier l'inventory service avec le nouvel équipement pour mettre à jour l'affichage
-            this.inventoryService.notifyEquipmentChange(response.data)
-
-
-            //Fermer la modale
-            this.modalService.closeModal()
-
-          },
-          error: (err)=>{
-            console.log(err)
-          }
-        })
-    }
+      const payload: AddEquipment = { 
+        name : formValue.name ?? '',
+        description : formValue.description ?? '',
+        weight : Number(formValue.weight) ?? 0,
+        brand : formValue.brand ?? '',
+        categoryName : formValue.categoryName ?? '',
+        sourceId : null
+      }
+  
+      this.result.emit({
+        action : 'create',
+        equipment : payload
+      })
+  
+      console.log({
+        action : 'create',
+        equipment : payload
+      })
+  
+      this.modalService.closeModal();
   }
 
 
