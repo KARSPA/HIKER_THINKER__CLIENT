@@ -35,7 +35,6 @@ export class InventoryEquipmentModalComponent {
 
 
   onSubmit(){
-    console.log("SOUMIS EQUIPEMENT")
 
     if(!this.equipmentForm.valid) return
 

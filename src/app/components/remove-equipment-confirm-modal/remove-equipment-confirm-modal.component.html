@@ -4,13 +4,19 @@
         <p class="font-semibold">Êtes-vous bien sûr ???</p>
     </div>
     <div class="modal-content">
-        <p>Vous ne pourrez plus voir les statistiques de cet équipement.</p>
-        <p>Vous ne pourrez plus affecter cet équipement aux futurs randonnées et modèles.</p>
-        <p>L'équipement sera supprimé de l'inventaire et des modèles dans lequel il se trouve.</p>
-        <p>En confirmant, l'équipement sera définitivement supprimé.</p>
-
+        @if(context === 'Inventory'){
+            <p>Vous ne pourrez plus voir les statistiques de cet équipement.</p>
+            <p>Vous ne pourrez plus affecter cet équipement aux futurs randonnées et modèles.</p>
+            <p>L'équipement sera supprimé de l'inventaire et des modèles dans lequel il se trouve.</p>
+            <p>En confirmant, l'équipement sera définitivement supprimé.</p>
+        }@else if(context === 'Hike'){
+            <p>Randonnée</p>
+        }@else if(context === 'Models'){
+            <p>Modèles</p>
+        }
+            
         <button 
-            (click)="removeEquipment()"
+            (click)="confirmRemoval()"
             class="confirm-btn block mt-10 mx-auto py-2 px-3 rounded-md shadow-md cursor-pointer hover:opacity-80 bg-amber-500 text-white">
             Confirmer
         </button>

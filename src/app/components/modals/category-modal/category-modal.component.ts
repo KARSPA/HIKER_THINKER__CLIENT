@@ -85,9 +85,6 @@ export class CategoryModalComponent implements OnInit{
       category : payload
     })
 
-    console.log({
-      action : this.category?.id ? 'update' : 'create',
-      category : payload})
 
     this.modalService.closeModal();
   }

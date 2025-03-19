@@ -1,8 +1,9 @@
-import { Component, inject, Input } from '@angular/core';
-import { Equipment } from '../../interfaces/equipment/Equipment';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+
 import { RouterLink } from '@angular/router';
 import { ModalService } from '../../services/modal.service';
 import { RemoveEquipmentConfirmModalComponent } from '../remove-equipment-confirm-modal/remove-equipment-confirm-modal.component';
+import { Equipment } from '../../interfaces/equipment/Equipment';
 
 @Component({
   selector: 'app-equipment-card',
@@ -13,14 +14,11 @@ export class EquipmentCardComponent {
 
   @Input() equipment : Equipment|null = null;
 
-  private modalService : ModalService = inject(ModalService);
+  @Output() delete = new EventEmitter<Equipment>();
 
 
-  openRemoveEquipmentConfirmationModal(){
-    this.modalService.openModal({
-      component: RemoveEquipmentConfirmModalComponent,
-      data: {equipment : this.equipment ?? undefined}
-    })
+  onRemoveClick(){ // Transmet le clic du bouton au parent pour qu'il gère en fonctione de la page sur laquelle se situe ce composant.
+    this.delete.emit(this.equipment!)
   }
 
 }

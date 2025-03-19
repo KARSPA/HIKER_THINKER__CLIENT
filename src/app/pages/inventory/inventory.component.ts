@@ -13,6 +13,8 @@ import { CategoryService } from '../../services/category.service';
 import { EquipmentService } from '../../services/equipment.service';
 import { EquipmentEvent } from '../../interfaces/equipment/EquipmentEvent';
 import { AddEquipment } from '../../interfaces/equipment/AddEquipment';
+import { RemoveEquipmentConfirmModalComponent } from '../../components/remove-equipment-confirm-modal/remove-equipment-confirm-modal.component';
+import { filter } from 'rxjs/internal/operators/filter';
 
 @Component({
   selector: 'app-inventory',
@@ -132,6 +134,22 @@ export class InventoryComponent implements OnInit{
       .subscribe((event)=>{
         this.sendEquipmentRequestAndNotify(event);
       })
+    }
+
+
+    openRemoveEquipmentModal(equipment : Equipment): void{
+      this.modalService.openModal<RemoveEquipmentConfirmModalComponent, boolean>({
+        component : RemoveEquipmentConfirmModalComponent,
+        data : {context : 'Inventory'}
+      })
+      .pipe(
+        filter(confirmed => confirmed)  //On garde que les réponses true (confirmations)
+      )
+      .subscribe(()=>{
+          this.equipmentService.removeInventoryEquipment(equipment.id)
+          .subscribe((response)=>this.inventoryService.notifyEquipmentRemove(response.data))
+      })
+
     }
 
 

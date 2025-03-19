@@ -45,9 +45,14 @@ export class EquipmentDetailsComponent implements OnInit{
   }
 
   openRemoveEquipmentConfirmationModal(){
-      this.modalService.openModal({
+      this.modalService.openModal<RemoveEquipmentConfirmModalComponent, boolean>({
         component: RemoveEquipmentConfirmModalComponent,
-        data: {equipment : this.equipment ?? undefined}
+        data: {context : 'Inventory'}
+      })
+      .pipe(confirm => confirm) //On garde que les réponses true (confirmations)
+      .subscribe(()=>{
+          this.equipmentService.removeInventoryEquipment(this.equipment.id)
+          .subscribe((response)=>this.inventoryService.notifyEquipmentRemove(response.data))
       })
     }
   
