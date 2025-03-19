@@ -1,13 +1,15 @@
-import { Component, inject, OnInit, TemplateRef } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { InventoryService } from '../../services/inventory.service';
 import { Inventory } from '../../interfaces/Inventory';
 import { EquipmentCardComponent } from '../../components/equipment-card/equipment-card.component';
 import { Category } from '../../interfaces/equipment/Category';
 import { Equipment } from '../../interfaces/equipment/Equipment';
 import { ModalService } from '../../services/modal.service';
-import { InventoryCategoryModalComponent } from '../../components/inventory-category-modal/inventory-category-modal.component';
+import { CategoryModalComponent } from '../../components/modals/category-modal/category-modal.component';
 import { InventoryEquipmentModalComponent } from '../../components/inventory-equipment-modal/inventory-equipment-modal.component';
 import { ClickStopPropagationDirective } from '../../_helpers/directives/click-stop-propagation.directive';
+import { CategoryEvent } from '../../interfaces/equipment/CategoryEvent';
+import { CategoryService } from '../../services/category.service';
 
 @Component({
   selector: 'app-inventory',
@@ -17,6 +19,7 @@ import { ClickStopPropagationDirective } from '../../_helpers/directives/click-s
 export class InventoryComponent implements OnInit{
   
   private inventoryService : InventoryService = inject(InventoryService)
+  private categoryService : CategoryService = inject(CategoryService)
   private modalService : ModalService = inject(ModalService);
 
   inventory : Map<Category, Equipment[]> | null = null;
@@ -104,10 +107,38 @@ export class InventoryComponent implements OnInit{
 
       const requestType = category?.id ? 'Modification':'Ajout';
 
-      this.modalService.openModal({
-        component: InventoryCategoryModalComponent,
-        data: {requestType : requestType, category : category}
+      this.modalService.openModal<CategoryModalComponent, CategoryEvent>({
+        component: CategoryModalComponent,
+        data: {
+          requestType : requestType,
+          category : category,
+          existingCategories : this.rawInventory?.categories}
       })
+      .subscribe(({action, category})=>{
+        if(action === 'delete'){
+          this.categoryService.removeInventoryCategory(category?.id ?? '').subscribe({
+            next:(response)=>{
+              this.inventoryService.notifyCategoryRemove(category?.id ?? '')
+            },
+            error:(err)=>{
+              console.log(err.error)
+            }
+          })
+        }else{
+          let returnObs$;
+          if(action === 'create') returnObs$ = this.categoryService.addInventoryCategory(category)
+          else returnObs$ = this.categoryService.modifyInventoryCategory(category)
+
+            returnObs$.subscribe({
+              next:(response)=>{
+                this.inventoryService.notifyCategoryChange(response.data)
+              },
+              error:(err)=>{
+                console.log(err.error)
+              }
+            })
+          }
+      });
     }
 
 

@@ -2,10 +2,10 @@
 <div class="modal-content h-fit pb-4 w-full">
     <div class="modal-title text-lg text-center">
         @if(this.requestType === 'Modification'){
-            <p>Modifier cette catégorie dans votre inventaire</p>
+            <p>Modifier cette catégorie</p>
         }
         @else if(this.requestType === 'Ajout'){
-            <p>Ajouter une catégorie à votre inventaire</p>
+            <p>Ajouter une catégorie</p>
         }
     </div>
 
@@ -13,10 +13,14 @@
     
         <div class="form-errors text-orange-400 h-[20px] mb-8 flex flex-col items-center">
     
-            <p class="text-red-600 text-lg">{{categoryHttpError}}</p>
+            <p class="text-red-600 text-lg">
+                @if ((name?.touched) && name?.hasError('duplicateCategory')) {
+                    <p class="text-sm text-center">Champs requis</p>
+                }
+            </p>
     
             @if (categoryForm.touched && categoryForm.invalid) {
-                <p class="text-lg ">Informations manquantes.</p>
+                <p class="text-lg ">Informations manquantes ou incorrectes.</p>
             }
         
         </div>
@@ -27,7 +31,9 @@
             class="w-[90%] bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2">
     
             <div class="input-errors text-amber-300 h-8">
-                
+                @if ((name?.touched) && name?.hasError('required')) {
+                    <p class="text-sm text-center">Champs requis</p>
+                }
             </div>
         </div>
 

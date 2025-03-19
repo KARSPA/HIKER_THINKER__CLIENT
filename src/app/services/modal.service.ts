@@ -7,17 +7,17 @@ import { ModalConfig } from "../interfaces/ModalConfig";
 })
 export class ModalService{
     
-  private modalSubject = new Subject<ModalConfig<any>>();
-  modal: Observable<ModalConfig<any>> = this.modalSubject.asObservable();
-
-
+  private modalSubject = new Subject<ModalConfig<any, any>>();
+  modal: Observable<ModalConfig<any, any>> = this.modalSubject.asObservable();
 
   private modalCloseSubject = new Subject<void>();
   modalClose: Observable<void> = this.modalCloseSubject.asObservable();
 
 
-  openModal<T>(config : ModalConfig<T>): void{
-    this.modalSubject.next(config);
+  openModal<T, R>(config : ModalConfig<T, R>): Observable<R>{
+    const result = new Subject<R>();
+    this.modalSubject.next({...config, result});
+    return result.asObservable()
   }
 
 
