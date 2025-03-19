@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { ResponseModel } from '../interfaces/ResponseModel';
 import { Hike } from '../interfaces/hike/Hike';
 import { Observable, Subject } from 'rxjs';
+import { Category } from '../interfaces/equipment/Category';
 
 @Injectable({
   providedIn: 'root'
@@ -17,13 +18,25 @@ export class HikeService {
   hikeChangeSubject = new Subject<Hike>();
   hikeChange$ = this.hikeChangeSubject.asObservable();
 
+  private categoryChangeSubject = new Subject<Category>();
+  categoryChange$ = this.categoryChangeSubject.asObservable();
+
+  private categoryRemoveSubject = new Subject<string>();
+  categoryRemove$ = this.categoryRemoveSubject.asObservable();
+  
 
 
   notifyHikeChange(hike : Hike){
     this.hikeChangeSubject.next(hike);
   }
 
+  notifyCategoryRemove(categoryId : string){
+    this.categoryRemoveSubject.next(categoryId);
+  }
 
+  notifyCategoryChange(category : Category){
+    this.categoryChangeSubject.next(category);
+  }
 
   addHike(hike : Hike): Observable<ResponseModel<Hike>>{
 

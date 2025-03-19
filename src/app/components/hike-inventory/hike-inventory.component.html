@@ -16,7 +16,7 @@
                 <button
                 stop-click-propagation
                 class="p-2 rounded-full hover:outline-1 hover:outline-amber-500 cursor-pointer"
-                (click)="placeholder()">
+                (click)="openCategoryModal(grouped[0])">
                 <img src="assets/modifyIcon.svg" alt="" class="h-4 aspect-square">
             </button>
             <button
@@ -44,7 +44,7 @@
     </div>
     <div class="">
         <button 
-        (click)="placeholder()"
+        (click)="openCategoryModal()"
         class="h-8 aspect-square rounded-full bg-amber-500 font-semibold text-white cursor-pointer shadow-sm hover:opacity-80">
             +
         </button>

@@ -186,15 +186,15 @@ export class InventoryComponent implements OnInit{
         if(action === 'create') returnObs$ = this.categoryService.addInventoryCategory(category)
         else returnObs$ = this.categoryService.modifyInventoryCategory(category)
 
-          returnObs$.subscribe({
-            next:(response)=>{
-              this.inventoryService.notifyCategoryChange(response.data)
-            },
-            error:(err)=>{
-              console.log(err.error)
-            }
-          })
-        }
+        returnObs$.subscribe({
+          next:(response)=>{
+            this.inventoryService.notifyCategoryChange(response.data)
+          },
+          error:(err)=>{
+            console.log(err.error)
+          }
+        })
+      }
     }
 
     sendEquipmentRequestAndNotify(evt: EquipmentEvent) {

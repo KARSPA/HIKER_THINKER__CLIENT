@@ -21,7 +21,6 @@ export class InventoryService{
   private categoryChangeSubject = new Subject<Category>();
   categoryChange$ = this.categoryChangeSubject.asObservable();
 
-
   private categoryRemoveSubject = new Subject<string>();
   categoryRemove$ = this.categoryRemoveSubject.asObservable();
 
