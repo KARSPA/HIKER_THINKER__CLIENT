@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { Category } from '../../interfaces/equipment/Category';
 import { Equipment } from '../../interfaces/equipment/Equipment';
 import { EquipmentCardComponent } from '../equipment-card/equipment-card.component';
@@ -19,6 +19,8 @@ export class HikeInventoryComponent implements OnInit{
 
   @Input() hikeInventory : Map<Category, Equipment[]>|null = null;
   @Input() hike : Hike|null = null;
+
+  @Output() categoryRemoved = new EventEmitter<void>();
 
   private categoryService : CategoryService = inject(CategoryService)
   private hikeService : HikeService = inject(HikeService)
@@ -49,12 +51,14 @@ export class HikeInventoryComponent implements OnInit{
       }
     })
 
-    //S'abonner aux évènement de suppression d'un catégorie
+    //S'abonner aux évènement de suppression d'une catégorie
         // Si ça arrive : 
     // Redemander l'inventaire à l'API car les équipements seront mis à jours.
 
     this.hikeService.categoryRemove$.subscribe((categoryId)=>{
       //Rechercher l'inventaire car mis à jour par l'API
+      //Émettre un évènement au parent, qui rechargera l'inventaire :)
+      this.categoryRemoved.emit();
     })
   }
 
