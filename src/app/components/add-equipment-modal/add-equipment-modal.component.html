@@ -1,0 +1,44 @@
+<div class="modal-content h-fit max-h-[10%] pb-4 w-3xl">
+    <div class="modal-title text-lg text-center">
+        @if(this.context === 'Hike'){
+            <p>Ajouter un équipement à cette randonnée</p>
+        }
+        @else if(this.context === 'Model'){
+            <p>Ajouter un équipement à cet modèle</p>
+        }
+    </div>
+
+    <div class="mt-10 equipments-container grid grid-cols-3 gap-5 overflow-y-scroll h-[10%]">
+        @for(equipment of filteredEquipments; track $index){
+            <div class="my-4 pb-2 bg-[#DEB887] outline-1 outline-stone-300 rounded-md shadow-md shadow-stone-400 h-40">
+
+                <div class="flex items-center pl-2 gap-5 h-[70%]">
+                    <img src="assets/placeholder-image.jpg" alt="" class="h-16 aspect-square">
+                    <div class="grow text-stone-800">
+                        <p class="font-semibold">{{equipment?.name}}</p>
+                        <!-- <p>{{equipment?.description}}</p> -->
+                        <p>{{equipment?.brand}}</p>
+                        <p class="font-semibold italic">{{equipment?.weight}} g</p>
+                    </div>
+                </div>
+                <div class="links flex justify-around mt-3">
+                    <button 
+                    (click)="onAddClick(equipment.id)"
+                    class="px-2 py-1 rounded-sm bg-amber-500 text-white min-w-[100px] cursor-pointer hover:opacity-80 shadow-md shadow-stone-500">
+                        Ajouter
+                    </button>
+                    <a [routerLink]="['/inventory/equipments/', equipment?.id]" class="text-center px-2 py-1 rounded-sm bg-green-900 text-white min-w-[100px] cursor-pointer hover:opacity-80 shadow-md shadow-stone-500">
+                        Voir
+                    </a>
+                </div>
+            </div>
+        }
+        <div class="my-4 p-2 outline-1 outline-stone-300 rounded-md shadow-md shadow-stone-400 h-40 flex flex-col justify-between">
+            <p class="font-semibold text-sm">Vous ne trouvez pas l'équipement souhaité ?</p>
+            <p class="text-xs">Il n'est peut être pas dans votre inventaire, ajoutez-le pour le retrouver dans cette liste.</p>
+            <a [routerLink]="['/inventory']" class="text-center px-2 py-1 rounded-sm bg-amber-800 text-white mx-auto w-[150px] cursor-pointer hover:opacity-80 shadow-md shadow-stone-500">
+                Aller à l'inventaire
+            </a>
+        </div>
+    </div>
+</div>  

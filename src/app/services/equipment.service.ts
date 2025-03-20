@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Equipment } from '../interfaces/equipment/Equipment';
 import { Observable } from 'rxjs';
 import { ResponseModel } from '../interfaces/ResponseModel';
+import { RefEquipment } from '../interfaces/equipment/RefEquipment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,8 @@ import { ResponseModel } from '../interfaces/ResponseModel';
 export class EquipmentService {
 
   private INVENTORY_EQUIP_BASE_URL = "http://localhost:8000/api/v1/inventory/equipments";
+  private HIKE_BASE_URL = "http://localhost:8000/api/v1/hikes";
+
 
 
   private httpClient : HttpClient = inject(HttpClient);
@@ -38,6 +41,17 @@ export class EquipmentService {
 
     return this.httpClient.delete<ResponseModel<string>>(this.INVENTORY_EQUIP_BASE_URL+`/${equipmentId}`)
   }
+
+
+  addHikeEquipment(hikeId : string, refEquipment : RefEquipment) : Observable<ResponseModel<Equipment>>{
+    return this.httpClient.post<ResponseModel<Equipment>>(this.buildBaseHikeEquipmentUrl(hikeId), {...refEquipment})
+  }
+
+
+  private buildBaseHikeEquipmentUrl(hikeId : string){
+    return `${this.HIKE_BASE_URL}/${hikeId}/equipments`;
+  }
+
 
 
 }

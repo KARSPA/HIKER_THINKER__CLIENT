@@ -17,7 +17,7 @@ export class CategoryService {
 
 
   addInventoryCategory(category : Category) : Observable<ResponseModel<Category>>{
-    console.log(category)
+
     return this.httpClient.post<ResponseModel<Category>>(this.INVENTORY_BASE_URL, {
       name : category.name,
       icon : category.icon,
@@ -26,7 +26,6 @@ export class CategoryService {
 
   }
   modifyInventoryCategory(category : Category) : Observable<ResponseModel<Category>>{
-    console.log(category);
 
     return this.httpClient.patch<ResponseModel<Category>>(this.INVENTORY_BASE_URL+`/${category.id}`, {
       name : category.name,
@@ -35,7 +34,6 @@ export class CategoryService {
     })
   }
   removeInventoryCategory(categoryId : string) : Observable<ResponseModel<Category>>{
-    console.log('CategoryId (remove) : ', categoryId);
 
     return this.httpClient.delete<ResponseModel<Category>>(this.INVENTORY_BASE_URL+`/${categoryId}`);
     
@@ -45,7 +43,6 @@ export class CategoryService {
   
   addHikeCategory(hikeId : string, category : Category) : Observable<ResponseModel<Category>>{
 
-    console.log(category)
     return this.httpClient.post<ResponseModel<Category>>(this.buildBaseHikeCategoryUrl(hikeId), {
       name : category.name,
       icon : category.icon,
@@ -54,7 +51,6 @@ export class CategoryService {
 
   }
   modifyHikeCategory(hikeId : string, category : Category) : Observable<ResponseModel<Category>>{
-    console.log(category);
 
     return this.httpClient.patch<ResponseModel<Category>>(this.buildBaseHikeCategoryUrl(hikeId)+`/${category.id}`, {
       name : category.name,
@@ -63,7 +59,6 @@ export class CategoryService {
     })
   }
   removeHikeCategory(hikeId : string, categoryId : string) : Observable<ResponseModel<Category>>{
-    console.log('CategoryId (remove) : ', categoryId);
 
     return this.httpClient.delete<ResponseModel<Category>>(this.buildBaseHikeCategoryUrl(hikeId)+`/${categoryId}`);
     

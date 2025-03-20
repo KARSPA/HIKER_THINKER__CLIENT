@@ -1,11 +1,20 @@
 import { Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs";
 import { ModalConfig } from "../interfaces/ModalConfig";
+import { NavigationStart, Router } from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ModalService{
+
+  constructor(private router : Router){
+    this.router.events.subscribe(event =>{ // On écoute la navigation interne d'angular, si on navigue, alors on ferme les modales.
+      if(event instanceof NavigationStart){
+        this.closeModal()
+      }
+    })
+  }
     
   private modalSubject = new Subject<ModalConfig<any, any>>();
   modal: Observable<ModalConfig<any, any>> = this.modalSubject.asObservable();

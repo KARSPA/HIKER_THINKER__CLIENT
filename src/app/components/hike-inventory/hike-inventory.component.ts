@@ -9,6 +9,9 @@ import { ModalService } from '../../services/modal.service';
 import { CategoryModalComponent } from '../modals/category-modal/category-modal.component';
 import { CategoryEvent } from '../../interfaces/equipment/CategoryEvent';
 import { HikeService } from '../../services/hike.service';
+import { AddEquipmentModalComponent } from '../add-equipment-modal/add-equipment-modal.component';
+import { EquipmentEvent } from '../../interfaces/equipment/EquipmentEvent';
+import { RefEquipment } from '../../interfaces/equipment/RefEquipment';
 
 @Component({
   selector: 'app-hike-inventory',
@@ -32,10 +35,8 @@ export class HikeInventoryComponent implements OnInit{
       // S'abonner aux évènements d'ajout/modification de catégorie.
     this.hikeService.categoryChange$.subscribe((category)=>{
 
-      console.log(category)
       const previousCategory = Array.from(this.hikeInventory?.keys() ?? []).find(cat => cat.id === category.id);
 
-      console.log('DANS INVENTAIRE :', previousCategory)
       if(previousCategory){
         const tempSave = this.hikeInventory?.get(previousCategory);
         this.hikeInventory?.delete(previousCategory);
@@ -81,6 +82,36 @@ export class HikeInventoryComponent implements OnInit{
   }
 
 
+  openHikeEquipmentModal(category : Category) : void{
+    console.log('click ok', category)
+
+    //Ouvrir la modale d'ajout d'équipement pour randonnée et modèles
+    //Lui passer les équipements présents dans la randonnée pour filtrer
+    //Passer également la catégorie dans lequelle il va ajouter l'équipement (bouton)
+
+    this.modalService.openModal<AddEquipmentModalComponent, RefEquipment>({
+      component : AddEquipmentModalComponent,
+      data: {
+        alreadyInEquipments : Array.from(this.hikeInventory?.values() ?? []).flat(),
+        categoryIdRef : category.id,
+        context : 'Hike'
+      }
+    })
+    .subscribe((refEquipment)=>{
+      this.equipmentService.addHikeEquipment(this.hike?.id!, refEquipment).subscribe({
+        next:(res)=>{
+          console.log(res)
+        },
+        error : (err)=>{
+          console.log(err)
+        }
+      })
+    })
+  }
+
+  removeHikeEquipment(){
+    console.log("A FAIRE")
+  }
 
 
   sendCategoryRequestAndNotify(action : string, category : Category ){
@@ -103,7 +134,6 @@ export class HikeInventoryComponent implements OnInit{
 
       returnObs$.subscribe({
         next:(response)=>{
-          console.log('RÉPONSE API : ', response)
           this.hikeService.notifyCategoryChange(response.data)
         },
         error:(err)=>{
