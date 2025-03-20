@@ -10,36 +10,36 @@
         <div class="flex flex-col gap-2" >
 
             <div class="flex justify-between items-center">
-                <p class="font-semibold text-lg">{{hike?.title}}</p>
+                <p class="font-semibold text-lg">{{hike.title}}</p>
             </div>
 
             <div class="flex justify-between items-center gap-10">
 
                 <div class="flex gap-2">
                     <img src="assets/hike_icons/path_icon.svg" alt="" class="h-6 aspect-square">
-                    <p><span class="font-semibold italic">{{hike?.distance | numberFormat}}</span> km</p>
+                    <p><span class="font-semibold italic">{{hike.distance | numberFormat}}</span> km</p>
     
                 </div>
 
                 <div>
                     <div class="flex gap-2 mb-4">
                         <img src="assets/hike_icons/up-trend-bis_icon.svg" alt="" class="h-6 aspect-square">
-                        <p><span class="font-semibold italic">{{hike?.positive | numberFormat}}</span> m</p>
+                        <p><span class="font-semibold italic">{{hike.positive | numberFormat}}</span> m</p>
                     </div>
                     <div class="flex gap-2">
                         <img src="assets/hike_icons/down-trend-bis_icon.svg" alt="" class="h-6 aspect-square">
-                        <p><span class="font-semibold italic">{{hike?.negative | numberFormat}}</span> m</p>
+                        <p><span class="font-semibold italic">{{hike.negative | numberFormat}}</span> m</p>
                     </div>
                 </div>
     
                 <div>
                     <div class="flex gap-2 mb-4">
                         <img src="assets/hike_icons/calendar_icon.svg" alt="" class="h-6 aspect-square">
-                        <p>{{hike?.date | date:'dd/MM/yyyy'}}</p>
+                        <p>{{hike.date | date:'dd/MM/yyyy'}}</p>
                     </div>
                     <div class="flex gap-2">
                         <img src="assets/hike_icons/clock_icon.svg" alt="" class="h-6 aspect-square">
-                        <p><span class="italic">{{hike?.duration}}</span> {{hike?.durationUnit}}</p>
+                        <p><span class="italic">{{hike.duration}}</span> {{hike.durationUnit}}</p>
                     </div>
                 </div>
 
@@ -49,10 +49,10 @@
                         <p>12.6 kg</p>
                     </div>
                     <div>
-                        @if((hike?.weightCorrection ?? 0) >= 0){
-                            <p class="text-sm text-stone-500">Corr : +{{hike?.weightCorrection}} g</p>
+                        @if((hike.weightCorrection) >= 0){
+                            <p class="text-sm text-stone-500">Corr : +{{hike.weightCorrection}} g</p>
                         }@else{
-                            <p class="text-sm text-stone-500">Corr : -{{hike?.weightCorrection}} g</p>
+                            <p class="text-sm text-stone-500">Corr : -{{hike.weightCorrection}} g</p>
                         }
                     </div>
                 </div>

@@ -6,7 +6,7 @@ import { Hike } from '../../interfaces/hike/Hike';
 
 @Component({
   selector: 'app-hike-details-card',
-  imports: [DatePipe, NumberFormatPipe, RouterLink],
+  imports: [DatePipe, NumberFormatPipe],
   templateUrl: './hike-details-card.component.html'
 })
 export class HikeDetailsCardComponent {

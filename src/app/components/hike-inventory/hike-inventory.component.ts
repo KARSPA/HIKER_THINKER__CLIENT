@@ -12,6 +12,7 @@ import { HikeService } from '../../services/hike.service';
 import { AddEquipmentModalComponent } from '../add-equipment-modal/add-equipment-modal.component';
 import { EquipmentEvent } from '../../interfaces/equipment/EquipmentEvent';
 import { RefEquipment } from '../../interfaces/equipment/RefEquipment';
+import { InventoryService } from '../../services/inventory.service';
 
 @Component({
   selector: 'app-hike-inventory',
@@ -27,11 +28,31 @@ export class HikeInventoryComponent implements OnInit{
 
   private categoryService : CategoryService = inject(CategoryService)
   private hikeService : HikeService = inject(HikeService)
+  private inventoryService : InventoryService = inject(InventoryService)
   private equipmentService : EquipmentService = inject(EquipmentService)
   private modalService : ModalService = inject(ModalService)
 
 
   ngOnInit(): void {
+
+      // S'abonner aux évènements d'ajout/modification d'équipement
+      this.inventoryService.equipmentChange$.subscribe((equipment)=>{
+
+        //Lors de l'ajout d'un nouvel équipement :
+          //On trouve la catégorie dans lequel il se situe et on l'ajoute aux tableau de la map
+        const category = Array.from(this.hikeInventory?.keys() ?? []).find(cat => cat.id === equipment.categoryId);
+  
+        if (category && this.hikeInventory) {
+  
+          const currentEquipments = this.hikeInventory.get(category) ?? [];
+  
+          currentEquipments.push(equipment);
+  
+          this.hikeInventory.set(category, currentEquipments);
+        }
+      })
+
+
       // S'abonner aux évènements d'ajout/modification de catégorie.
     this.hikeService.categoryChange$.subscribe((category)=>{
 
@@ -101,6 +122,7 @@ export class HikeInventoryComponent implements OnInit{
       this.equipmentService.addHikeEquipment(this.hike?.id!, refEquipment).subscribe({
         next:(res)=>{
           console.log(res)
+          this.inventoryService.notifyEquipmentChange(res.data)
         },
         error : (err)=>{
           console.log(err)
