@@ -67,7 +67,6 @@ export class CategoryModalComponent implements OnInit{
       name : this.category?.name ?? '',
       icon: this.category?.icon ?? 'no_icon'
     })
-      console.log(this.category, this.category?.name ?? '')
   }
 
 

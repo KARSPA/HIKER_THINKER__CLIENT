@@ -21,7 +21,6 @@ export class RemoveEquipmentConfirmModalComponent {
 
 
   confirmRemoval() : void{
-    console.log('dans modale')
     this.result.emit(true);
     this.modalService.closeModal();
   }

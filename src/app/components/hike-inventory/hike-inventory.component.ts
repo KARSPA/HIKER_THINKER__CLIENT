@@ -121,7 +121,6 @@ export class HikeInventoryComponent implements OnInit{
 
 
   openHikeEquipmentModal(category : Category) : void{
-    console.log('click ok', category)
 
     //Ouvrir la modale d'ajout d'équipement pour randonnée et modèles
     //Lui passer les équipements présents dans la randonnée pour filtrer
@@ -138,7 +137,6 @@ export class HikeInventoryComponent implements OnInit{
     .subscribe((refEquipment)=>{
       this.equipmentService.addHikeEquipment(this.hike?.id!, refEquipment).subscribe({
         next:(res)=>{
-          console.log(res)
           this.inventoryService.notifyEquipmentChange(res.data)
         },
         error : (err)=>{
@@ -149,15 +147,10 @@ export class HikeInventoryComponent implements OnInit{
   }
 
   removeHikeEquipment(equipment : Equipment){
-    console.log("A FAIRE")
     // Ouvrir une modale de confirmation ??? 
-
-    // Faire la requete et en fonction du retour, notifier ou non l'inventoryService auquel on s'abonne pour les retrait d'équipement
-    // Notifier l'inventoryService
 
     this.equipmentService.removeHikeEquipment(this.hike?.id!, equipment.id).subscribe({
       next:(res)=>{
-        console.log(res);
         this.inventoryService.notifyEquipmentRemove(res.data)
       }
     })

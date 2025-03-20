@@ -56,11 +56,6 @@ export class InventoryEquipmentModalComponent {
         equipment : payload
       })
   
-      console.log({
-        action : 'create',
-        equipment : payload
-      })
-  
       this.modalService.closeModal();
   }
 

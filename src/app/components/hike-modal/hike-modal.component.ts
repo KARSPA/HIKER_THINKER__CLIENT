@@ -55,14 +55,12 @@ export class HikeModalComponent {
 
       this.hikeService.addHike(newHike).subscribe({
         next:(response)=>{
-          console.log(response)
 
           this.hikeService.notifyHikeChange(response.data);
 
           this.modalService.closeModal();
         },
         error:(err)=>{
-          console.log(err)
           this.hikeHttpError = err.error.message
         }
       })

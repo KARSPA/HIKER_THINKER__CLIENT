@@ -64,8 +64,8 @@ export class AddEquipmentModalComponent implements OnInit{
         this.filteredEquipments = response.data.equipments.filter(eq => {
           return !this.alreadyInEquipments.some(existingEq => existingEq.id === eq.id) // On ne garde que ceux qui ne sont pas dans le tableaux des équipements déja présents
         });
-        console.log('Équipements inventaire : ',response.data.equipments)
-        console.log('Après filtre : ', this.filteredEquipments)
+        // console.log('Équipements inventaire : ',response.data.equipments)
+        // console.log('Après filtre : ', this.filteredEquipments)
       },
       error : (error)=> {
         console.log(error)

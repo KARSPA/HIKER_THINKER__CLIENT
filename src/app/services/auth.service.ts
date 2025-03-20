@@ -31,8 +31,6 @@ export class AuthService {
   logout(){
     localStorage.removeItem('HT_Token');
     this.currentUserSignal.set(null);
-
-    console.log(this.currentUserSignal())
   }
 
   login(credentials : LoginInfos) : Observable<ResponseModel<UserInterface>>{

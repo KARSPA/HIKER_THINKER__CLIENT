@@ -25,8 +25,6 @@ export class EquipmentService {
 
 
   addInventoryEquipment(equipmentFormValue : any) : Observable<ResponseModel<Equipment>>{
-    console.log(equipmentFormValue);
-
     return this.httpClient.post<ResponseModel<Equipment>>(this.INVENTORY_EQUIP_BASE_URL, {
       name : equipmentFormValue.name,
       weight : equipmentFormValue.weight,

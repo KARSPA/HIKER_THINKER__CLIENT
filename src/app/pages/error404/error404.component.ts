@@ -15,7 +15,6 @@ export class Error404Component implements OnInit{
   ngOnInit(): void {
     const navigation = this.router.getCurrentNavigation();
 
-    console.log(navigation)
     // navigation.extras.state peut être undefined si on arrive sur cette page autrement
     if (navigation?.extras && navigation.extras.state && navigation.extras.state['message']) {
       this.message = navigation.extras.state['message'];

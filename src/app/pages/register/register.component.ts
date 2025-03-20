@@ -50,7 +50,6 @@ export class RegisterComponent {
   }
 
   onSubmit() : void{
-    console.log(this.registerForm);
 
     if(this.registerForm.invalid){
       this.hasBeenSubmitted = true;
@@ -61,14 +60,11 @@ export class RegisterComponent {
 
       const registerInfos : RegisterInfos = this.registerForm.value;
 
-      console.log(registerInfos);
-
      // Check si les mots de passes sont égaux.
       if(registerInfos.password === registerInfos.confirmPassword) {
         
         this.authService.register(registerInfos).subscribe({
           next: (value) => {
-            console.log(value);
             this.router.navigate(['login']);
           },
           error : error => {

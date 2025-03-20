@@ -40,10 +40,8 @@ export class InventoryComponent implements OnInit{
     // S'abonner aux évènements d'ajout/modification de catégorie.
     this.inventoryService.categoryChange$.subscribe((category)=>{
 
-      console.log(category)
       const previousCategory = Array.from(this.inventory?.keys() ?? []).find(cat => cat.id === category.id);
 
-      console.log('DANS INVENTAIRE :', previousCategory)
       if(previousCategory){
         const tempSave = this.inventory?.get(previousCategory);
         this.inventory?.delete(previousCategory);
@@ -158,7 +156,6 @@ export class InventoryComponent implements OnInit{
         next :(response) => {
           this.rawInventory = response.data;
           this.inventory = this.inventoryService.restructureInventory(response.data);
-          console.log(response)
         },
         error : (error)=> {
           console.log(error)

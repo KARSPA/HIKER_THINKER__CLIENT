@@ -22,16 +22,12 @@ export class LoginComponent {
   })
 
   onSubmit(): void {
-    console.log("dans onSubmit");
     if(this.loginForm.valid) {
       // check if exist
       const credentials : LoginInfos = this.loginForm.value
-      console.log(credentials)
 
-      // Todo Persist in SL
       this.authService.login(credentials).subscribe({
         next: (value) => {
-          console.log(value);
           this.authService.handleLoginSuccess(value.data);
           this.router.navigate(['home'])
         },
