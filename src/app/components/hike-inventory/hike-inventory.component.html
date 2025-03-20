@@ -31,7 +31,7 @@
         id="equipment-content-{{$index}}"
         class="equipment-container grid grid-cols-3 gap-x-10 px-4 rounded-b-md max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
             @for(equipment of grouped[1]; track $index){
-                <app-equipment-card [equipment]="equipment" (delete)="removeHikeEquipment()" />
+                <app-equipment-card [equipment]="equipment" (delete)="removeHikeEquipment(equipment)" />
             }
 
             <div class="my-4 rounded-md flex justify-center items-center">

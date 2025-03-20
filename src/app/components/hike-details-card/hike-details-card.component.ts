@@ -11,6 +11,6 @@ import { Hike } from '../../interfaces/hike/Hike';
 })
 export class HikeDetailsCardComponent {
 
-  @Input() hike !: Hike;
+  @Input() hike : Hike|null = null;
 
 }

@@ -47,6 +47,10 @@ export class EquipmentService {
     return this.httpClient.post<ResponseModel<Equipment>>(this.buildBaseHikeEquipmentUrl(hikeId), {...refEquipment})
   }
 
+  removeHikeEquipment(hikeId : string, equipmentId : string) : Observable<ResponseModel<string>>{
+    return this.httpClient.delete<ResponseModel<string>>(this.buildBaseHikeEquipmentUrl(hikeId)+`/${equipmentId}`)
+  }
+
 
   private buildBaseHikeEquipmentUrl(hikeId : string){
     return `${this.HIKE_BASE_URL}/${hikeId}/equipments`;

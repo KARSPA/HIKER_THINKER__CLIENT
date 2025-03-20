@@ -52,36 +52,53 @@ export class HikeInventoryComponent implements OnInit{
         }
       })
 
+      // S'abonner au retrait d'équipement
+      this.inventoryService.equipmentRemove$.subscribe({
+        next:(equipmentId)=>{
+  
+          if (!this.hikeInventory) return;
+  
+          // Parcourir chaque entrée de la Map (chaque catégorie et son tableau d'équipements)
+          this.hikeInventory.forEach((equipments, category) => {
+            // Rechercher l'index de l'équipement à supprimer dans le tableau
+            const index = equipments.findIndex(eq => eq.id === equipmentId);
+            if (index !== -1) {
+  
+              // Supprimer l'équipement du tableau
+              equipments.splice(index, 1);
+    
+            }
+          })
+        }
+      })
+
 
       // S'abonner aux évènements d'ajout/modification de catégorie.
-    this.hikeService.categoryChange$.subscribe((category)=>{
+      this.hikeService.categoryChange$.subscribe((category)=>{
 
-      const previousCategory = Array.from(this.hikeInventory?.keys() ?? []).find(cat => cat.id === category.id);
+        const previousCategory = Array.from(this.hikeInventory?.keys() ?? []).find(cat => cat.id === category.id);
 
-      if(previousCategory){
-        const tempSave = this.hikeInventory?.get(previousCategory);
-        this.hikeInventory?.delete(previousCategory);
-        this.hikeInventory?.set(category, tempSave ?? []);
-      }else{
-        this.hikeInventory?.set(category, []);
-      }
-      //Retrier la Map de l'inventaire pour afficher les catégories correctement
-      if(this.hikeInventory){
-        this.hikeInventory = new Map([...this.hikeInventory.entries()].sort(
-          ([catA], [catB]) => (catA.order ?? 0) - (catB.order ?? 0) 
-        ))
-      }
-    })
+        if(previousCategory){
+          const tempSave = this.hikeInventory?.get(previousCategory);
+          this.hikeInventory?.delete(previousCategory);
+          this.hikeInventory?.set(category, tempSave ?? []);
+        }else{
+          this.hikeInventory?.set(category, []);
+        }
+        //Retrier la Map de l'inventaire pour afficher les catégories correctement
+        if(this.hikeInventory){
+          this.hikeInventory = new Map([...this.hikeInventory.entries()].sort(
+            ([catA], [catB]) => (catA.order ?? 0) - (catB.order ?? 0) 
+          ))
+        }
+      })
 
-    //S'abonner aux évènement de suppression d'une catégorie
-        // Si ça arrive : 
-    // Redemander l'inventaire à l'API car les équipements seront mis à jours.
-
-    this.hikeService.categoryRemove$.subscribe((categoryId)=>{
-      //Rechercher l'inventaire car mis à jour par l'API
-      //Émettre un évènement au parent, qui rechargera l'inventaire :)
-      this.categoryRemoved.emit();
-    })
+      //S'abonner aux évènement de suppression d'une catégorie
+      this.hikeService.categoryRemove$.subscribe((categoryId)=>{
+        //Rechercher l'inventaire car mis à jour par l'API
+        //Émettre un évènement au parent, qui rechargera l'inventaire :)
+        this.categoryRemoved.emit();
+      })
   }
 
 
@@ -131,8 +148,19 @@ export class HikeInventoryComponent implements OnInit{
     })
   }
 
-  removeHikeEquipment(){
+  removeHikeEquipment(equipment : Equipment){
     console.log("A FAIRE")
+    // Ouvrir une modale de confirmation ??? 
+
+    // Faire la requete et en fonction du retour, notifier ou non l'inventoryService auquel on s'abonne pour les retrait d'équipement
+    // Notifier l'inventoryService
+
+    this.equipmentService.removeHikeEquipment(this.hike?.id!, equipment.id).subscribe({
+      next:(res)=>{
+        console.log(res);
+        this.inventoryService.notifyEquipmentRemove(res.data)
+      }
+    })
   }
 
 
