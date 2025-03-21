@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { Hike } from '../../interfaces/hike/Hike';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { validDurationUnit } from '../../_helpers/validators/durationUnit';
@@ -10,17 +10,19 @@ import { ModalService } from '../../services/modal.service';
   imports: [ReactiveFormsModule],
   templateUrl: './hike-modal.component.html'
 })
-export class HikeModalComponent {
+export class HikeModalComponent implements OnInit{
 
   @Input() hike : Hike|null = null;
+  @Input() requestType !: string;
 
-  private hikeService : HikeService = inject(HikeService);
+
+  @Output() result = new EventEmitter<Hike>()
+
   private modalService : ModalService = inject(ModalService);
 
   durationUnits = ["jours", "heures"]
 
-  hikeHttpError : string = '';
-
+  hikeHttpError : string = ''; // UTILISER AVANT ....
 
   hikeForm = new FormGroup({
     title: new FormControl('', [Validators.required, Validators.maxLength(30)]),
@@ -33,40 +35,41 @@ export class HikeModalComponent {
   })
 
 
-
+  ngOnInit(): void {
+    this.hikeForm.patchValue({
+      title : this.hike?.title ?? '',
+      distance: this.hike?.distance.toString(),
+      positive: this.hike?.positive.toString(),
+      negative: this.hike?.negative.toString(),
+      duration: this.hike?.duration.toString(),
+      durationUnit: this.hike?.durationUnit,
+      date : this.hike ? new Date(this.hike.date).toISOString().split('T')[0] : ''
+    })
+  }
 
   onSubmit(){
 
-    if(this.hikeForm.valid){
-      const formValue = this.hikeForm.value;
+    if(!this.hikeForm.valid) return
 
-      const newHike : Hike = {
-        id: null,
-        title: formValue.title ?? '',
-        distance: Number(formValue.distance),       
-        positive: Number(formValue.positive),       
-        negative: Number(formValue.negative),       
-        duration: Number(formValue.duration),       
-        durationUnit: formValue.durationUnit ?? '',
-        date: new Date(formValue.date ?? 'now'), 
-        weightCorrection: 0,
-        inventory : null
-      }
+    const formValue = this.hikeForm.value;
 
-      this.hikeService.addHike(newHike).subscribe({
-        next:(response)=>{
-
-          this.hikeService.notifyHikeChange(response.data);
-
-          this.modalService.closeModal();
-        },
-        error:(err)=>{
-          this.hikeHttpError = err.error.message
-        }
-      })
+    const payload : Hike = {
+      id: this.hike ? this.hike.id : null,
+      title: formValue.title ?? '',
+      distance: Number(formValue.distance),       
+      positive: Number(formValue.positive),       
+      negative: Number(formValue.negative),       
+      duration: Number(formValue.duration),       
+      durationUnit: formValue.durationUnit ?? '',
+      date: new Date(formValue.date ?? 'now'), 
+      weightCorrection: 0,
+      inventory : null
     }
-  }
 
+    this.result.emit(payload) //Transmettre au parent
+
+    //Fermer la modale ?
+  }
 
   allFieldsTouched() : boolean{
     return (this.hikeForm.get('title')?.touched

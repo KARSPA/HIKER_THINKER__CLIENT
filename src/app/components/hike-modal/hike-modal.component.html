@@ -1,6 +1,11 @@
 <div class="modal-content h-fit pb-4 w-4xl">
     <div class="modal-title text-lg text-center">
-        <p>Vous partez en rando ?</p>
+        @if(requestType === 'Ajout'){
+            <p>Vous partez en rando ?</p>
+        }
+        @else if(requestType === 'Modification'){
+            <p>Changement de plan ?</p>
+        }
     </div>
 
     <form [formGroup]="hikeForm" (ngSubmit)="onSubmit()">
@@ -33,10 +38,11 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col  w-full mb-10">
+                <div class="flex flex-col  w-full mb-10 relative">
                     <input id="hikeForm-distance" type="text" formControlName="distance" placeholder="Distance (en kilomètres)"
                     class="w-full bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2"
                     maxLength="8">
+                    <img src="assets/hike_icons/path_icon.svg" class="absolute top-2 right-2 h-6 aspect-square">
             
                     <div class="input-errors text-orange-500 h-8">
                         @if ((distance?.touched) && distance?.hasError('required')) {
@@ -49,10 +55,11 @@
                 </div>
 
                 <div class="flex gap-2 w-full">
-                    <div class="flex flex-col  w-full mb-10">
+                    <div class="flex flex-col w-full mb-10 relative">
                         <input id="hikeForm-positive" type="text" formControlName="positive" placeholder="Dénivelé positif (en m)"
                         class="w-full bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2"
                         maxLength="6">
+                        <img src="assets/hike_icons/up-trend-bis_icon.svg" class="absolute top-2 right-2 h-6 aspect-square">
                         <div class="input-errors text-orange-500 h-8">
                             @if ((positive?.touched) && positive?.hasError('required')) {
                                 <p class="text-sm text-center">{{getErrorMessage('required')}}</p>
@@ -62,10 +69,11 @@
                             }
                         </div>
                     </div>
-                    <div class="flex flex-col  w-full mb-10">
-                        <input id="hikeForm-negative" type="text" formControlName="negative" placeholder="Dénivelé négatif (en m)"
-                        class="w-full bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2"
-                        maxLength="6">
+                    <div class="flex flex-col w-full mb-10 relative">
+                            <input id="hikeForm-negative" type="text" formControlName="negative" placeholder="Dénivelé négatif (en m)"
+                            class="w-full bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2"
+                            maxLength="6">
+                            <img src="assets/hike_icons/down-trend-bis_icon.svg" class="absolute top-2 right-2 h-6 aspect-square">
                         <div class="input-errors text-orange-500 h-8">
                             @if ((negative?.touched) && negative?.hasError('required')) {
                                 <p class="text-sm text-center">{{getErrorMessage('required')}}</p>
@@ -134,7 +142,12 @@
             <button type="submit"
                 [disabled]="hikeForm.invalid"
                 class="text-white mt-10 disabled:cursor-not-allowed not-disabled:hover:opacity-80 rounded-md bg-amber-500 px-2 py-3 shadow-md disabled:bg-gray-500 cursor-pointer">
-                Créer la randonnée
+                @if(requestType === 'Ajout'){
+                    Créer la randonnée
+                }
+                @else if(requestType === 'Modification'){
+                    Modifier la randonnée
+                }
             </button>
             
         </div>

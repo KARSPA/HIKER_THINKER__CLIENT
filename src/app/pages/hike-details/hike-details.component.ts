@@ -8,6 +8,7 @@ import { Category } from '../../interfaces/equipment/Category';
 import { Equipment } from '../../interfaces/equipment/Equipment';
 import { InventoryService } from '../../services/inventory.service';
 import { HikeInventoryComponent } from '../../components/hike-inventory/hike-inventory.component';
+import { HikeModalComponent } from '../../components/hike-modal/hike-modal.component';
 
 @Component({
   selector: 'app-hike-details',
@@ -36,7 +37,48 @@ export class HikeDetailsComponent implements OnInit{
           this.router.navigate(['/error404'], { state: { message: 'Aucune randonnée trouvée.' } });
         }
       });
+
+
+      // S'abonner aux changements des valeurs d'une randonnée
+      this.hikeService.hikeChange$.subscribe((newHike)=>{
+        this.hike = newHike;
+      })
+
+
     }
+
+    openHikeModifyModal(hike : Hike){
+      this.modalService.openModal<HikeModalComponent, Hike>({
+        component : HikeModalComponent,
+        data : {
+          requestType : 'Modification',
+          hike : hike
+        }
+      })
+      .subscribe((modifiedHike)=>{
+
+        console.log(modifiedHike)
+
+        //Faire la requete d'ajout de la randonnée
+        this.hikeService.modifyHike(modifiedHike).subscribe({
+          next:(res)=>{
+
+            this.hikeService.notifyHikeChange(res.data);
+
+            this.modalService.closeModal();
+          },
+          error:(err)=>{
+            console.log(err)
+            //TODO => Afficher/Transmettre une erreur dans la modale ou sur cette page (OU avec ASYNC Validator)
+          }
+        })
+      })
+    }
+
+
+
+
+
   
     loadHike(hikeId: string): void {
       this.hikeService.getHikeById(hikeId).subscribe({

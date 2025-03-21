@@ -52,9 +52,31 @@ export class HikesComponent implements OnInit{
 
 
   openHikeModal(hike?: Hike){
-    this.modalService.openModal({
+
+    this.modalService.openModal<HikeModalComponent, Hike>({
       component : HikeModalComponent,
-      data: {hike : hike}
+      data: {
+        hike : hike,
+        requestType : 'Ajout'
+      }
+    })
+    .subscribe((newHike)=>{
+      
+        console.log(newHike)
+
+        //Faire la requete d'ajout de la randonnée
+        this.hikeService.addHike(newHike).subscribe({
+          next:(res)=>{
+
+            this.hikeService.notifyHikeChange(res.data);
+
+            this.modalService.closeModal();
+          },
+          error:(err)=>{
+            console.log(err)
+            //TODO => Afficher/Transmettre une erreur dans la modale ou sur cette page (OU avec ASYNC Validator)
+          }
+        })
     })
   }
 
