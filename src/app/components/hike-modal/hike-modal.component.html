@@ -127,12 +127,20 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col  w-full mb-10">
+                @if(requestType === 'Modification'){
+                    <div class="flex flex-col w-full mb-10">
+                        <label for="hikeForm-weightCorrection">Correctif de poids : </label>
+                        <input id="hikeForm-weightCorrection"  type="number" formControlName="weightCorrection"
+                        class="bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2">
+                    </div>
+                }
+
+                <!-- <div class="flex flex-col  w-full mb-10">
                     <label for="">MODÈLES .... </label>
                     <div class="input-errors text-orange-500 h-8">
                         
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
 

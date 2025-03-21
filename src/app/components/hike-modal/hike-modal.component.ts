@@ -31,7 +31,8 @@ export class HikeModalComponent implements OnInit{
     negative: new FormControl('', [Validators.required, Validators.pattern("^(?:[1-9]\\d{0,4}|100000)$")]),
     duration: new FormControl('', [Validators.required, Validators.pattern("^(?:[1-9]\\d{0,2}|1000)$")]),
     durationUnit: new FormControl('jours', [Validators.required, validDurationUnit()]),
-    date : new FormControl('', [Validators.required])
+    date : new FormControl('', [Validators.required]),
+    weightCorrection : new FormControl('')
   })
 
 
@@ -62,7 +63,7 @@ export class HikeModalComponent implements OnInit{
       duration: Number(formValue.duration),       
       durationUnit: formValue.durationUnit ?? '',
       date: new Date(formValue.date ?? 'now'), 
-      weightCorrection: 0,
+      weightCorrection: Number(formValue.weightCorrection),
       inventory : null
     }
 
