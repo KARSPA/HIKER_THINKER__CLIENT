@@ -44,7 +44,8 @@ export class HikeModalComponent implements OnInit{
       negative: this.hike?.negative.toString(),
       duration: this.hike?.duration.toString(),
       durationUnit: this.hike?.durationUnit,
-      date : this.hike ? new Date(this.hike.date).toISOString().split('T')[0] : ''
+      date : this.hike ? new Date(this.hike.date).toISOString().split('T')[0] : '',
+      weightCorrection : this.hike?.weightCorrection.toString()
     })
   }
 
@@ -64,7 +65,7 @@ export class HikeModalComponent implements OnInit{
       durationUnit: formValue.durationUnit ?? '',
       date: new Date(formValue.date ?? 'now'), 
       weightCorrection: Number(formValue.weightCorrection),
-      totalWeight : 0,
+      totalWeight : this.hike ? this.hike.totalWeight : 0,
       inventory : null
     }
 

@@ -41,7 +41,7 @@ export class HikeDetailsComponent implements OnInit{
 
       // S'abonner aux changements des valeurs d'une randonnée
       this.hikeService.hikeChange$.subscribe((newHike)=>{
-        this.hike = newHike;
+        this.hike = newHike
       })
 
 

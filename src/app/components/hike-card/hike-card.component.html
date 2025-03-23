@@ -40,7 +40,7 @@
             <div class="flex gap-2">
                 <img src="assets/hike_icons/weight-bis_icon.png" alt="" class="h-6 aspect-square">
 
-                <p>{{(hike?.totalWeight ?? 0) / 1000}} kg</p>
+                <p>{{((hike?.totalWeight ?? 0) + (hike?.weightCorrection ?? 0)) / 1000}} kg</p>
             </div>
         </div>
         <div class="flex justify-center items-center">
