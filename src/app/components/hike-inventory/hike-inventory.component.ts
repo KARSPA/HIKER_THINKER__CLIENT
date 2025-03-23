@@ -49,7 +49,8 @@ export class HikeInventoryComponent implements OnInit{
           currentEquipments.push(equipment);
   
           category.accumulatedWeight += equipment.weight
-          
+          if(this.hike) this.hike.totalWeight += equipment.weight // Modification par référence de l'objet Hike (pas ouf mais fonctionne)
+
           this.hikeInventory.set(category, currentEquipments);
         }
       })
@@ -68,6 +69,8 @@ export class HikeInventoryComponent implements OnInit{
   
               // Supprimer l'équipement du tableau
               category.accumulatedWeight -= equipments[index].weight;
+              if(this.hike) this.hike.totalWeight -= equipments[index].weight // Modification par référence de l'objet Hike (pas ouf mais fonctionne)
+
               equipments.splice(index, 1);
     
             }
