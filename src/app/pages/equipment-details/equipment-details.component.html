@@ -2,9 +2,7 @@
 <a [routerLink]="['/inventory']" class="absolute top-0 left-0">
     <img src="assets/back-chevron.svg" alt="" class="h-6 aspect-square hover:opacity-60 hover:outline-2 outline-green-800 rounded-full">
 </a>
-<h1 class="text-center text-2xl font-semibold">{{equipment.name}}</h1>
-
-
+<h1 class="text-center text-2xl font-semibold">{{equipment?.name}}</h1>
 
 <div class="mt-10 grid grid-cols-[3fr_1fr] gap-10">
     <div class="left-content border border-stone-300 rounded-md shadow-md p-6">
@@ -16,13 +14,13 @@
         </div>
         <div class="equipment-infos-row grid grid-cols-[2fr_1fr] mt-10 gap-10">
             <textarea name="" id="" class="min-h-[100px] resize-none border border-stone-300 rounded-md shadow-md text-left" readonly>
-                {{equipment.description}}
+                {{equipment?.description}}
             </textarea>
 
             <div class="category-weight-brand flex flex-col justify-between">
 
-                <p>Poids : <span class="font-semibold">{{equipment.weight}}</span> grammes</p>
-                <p>Marque : <span class="font-semibold">{{equipment.brand}}</span></p>
+                <p>Poids : <span class="font-semibold">{{equipment?.weight}}</span> grammes</p>
+                <p>Marque : <span class="font-semibold">{{equipment?.brand}}</span></p>
                 <p>Catégorie : <span class="font-semibold">NOM CAT À RÉCUP</span></p>
 
             </div>

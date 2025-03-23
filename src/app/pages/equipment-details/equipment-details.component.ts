@@ -1,7 +1,7 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { Equipment } from '../../interfaces/equipment/Equipment';
 import { EquipmentService } from '../../services/equipment.service';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { EquipmentCardComponent } from '../../components/equipment-card/equipment-card.component';
 import { ModalService } from '../../services/modal.service';
 import { RemoveEquipmentConfirmModalComponent } from '../../components/remove-equipment-confirm-modal/remove-equipment-confirm-modal.component';
@@ -19,24 +19,30 @@ export class EquipmentDetailsComponent implements OnInit{
   private inventoryService : InventoryService = inject(InventoryService);
   private modalService : ModalService = inject(ModalService);
   private router : Router = inject(Router);
+  private route : ActivatedRoute = inject(ActivatedRoute);
 
-  equipment !: Equipment;
-
-  @Input()
-  set equipmentId(equipmentId : string){
-    this.equipmentService.getEquipmentById(equipmentId).subscribe({
-      next : (response)=>{
-        this.equipment = response.data
-      },
-      error: (err)=>{
-        console.log(err);
-        this.router.navigate(["/error404"], {state: {message: err.error?.message}})
-      }
-    });
-  }
-
+  equipment ?: Equipment;
 
   ngOnInit(): void {
+
+    // Récupérer l'id depuis l'URL et charger la randonnée
+    this.route.paramMap.subscribe(params => {
+      const equipmentId = params.get('equipmentId');
+      if (equipmentId) {
+        this.equipmentService.getEquipmentById(equipmentId).subscribe({
+          next : (response)=>{
+            this.equipment = response.data
+          },
+          error: (err)=>{
+            console.log(err);
+            this.router.navigate(["/error404"], {state: {message: err.error?.message}})
+          }
+        })
+      }
+    });
+
+
+    // S'abonner à la suppression
     this.inventoryService.equipmentRemove$.subscribe({
       next:(equipmentId)=>{
         this.router.navigate(['/inventory'])
@@ -51,8 +57,10 @@ export class EquipmentDetailsComponent implements OnInit{
       })
       .pipe(confirm => confirm) //On garde que les réponses true (confirmations)
       .subscribe(()=>{
-          this.equipmentService.removeInventoryEquipment(this.equipment.id)
-          .subscribe((response)=>this.inventoryService.notifyEquipmentRemove(response.data))
+          if (this.equipment) {
+            this.equipmentService.removeInventoryEquipment(this.equipment.id)
+            .subscribe((response)=>this.inventoryService.notifyEquipmentRemove(response.data))
+          }
       })
     }
   
