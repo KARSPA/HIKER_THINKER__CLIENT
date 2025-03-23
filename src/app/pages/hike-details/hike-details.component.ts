@@ -85,6 +85,7 @@ export class HikeDetailsComponent implements OnInit{
         next: (response) => {
           this.hike = response.data;
           if (this.hike.inventory) {
+            console.log(response.data)
             this.hikeInventory = this.inventoryService.restructureInventory(this.hike.inventory);
           }
         },

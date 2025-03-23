@@ -12,6 +12,7 @@ export interface Hike{
     durationUnit : string;
 
     weightCorrection : number;
+    totalWeight : number|null;
 
     inventory : Inventory|null
     

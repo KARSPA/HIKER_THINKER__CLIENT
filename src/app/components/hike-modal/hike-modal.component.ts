@@ -64,6 +64,7 @@ export class HikeModalComponent implements OnInit{
       durationUnit: formValue.durationUnit ?? '',
       date: new Date(formValue.date ?? 'now'), 
       weightCorrection: Number(formValue.weightCorrection),
+      totalWeight : 0,
       inventory : null
     }
 

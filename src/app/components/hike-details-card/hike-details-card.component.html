@@ -49,7 +49,7 @@
                 <div>
                     <div class="flex gap-2">
                         <img src="assets/hike_icons/weight-bis_icon.png" alt="" class="h-6 aspect-square">
-                        <p>12.6 kg</p>
+                        <p>{{(hike?.totalWeight ?? 0) / 1000}} kg</p>
                     </div>
                     <div>
                         @if((hike?.weightCorrection ?? 0) >= 0){

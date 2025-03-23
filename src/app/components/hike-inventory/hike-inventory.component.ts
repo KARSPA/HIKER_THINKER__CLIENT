@@ -48,6 +48,8 @@ export class HikeInventoryComponent implements OnInit{
   
           currentEquipments.push(equipment);
   
+          category.accumulatedWeight += equipment.weight
+          
           this.hikeInventory.set(category, currentEquipments);
         }
       })
@@ -65,6 +67,7 @@ export class HikeInventoryComponent implements OnInit{
             if (index !== -1) {
   
               // Supprimer l'équipement du tableau
+              category.accumulatedWeight -= equipments[index].weight;
               equipments.splice(index, 1);
     
             }

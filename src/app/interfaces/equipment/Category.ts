@@ -4,4 +4,5 @@ export interface Category{
     name : string;
     icon : string | null;
     order: number;
+    accumulatedWeight : number;
 }
