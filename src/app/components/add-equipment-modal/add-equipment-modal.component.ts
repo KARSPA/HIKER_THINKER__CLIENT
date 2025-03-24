@@ -37,7 +37,6 @@ export class AddEquipmentModalComponent implements OnInit{
       //Filtrer les équipements récupérés en enlevant ceux déjà présents dans la rando ou modèle
       this.loadAndFilterInventory();
 
-
       // Abonnement aux changements d'équipements pour actualiser la liste
       this.inventoryService.equipmentChange$.subscribe((newEquip) => {
         this.filteredEquipments = this.filteredEquipments.filter(
@@ -45,8 +44,6 @@ export class AddEquipmentModalComponent implements OnInit{
         );
       });
   }
-
-
 
   onAddClick(equipmentId : string){
 

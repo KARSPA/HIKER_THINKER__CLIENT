@@ -2,7 +2,7 @@
 <a [routerLink]="['/inventory']" class="absolute top-0 left-0">
     <img src="assets/back-chevron.svg" alt="" class="h-6 aspect-square hover:opacity-60 hover:outline-2 outline-green-800 rounded-full">
 </a>
-<h1 class="text-center text-2xl font-semibold">{{equipment?.name}}</h1>
+<h1 class="text-center text-2xl font-semibold italic">{{equipment?.name}}</h1>
 
 <div class="mt-10 grid grid-cols-[3fr_1fr] gap-10">
     <div class="left-content border border-stone-300 rounded-md shadow-md p-6">
@@ -10,10 +10,11 @@
             <img src="assets/placeholder-image.jpg" alt="" class="aspect-square">
             <div class="models border border-stone-300 rounded-md shadow-md">
                 <p class="text-center font-semibold">Randonnées et modèles</p>
+                <p class="text-center mt-20 italic text-xs text-gray-600">À venir ...</p>
             </div>
         </div>
         <div class="equipment-infos-row grid grid-cols-[2fr_1fr] mt-10 gap-10">
-            <textarea name="" id="" class="min-h-[100px] resize-none border border-stone-300 rounded-md shadow-md text-left" readonly>
+            <textarea class="min-h-[100px] resize-none border border-stone-300 rounded-md shadow-md" readonly>
                 {{equipment?.description}}
             </textarea>
 
@@ -21,18 +22,21 @@
 
                 <p>Poids : <span class="font-semibold">{{equipment?.weight}}</span> grammes</p>
                 <p>Marque : <span class="font-semibold">{{equipment?.brand}}</span></p>
-                <p>Catégorie : <span class="font-semibold">NOM CAT À RÉCUP</span></p>
+                <p>Catégorie : <span class="text-center mt-20 italic text-xs text-gray-600">À venir ...</span></p>
 
             </div>
         </div>
     </div>
     <div class="right-content border border-stone-300 rounded-md shadow-md p-2">
         <h2 class="text-center text-xl font-semibold">Statistiques</h2>
+        <div class="stats-container">
+            <p class="text-center mt-30 italic text-xs text-gray-600">À venir ...</p>
+        </div>
     </div>
 </div>
 
 <div class="mt-10 btns-container flex justify-center items-center gap-10">
-    <button class="py-2 px-3 rounded-md bg-amber-500 text-white hover:opacity-80 cursor-pointer shadow-lg">
+    <button disabled class="disabled:bg-gray-500 disabled:cursor-not-allowed py-2 px-3 rounded-md bg-amber-500 text-white not-disabled:hover:opacity-80 cursor-pointer shadow-lg">
         Modifier
     </button>
     <button 

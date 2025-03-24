@@ -4,3 +4,7 @@
 .selectedIcon{
     @apply outline-3 outline-green-700;
 }
+
+.active-link{
+    @apply text-amber-500 font-semibold
+}

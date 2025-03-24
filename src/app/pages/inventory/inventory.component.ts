@@ -127,7 +127,7 @@ export class InventoryComponent implements OnInit{
     openEquipmentModal(equipment? : Equipment): void{
       this.modalService.openModal<InventoryEquipmentModalComponent, EquipmentEvent>({
         component : InventoryEquipmentModalComponent,
-        data: {categories : this.rawInventory?.categories}
+        data: {categories : Array.from(this.inventory?.keys() ?? [])}
       })
       .subscribe((event)=>{
         this.sendEquipmentRequestAndNotify(event);

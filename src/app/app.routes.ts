@@ -10,6 +10,7 @@ import { Error404Component } from './pages/error404/error404.component';
 import { HikesComponent } from './pages/hikes/hikes.component';
 import { HikeDetailsComponent } from './pages/hike-details/hike-details.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { blockingGuard } from './_helpers/guards/blocking.guard';
 
 export const routes: Routes = [
     {path:'home', component: HomeComponent},
@@ -21,9 +22,9 @@ export const routes: Routes = [
     {path:'inventory/equipments/:equipmentId', component: EquipmentDetailsComponent, canActivate: [authGuard], data: {requiresAuth : true}},
     {path:'hikes', component: HikesComponent, canActivate: [authGuard], data: {requiresAuth : true}},
     {path:'hikes/:hikeId', component: HikeDetailsComponent, canActivate: [authGuard], data: {requiresAuth : true}},
-    {path:'profile', component: ProfileComponent, canActivate: [authGuard], data: {requiresAuth : true}}
+    {path:'profile', component: ProfileComponent, canActivate: [authGuard], data: {requiresAuth : true}},
     // {path:'hikes/create', component: CreateHikeComponent, canActivate: [authGuard]},
-    // {path:'models', component: ModelsComponent, canActivate: [authGuard]},
+    {path:'models', component: HikesComponent, canActivate: [blockingGuard]},
     // {path:'contact', component: ContactComponent},
 
 ];

@@ -5,21 +5,21 @@
     <a class="flex title-font font-medium items-center text-white mb-4 md:mb-0 cursor-pointer hover:opacity-90">
         <!-- LOGO -->
          <img [src]="appLogoUrl" alt="Logo HikerThinker" class="h-20 w-20">
-      <span routerLink="/home" class="text-xl ">HikerThinker</span>
+      <span routerLink="/home" routerLinkActive="active-link" class="text-xl">HikerThinker</span>
     </a>
     <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
       @if (isLogged()) {
-        <a routerLink="/profile" class="mr-5 hover:text-white cursor-pointer">{{authService.currentUserSignal()?.firstName}} {{authService.currentUserSignal()?.lastName}}</a>
-        <a routerLink="/home" class="mr-5 hover:text-white cursor-pointer">Accueil</a>
-        <a routerLink="/inventory" class="mr-5 hover:text-white cursor-pointer">Inventaire</a>
-        <a routerLink="/hikes" class="mr-5 hover:text-white cursor-pointer">Randonnées</a>
-        <a routerLink="/models" class="mr-5 hover:text-white cursor-pointer">Modèles</a>
+        <a routerLink="/profile" routerLinkActive="active-link" class="mr-5 hover:text-white cursor-pointer">{{authService.currentUserSignal()?.firstName}} {{authService.currentUserSignal()?.lastName}}</a>
+        <a routerLink="/home" routerLinkActive="active-link" class="mr-5 hover:text-white cursor-pointer">Accueil</a>
+        <a routerLink="/inventory" routerLinkActive="active-link" class="mr-5 hover:text-white cursor-pointer">Inventaire</a>
+        <a routerLink="/hikes" routerLinkActive="active-link" class="mr-5 hover:text-white cursor-pointer">Randonnées</a>
+        <a routerLink="/models" routerLinkActive="active-link" class="mr-5 cursor-not-allowed text-stone-800">Modèles</a>
         <a routerLink="/logout" class="mr-5 hover:text-white cursor-pointer">Se déconnecter</a>
       }
       @else {
-        <a routerLink="/home" class="mr-5 hover:text-white cursor-pointer">Accueil</a>
-        <a routerLink="/login" class="mr-5 hover:text-white cursor-pointer">Se connecter</a>
-        <a routerLink="/register" class="mr-5 hover:text-white cursor-pointer">S'inscrire</a>
+        <a routerLink="/home" routerLinkActive="active-link" class="mr-5 hover:text-white cursor-pointer">Accueil</a>
+        <a routerLink="/login" routerLinkActive="active-link" class="mr-5 hover:text-white cursor-pointer">Se connecter</a>
+        <a routerLink="/register" routerLinkActive="active-link" class="mr-5 hover:text-white cursor-pointer">S'inscrire</a>
       }
 
     </nav>

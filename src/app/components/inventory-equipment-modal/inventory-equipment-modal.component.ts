@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InventoryService } from '../../services/inventory.service';
 import { Category } from '../../interfaces/equipment/Category';
@@ -12,7 +12,7 @@ import { AddEquipment } from '../../interfaces/equipment/AddEquipment';
   imports: [ReactiveFormsModule],
   templateUrl: './inventory-equipment-modal.component.html'
 })
-export class InventoryEquipmentModalComponent {
+export class InventoryEquipmentModalComponent implements OnInit{
 
   @Input() categories : Category[] = [];
 
@@ -23,13 +23,18 @@ export class InventoryEquipmentModalComponent {
 
   equipmentHttpError = null;
 
+  ngOnInit(): void {
+      this.equipmentForm.patchValue({
+        categoryName : this.categories.find(cat => cat.id === 'DEFAULT')?.name
+      })
+  }
 
   equipmentForm = new FormGroup({
     name : new FormControl('', [Validators.required, Validators.maxLength(30)]),
     weight : new FormControl('', [Validators.required, Validators.pattern("^(?:[1-9]\\d{0,3}|10000)$")]),
     description : new FormControl('', [Validators.maxLength(500)]),
     brand : new FormControl('', [Validators.required, Validators.maxLength(20)]),
-    categoryName : new FormControl('Sans catégorie', [Validators.required]),
+    categoryName : new FormControl('', [Validators.required]),
   })
 
 
