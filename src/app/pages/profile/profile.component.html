@@ -1,0 +1,33 @@
+<h1 class="text-xl text-center mb-10 italic">Mon compte</h1>
+
+
+<div class="grid grid-cols-[2fr_1fr] gap-20">
+    <div class="personnal-infos border border-stone-300 shadow-md rounded-md px-14 py-2">
+        <h2 class="text-center text-lg mb-10">Mes informations personnelles</h2>
+
+        <div class="names-container  flex justify-between gap-10">
+            <div class="grow">
+                <p class="text-sm italic">Nom</p>
+                <p class="border-b-1 border-[#6b9430] py-1">{{authService.currentUserSignal()?.lastName}}</p>
+            </div>
+            <div class="grow">
+                <p class="text-sm italic">Prénom</p>
+                <p class="border-b-1 border-[#6b9430] py-1">{{authService.currentUserSignal()?.firstName}}</p>
+            </div>
+        </div>
+        <div class="mt-10">
+            <p class="text-sm italic">Email</p>
+            <p class="border-b-1 border-[#6b9430] py-1">{{authService.currentUserSignal()?.email}}</p>
+        </div>
+
+        <button 
+        class="block mx-auto w-20 text-white my-10 rounded-md border border-stone-300 bg-amber-500 px-2 py-3 shadow-md cursor-pointer hover:opacity-80 transition-all duration-200 ease-in-out">
+            Modifier
+        </button>
+
+    </div>
+    <div class="statistics border border-stone-300 shadow-md rounded-md px-4 py-2">
+        <h2 class="text-center text-lg">Statistiques</h2>
+    </div>
+</div>
+

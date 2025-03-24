@@ -8,10 +8,8 @@
       <span routerLink="/home" class="text-xl ">HikerThinker</span>
     </a>
     <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
-      <!-- <p class="mr-4">{{userInfos?.username}}</p> -->
-      <p class="mr-4">{{authService.currentUserSignal()?.firstName}} {{authService.currentUserSignal()?.lastName}}</p>
-
       @if (isLogged()) {
+        <a routerLink="/profile" class="mr-5 hover:text-white cursor-pointer">{{authService.currentUserSignal()?.firstName}} {{authService.currentUserSignal()?.lastName}}</a>
         <a routerLink="/home" class="mr-5 hover:text-white cursor-pointer">Accueil</a>
         <a routerLink="/inventory" class="mr-5 hover:text-white cursor-pointer">Inventaire</a>
         <a routerLink="/hikes" class="mr-5 hover:text-white cursor-pointer">Randonnées</a>
