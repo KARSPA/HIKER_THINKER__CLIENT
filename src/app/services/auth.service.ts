@@ -6,13 +6,15 @@ import { RegisterInfos } from '../interfaces/auth/RegisterInfos';
 import { RegisterResponse } from '../interfaces/auth/RegisterResponse';
 import { ResponseModel } from '../interfaces/ResponseModel';
 import { LoginInfos } from '../interfaces/auth/LoginInfos';
+import { ModifyInfos } from '../interfaces/auth/ModifyInfos';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private VERIFY_LOGIN : string = 'http://localhost:8000/api/v1/users/verify';
+  private MODIFY_USER : string = 'http://localhost:8000/api/v1/users';
+  private VERIFY_LOGIN : string = this.MODIFY_USER+'/verify';
 
   private LOGIN_URL : string = 'http://localhost:8000/api/v1/auth/login';
   private REGISTER_URL : string = 'http://localhost:8000/api/v1/auth/register';
@@ -41,6 +43,10 @@ export class AuthService {
     return this.httpClient.get<ResponseModel<UserInterface>>(this.VERIFY_LOGIN);
   }
 
+  modifyUser(modifyInfos : ModifyInfos) : Observable<ResponseModel<UserInterface>>{
+    return this.httpClient.patch<ResponseModel<UserInterface>>(this.MODIFY_USER+`/${this.currentUserSignal()?.userId}`, {...modifyInfos})
+  }
+
   register(registerInfos : RegisterInfos) : Observable<ResponseModel<RegisterResponse>>{
     return this.httpClient.post<ResponseModel<RegisterResponse>>(this.REGISTER_URL, {
       email : registerInfos.email,
@@ -53,6 +59,10 @@ export class AuthService {
   handleLoginSuccess(userInfos : UserInterface) : void{
     localStorage.setItem('HT_Token', userInfos.jwt);
 
+    this.currentUserSignal.set(userInfos);
+  }
+
+  changeUserInfos(userInfos : UserInterface) : void{
     this.currentUserSignal.set(userInfos);
   }
 
