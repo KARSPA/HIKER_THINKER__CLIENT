@@ -57,9 +57,6 @@ export class HikeDetailsComponent implements OnInit{
         }
       })
       .subscribe((hikeEvent)=>{
-
-        console.log(hikeEvent)
-
         if(hikeEvent.action === 'update'){
             //Faire la requete de modification de la randonnée
             this.hikeService.modifyHike(hikeEvent.hike).subscribe({

@@ -25,7 +25,6 @@ export class ProfileComponent implements OnInit{
     ngOnInit(): void {
       this.statisticsService.getUserStatistics(this.authService.currentUserSignal()?.userId ?? '').subscribe({
         next : (res)=>{
-          console.log(res);
           this.userStats = res.data
         },
         error:(err)=>{
@@ -40,9 +39,6 @@ export class ProfileComponent implements OnInit{
         data: {user : this.authService.currentUserSignal()}
       })
       .subscribe((newInfos)=>{
-
-        console.log(newInfos)
-
         this.authService.modifyUser(newInfos).subscribe({
           next:(res)=>{
             this.httpError = '';
