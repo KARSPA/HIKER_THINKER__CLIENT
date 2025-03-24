@@ -30,7 +30,49 @@
 
     </div>
     <div class="statistics border border-stone-300 shadow-md rounded-md px-4 py-2">
-        <h2 class="text-center text-lg">Statistiques</h2>
+        <h2 class="text-center text-lg mb-4">Statistiques</h2>
+        <div class="stats-container">
+            <div class="flex justify-between">
+                <p class="stat-label text-sm italic">Nombre de randonnée :</p>
+                <p class="stat-value">{{userStats?.hikeCount}}</p>   
+            </div>
+            <div class="flex justify-between mt-4">
+                <p class="stat-label text-sm italic">Distance totale :</p>
+                <p class="stat-value">{{userStats?.totalDistance}} <span class="italic">km</span></p>   
+            </div>
+            <div class="flex justify-between">
+                <p class="stat-label text-sm italic">Distance moyenne :</p>
+                <p class="stat-value">{{userStats?.averageDistance}} <span class="italic">km</span></p>   
+            </div>
+            <div class="flex justify-between mt-4">
+                <p class="stat-label text-sm italic">Dénivelé positif total :</p>
+                <p class="stat-value">{{userStats?.totalPositive}} <span class="italic">m</span></p>   
+            </div>
+            <div class="flex justify-between">
+                <p class="stat-label text-sm italic">Dénivelé positif moyen :</p>
+                <p class="stat-value">{{userStats?.averagePositive}} <span class="italic">m</span></p>   
+            </div>
+            <div class="flex justify-between mt-4">
+                <p class="stat-label text-sm italic">Dénivelé négatif total :</p>
+                <p class="stat-value">{{userStats?.totalNegative}} <span class="italic">m</span></p>   
+            </div>
+            <div class="flex justify-between">
+                <p class="stat-label text-sm italic">Dénivelé négatif moyen :</p>
+                <p class="stat-value">{{userStats?.averageNegative}} <span class="italic">m</span></p>   
+            </div>
+            <div class="flex justify-between mt-4">
+                <p class="stat-label text-sm italic">Durée totale :</p>
+                <p class="stat-value">{{userStats?.totalDurationHours}}<span class="italic">h</span> | {{(userStats?.totalDurationHours ?? 0) / 24}}<span class="italic">j</span></p>   
+            </div>
+            <div class="flex justify-between">
+                <p class="stat-label text-sm italic">Durée moyenne :</p>
+                <p class="stat-value">{{userStats?.averageDurationHours}}<span class="italic">h</span> | {{(userStats?.averageDurationHours ?? 0) / 24}}<span class="italic">j</span></p>   
+            </div>
+            <div class="flex justify-between my-4">
+                <p class="stat-label text-sm italic">Durée moyenne :</p>
+                <p class="stat-value">{{(userStats?.averageWeight ?? 0)/1000}} <span class="italic">kg</span></p>   
+            </div>
+        </div>
     </div>
 </div>
 

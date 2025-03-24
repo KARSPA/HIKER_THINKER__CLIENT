@@ -1,20 +1,38 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { ModalService } from '../../services/modal.service';
 import { ProfileModalComponent } from '../../components/modals/profile-modal/profile-modal.component';
 import { ModifyInfos } from '../../interfaces/auth/ModifyInfos';
+import { StatisticsService } from '../../services/statistics.service';
+import { UserStats } from '../../interfaces/statistics/UserStats';
 
 @Component({
   selector: 'app-profile',
   imports: [],
   templateUrl: './profile.component.html'
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit{
+    
 
     protected authService : AuthService = inject(AuthService);
+    private statisticsService : StatisticsService = inject(StatisticsService);
     private modalService : ModalService = inject(ModalService);
 
     httpError : string = '';
+
+    userStats : UserStats|null = null;
+
+    ngOnInit(): void {
+      this.statisticsService.getUserStatistics(this.authService.currentUserSignal()?.userId ?? '').subscribe({
+        next : (res)=>{
+          console.log(res);
+          this.userStats = res.data
+        },
+        error:(err)=>{
+          console.log(err)
+        }
+      })
+    }
 
     openModifyUserModal(){
       this.modalService.openModal<ProfileModalComponent, ModifyInfos>({
