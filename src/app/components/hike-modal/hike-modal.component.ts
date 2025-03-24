@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { validDurationUnit } from '../../_helpers/validators/durationUnit';
 import { HikeService } from '../../services/hike.service';
 import { ModalService } from '../../services/modal.service';
+import { HikeEvent } from '../../interfaces/hike/HikeEvent';
 
 @Component({
   selector: 'app-hike-modal',
@@ -16,7 +17,7 @@ export class HikeModalComponent implements OnInit{
   @Input() requestType !: string;
 
 
-  @Output() result = new EventEmitter<Hike>()
+  @Output() result = new EventEmitter<HikeEvent>()
 
   private modalService : ModalService = inject(ModalService);
 
@@ -69,9 +70,15 @@ export class HikeModalComponent implements OnInit{
       inventory : null
     }
 
-    this.result.emit(payload) //Transmettre au parent
+    this.result.emit({
+      action : this.hike?.id ? 'update' : 'create',
+      hike : payload}) //Transmettre au parent
+  }
 
-    //Fermer la modale ?
+  emitRemoveEvent(){
+    this.result.emit({
+      action : 'delete',
+      hike : this.hike!})
   }
 
   allFieldsTouched() : boolean{

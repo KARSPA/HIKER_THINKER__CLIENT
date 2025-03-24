@@ -4,6 +4,7 @@ import { Hike } from '../../interfaces/hike/Hike';
 import { HikeCardComponent } from '../../components/hike-card/hike-card.component';
 import { ModalService } from '../../services/modal.service';
 import { HikeModalComponent } from '../../components/hike-modal/hike-modal.component';
+import { HikeEvent } from '../../interfaces/hike/HikeEvent';
 
 @Component({
   selector: 'app-hikes',
@@ -53,19 +54,19 @@ export class HikesComponent implements OnInit{
 
   openHikeModal(hike?: Hike){
 
-    this.modalService.openModal<HikeModalComponent, Hike>({
+    this.modalService.openModal<HikeModalComponent, HikeEvent>({
       component : HikeModalComponent,
       data: {
         hike : hike,
         requestType : 'Ajout'
       }
     })
-    .subscribe((newHike)=>{
+    .subscribe((hikeEvent)=>{
       
-        console.log(newHike)
+        console.log(hikeEvent)
 
         //Faire la requete d'ajout de la randonnée
-        this.hikeService.addHike(newHike).subscribe({
+        this.hikeService.addHike(hikeEvent.hike).subscribe({
           next:(res)=>{
 
             this.hikeService.notifyHikeChange(res.data);

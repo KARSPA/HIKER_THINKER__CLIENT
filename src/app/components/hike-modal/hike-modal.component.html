@@ -157,7 +157,14 @@
                     Modifier la randonnée
                 }
             </button>
-            
+
+            @if(requestType === 'Modification'){
+                <button type="button"
+                (click)="emitRemoveEvent()"
+                class="text-white mt-10 hover:opacity-80 rounded-md bg-red-600 px-2 py-3 shadow-md cursor-pointer">
+                    Supprimer
+                </button>
+            }
         </div>
     
     </form>

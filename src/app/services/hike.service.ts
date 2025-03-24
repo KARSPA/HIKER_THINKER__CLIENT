@@ -49,6 +49,10 @@ export class HikeService {
   modifyHike(hike : Hike){
     return this.httpClient.patch<ResponseModel<Hike>>(this.HIKES_URL+`/${hike.id}`, {...hike})
   }
+  
+  removeHike(hikeId : string){
+    return this.httpClient.delete<ResponseModel<Hike>>(this.HIKES_URL+`/${hikeId}`)
+  }
 
   getHikes() : Observable<ResponseModel<Hike[]>>{
     return this.httpClient.get<ResponseModel<Hike[]>>(this.HIKES_URL)

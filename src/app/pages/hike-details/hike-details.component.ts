@@ -9,6 +9,7 @@ import { Equipment } from '../../interfaces/equipment/Equipment';
 import { InventoryService } from '../../services/inventory.service';
 import { HikeInventoryComponent } from '../../components/hike-inventory/hike-inventory.component';
 import { HikeModalComponent } from '../../components/hike-modal/hike-modal.component';
+import { HikeEvent } from '../../interfaces/hike/HikeEvent';
 
 @Component({
   selector: 'app-hike-details',
@@ -48,37 +49,50 @@ export class HikeDetailsComponent implements OnInit{
     }
 
     openHikeModifyModal(hike : Hike){
-      this.modalService.openModal<HikeModalComponent, Hike>({
+      this.modalService.openModal<HikeModalComponent, HikeEvent>({
         component : HikeModalComponent,
         data : {
           requestType : 'Modification',
           hike : hike
         }
       })
-      .subscribe((modifiedHike)=>{
+      .subscribe((hikeEvent)=>{
 
-        console.log(modifiedHike)
+        console.log(hikeEvent)
 
-        //Faire la requete d'ajout de la randonnée
-        this.hikeService.modifyHike(modifiedHike).subscribe({
-          next:(res)=>{
+        if(hikeEvent.action === 'update'){
+            //Faire la requete de modification de la randonnée
+            this.hikeService.modifyHike(hikeEvent.hike).subscribe({
+              next:(res)=>{
 
-            this.hikeService.notifyHikeChange(res.data);
+                this.hikeService.notifyHikeChange(res.data);
 
-            this.modalService.closeModal();
-          },
-          error:(err)=>{
-            console.log(err)
-            //TODO => Afficher/Transmettre une erreur dans la modale ou sur cette page (OU avec ASYNC Validator)
-          }
-        })
-      })
-    }
+                this.modalService.closeModal();
+              },
+              error:(err)=>{
+                console.log(err)
+                //TODO => Afficher/Transmettre une erreur dans la modale ou sur cette page (OU avec ASYNC Validator)
+              }
+            })
+        }
+        else if(hikeEvent.action === 'delete'){
+          // Faire la requete de suppression de la randonnée
+          // Retourner à la liste des randos
 
+          this.hikeService.removeHike(hikeEvent.hike?.id ?? '').subscribe({
+            next:(res)=>{
+              this.modalService.closeModal();
 
-
-
-
+              this.router.navigate(["/hikes"]);
+            },
+            error:(err)=>{
+              console.log(err)
+            }
+          })
+        }
+      }
+    )}
+    
   
     loadHike(hikeId: string): void {
       this.hikeService.getHikeById(hikeId).subscribe({
