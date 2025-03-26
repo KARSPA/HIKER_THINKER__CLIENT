@@ -13,9 +13,11 @@
       @else {
         <h2 class="font-semibold text-xl mb-3">Bienvenue</h2>
       }
-      <p class="mb-8 leading-relaxed text-justify">
-        Détaillez votre matériel de randonnée, obtenez des statistiques, astuces et recommandations sur votre équipement, ou générez une check-liste pour ne plus jamais rien oublier.
-      </p>
+      <div class="mb-8 leading-relaxed">
+        <p class="text-justify"><span class="italic">Ajoutez</span> vos équipements, <span class="italic">affectez</span>-les à vos randonnées et consultez facilement le poids total de votre paquetage. </p>
+        <p class="text-justify"><span class="italic">Accédez</span> à des statistiques globales sur votre activité de randonneur ainsi qu'à des détails précis sur l'utilisation de chacun de vos équipements.</p>
+        <p class="text-justify"><span class="italic">Générez</span> des check-listes pour préparer votre sac et être sûr de ne rien oublier.</p>
+      </div>
       <div class="w-full flex flex-col gap-5 justify-center">
 
         @if (isLogged()) {

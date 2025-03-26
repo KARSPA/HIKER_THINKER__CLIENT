@@ -1,11 +1,12 @@
 
 
-<header class="text-gray-400 bg-[#3A4D39] body-font">
+<header class="text-gray-400 bg-[#3A4D39] body-font border-b border-b-gray-400">
   <div class="container mx-auto flex flex-wrap flex-col md:flex-row items-center">
     <a class="flex title-font font-medium items-center text-white mb-4 md:mb-0 cursor-pointer hover:opacity-90">
         <!-- LOGO -->
          <img [src]="appLogoUrl" alt="Logo HikerThinker" class="h-20 w-20">
       <span routerLink="/home" routerLinkActive="active-link" class="text-xl">HikerThinker</span>
+      <span class="ml-6 text-sm text-white">v0.1.0</span>
     </a>
     <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
       @if (isLogged()) {

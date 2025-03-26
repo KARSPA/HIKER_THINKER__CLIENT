@@ -62,8 +62,6 @@ export class HikesComponent implements OnInit{
       }
     })
     .subscribe((hikeEvent)=>{
-      
-        console.log(hikeEvent)
 
         //Faire la requete d'ajout de la randonnée
         this.hikeService.addHike(hikeEvent.hike).subscribe({
