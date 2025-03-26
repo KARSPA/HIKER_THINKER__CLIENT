@@ -1,5 +1,5 @@
 import { APP_INITIALIZER, ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { provideRouter, Router, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
@@ -10,10 +10,20 @@ import { errorInterceptor } from './_helpers/interceptors/errorInterceptor';
 
 
 
-function initializeApp(authService : AuthService) {
-  return () => firstValueFrom(authService.verifyConnected())
-  .then(response => authService.handleLoginSuccess(response.data))
-  .catch(()=> authService.logout());
+function initializeApp(authService : AuthService, router : Router) {
+  return () => {
+    const publicRoutes = ['/', '/home', '/register'];
+    const currentUrl = router.url;
+    
+    if (publicRoutes.includes(currentUrl)) {
+      // Si on est sur une route publique, on ne fait pas la vérification
+      return Promise.resolve();
+    }
+    
+    return firstValueFrom(authService.verifyConnected())
+      .then(response => authService.handleLoginSuccess(response.data))
+      .catch(() => authService.logout());
+  };
 }
 
 
@@ -23,7 +33,7 @@ export const appConfig: ApplicationConfig = {
     {
       provide: APP_INITIALIZER,
       useFactory: initializeApp,
-      deps: [AuthService],
+      deps: [AuthService, Router],
       multi: true
     },
     provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
