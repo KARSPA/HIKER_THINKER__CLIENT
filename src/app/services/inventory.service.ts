@@ -5,13 +5,14 @@ import { Observable, Subject } from 'rxjs';
 import { ResponseModel } from '../interfaces/ResponseModel';
 import { Equipment } from '../interfaces/equipment/Equipment';
 import { Category } from '../interfaces/equipment/Category';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InventoryService{
 
-  private INVENTORY_URL = "http://localhost:8000/api/v1/inventory";
+  private INVENTORY_URL = `${environment.apiUrl}/inventory`;
 
   // inventorySignal = signal<Inventory>();
 

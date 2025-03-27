@@ -4,14 +4,15 @@ import { Equipment } from '../interfaces/equipment/Equipment';
 import { Observable } from 'rxjs';
 import { ResponseModel } from '../interfaces/ResponseModel';
 import { RefEquipment } from '../interfaces/equipment/RefEquipment';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EquipmentService {
 
-  private INVENTORY_EQUIP_BASE_URL = "http://localhost:8000/api/v1/inventory/equipments";
-  private HIKE_BASE_URL = "http://localhost:8000/api/v1/hikes";
+  private INVENTORY_EQUIP_BASE_URL = `${environment.apiUrl}/inventory/equipments`;
+  private HIKE_BASE_URL = `${environment.apiUrl}/hikes`;
 
 
 

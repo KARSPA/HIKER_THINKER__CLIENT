@@ -4,13 +4,14 @@ import { ResponseModel } from '../interfaces/ResponseModel';
 import { Hike } from '../interfaces/hike/Hike';
 import { Observable, Subject } from 'rxjs';
 import { Category } from '../interfaces/equipment/Category';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HikeService {
 
-  private HIKES_URL = "http://localhost:8000/api/v1/hikes";
+  private HIKES_URL = `${environment.apiUrl}/hikes`;
 
 
   private httpClient : HttpClient = inject(HttpClient);

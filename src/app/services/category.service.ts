@@ -3,14 +3,15 @@ import { inject, Injectable } from '@angular/core';
 import { Category } from '../interfaces/equipment/Category';
 import { Observable } from 'rxjs';
 import { ResponseModel } from '../interfaces/ResponseModel';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
 
-  private INVENTORY_BASE_URL = "http://localhost:8000/api/v1/inventory/categories";
-  private HIKE_BASE_URL = "http://localhost:8000/api/v1/hikes";
+  private INVENTORY_BASE_URL = `${environment.apiUrl}/inventory/categories`;
+  private HIKE_BASE_URL = `${environment.apiUrl}/hikes`;
 
 
   private httpClient : HttpClient = inject(HttpClient);

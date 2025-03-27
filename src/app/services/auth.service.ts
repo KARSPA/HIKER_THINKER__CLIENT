@@ -7,17 +7,18 @@ import { RegisterResponse } from '../interfaces/auth/RegisterResponse';
 import { ResponseModel } from '../interfaces/ResponseModel';
 import { LoginInfos } from '../interfaces/auth/LoginInfos';
 import { ModifyInfos } from '../interfaces/auth/ModifyInfos';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private MODIFY_USER : string = 'http://localhost:8000/api/v1/users';
-  private VERIFY_LOGIN : string = this.MODIFY_USER+'/verify';
+  private MODIFY_USER : string = `${environment.apiUrl}/users`;
+  private VERIFY_LOGIN : string = this.MODIFY_USER+`/verify`;
 
-  private LOGIN_URL : string = 'http://localhost:8000/api/v1/auth/login';
-  private REGISTER_URL : string = 'http://localhost:8000/api/v1/auth/register';
+  private LOGIN_URL : string = `${environment.apiUrl}/auth/login`;
+  private REGISTER_URL : string = `${environment.apiUrl}/auth/register`;
 
   private httpClient : HttpClient = inject(HttpClient);
 
