@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'http://hikerthinker.fr:8000/api/v1'
+    apiUrl: 'https://api.hikerthinker.fr/api/v1'
   };
