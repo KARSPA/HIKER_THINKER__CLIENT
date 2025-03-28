@@ -10,10 +10,11 @@ import { InventoryService } from '../../services/inventory.service';
 import { HikeInventoryComponent } from '../../components/hike-inventory/hike-inventory.component';
 import { HikeModalComponent } from '../../components/hike-modal/hike-modal.component';
 import { HikeEvent } from '../../interfaces/hike/HikeEvent';
+import { BasicLoaderComponent } from "../../_partials/basic-loader/basic-loader.component";
 
 @Component({
   selector: 'app-hike-details',
-  imports: [HikeDetailsCardComponent, HikeInventoryComponent],
+  imports: [HikeDetailsCardComponent, HikeInventoryComponent, BasicLoaderComponent],
   templateUrl: './hike-details.component.html'
 })
 export class HikeDetailsComponent implements OnInit{
@@ -26,9 +27,12 @@ export class HikeDetailsComponent implements OnInit{
   
     hike !: Hike;
     hikeInventory : Map<Category, Equipment[]> | null = null;
+
+    loaderActive : boolean = true; 
     
   
     ngOnInit(): void {
+
       // Récupérer l'id depuis l'URL et charger la randonnée
       this.route.paramMap.subscribe(params => {
         const hikeId = params.get('hikeId');
@@ -39,13 +43,10 @@ export class HikeDetailsComponent implements OnInit{
         }
       });
 
-
       // S'abonner aux changements des valeurs d'une randonnée
       this.hikeService.hikeChange$.subscribe((newHike)=>{
         this.hike = newHike
       })
-
-
     }
 
     openHikeModifyModal(hike : Hike){
@@ -92,8 +93,18 @@ export class HikeDetailsComponent implements OnInit{
     
   
     loadHike(hikeId: string): void {
+
+      // On relance le loader
+      this.loaderActive = true
+      
+      
       this.hikeService.getHikeById(hikeId).subscribe({
         next: (response) => {
+
+          // Enlever le loader
+          this.loaderActive = false
+
+
           this.hike = response.data;
           if (this.hike.inventory) {
             // console.log(response.data)

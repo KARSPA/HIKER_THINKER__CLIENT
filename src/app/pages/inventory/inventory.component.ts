@@ -15,10 +15,11 @@ import { EquipmentEvent } from '../../interfaces/equipment/EquipmentEvent';
 import { AddEquipment } from '../../interfaces/equipment/AddEquipment';
 import { RemoveEquipmentConfirmModalComponent } from '../../components/remove-equipment-confirm-modal/remove-equipment-confirm-modal.component';
 import { filter } from 'rxjs/internal/operators/filter';
+import { BasicLoaderComponent } from "../../_partials/basic-loader/basic-loader.component";
 
 @Component({
   selector: 'app-inventory',
-  imports: [EquipmentCardComponent, ClickStopPropagationDirective],
+  imports: [EquipmentCardComponent, ClickStopPropagationDirective, BasicLoaderComponent],
   templateUrl: './inventory.component.html',
 })
 export class InventoryComponent implements OnInit{
@@ -30,6 +31,8 @@ export class InventoryComponent implements OnInit{
 
   inventory : Map<Category, Equipment[]> | null = null;
   rawInventory : Inventory | null = null;
+
+  loaderActive : boolean = true;
 
   ngOnInit(): void {
 
@@ -152,8 +155,13 @@ export class InventoryComponent implements OnInit{
 
 
     loadInventory(){
+
+      this.loaderActive = true;
+
+
       this.inventoryService.getInventory().subscribe({
         next :(response) => {
+          this.loaderActive = false;
           this.rawInventory = response.data;
           this.inventory = this.inventoryService.restructureInventory(response.data);
         },

@@ -5,10 +5,11 @@ import { HikeCardComponent } from '../../components/hike-card/hike-card.componen
 import { ModalService } from '../../services/modal.service';
 import { HikeModalComponent } from '../../components/hike-modal/hike-modal.component';
 import { HikeEvent } from '../../interfaces/hike/HikeEvent';
+import { BasicLoaderComponent } from "../../_partials/basic-loader/basic-loader.component";
 
 @Component({
   selector: 'app-hikes',
-  imports: [HikeCardComponent],
+  imports: [HikeCardComponent, BasicLoaderComponent],
   templateUrl: './hikes.component.html'
 })
 export class HikesComponent implements OnInit{
@@ -19,18 +20,20 @@ export class HikesComponent implements OnInit{
 
   hikes : Hike[] = [];
 
+  loaderActive : boolean = true;
+
 
   ngOnInit(): void {
     //Chercher les randonnées
     this.hikeService.getHikes().subscribe({
       next:(response)=>{
+        this.loaderActive = false;
         this.hikes = response.data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       },
       error:(err)=>{
         console.log(err)
       }
     });
-
 
     //S'abonner aux évènements d'ajout/modif de randonnées
     this.hikeService.hikeChange$.subscribe({

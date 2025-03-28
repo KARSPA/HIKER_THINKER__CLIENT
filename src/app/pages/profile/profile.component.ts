@@ -5,10 +5,12 @@ import { ProfileModalComponent } from '../../components/modals/profile-modal/pro
 import { ModifyInfos } from '../../interfaces/auth/ModifyInfos';
 import { StatisticsService } from '../../services/statistics.service';
 import { UserStats } from '../../interfaces/statistics/UserStats';
+import { DecimalPipe } from '@angular/common';
+import { BasicLoaderComponent } from '../../_partials/basic-loader/basic-loader.component';
 
 @Component({
   selector: 'app-profile',
-  imports: [],
+  imports: [DecimalPipe, BasicLoaderComponent],
   templateUrl: './profile.component.html'
 })
 export class ProfileComponent implements OnInit{
@@ -22,9 +24,13 @@ export class ProfileComponent implements OnInit{
 
     userStats : UserStats|null = null;
 
+    loaderActive : boolean = true;
+
+
     ngOnInit(): void {
-      this.statisticsService.getUserStatistics(this.authService.currentUserSignal()?.userId ?? '').subscribe({
-        next : (res)=>{
+    this.statisticsService.getUserStatistics(this.authService.currentUserSignal()?.userId ?? '').subscribe({
+      next : (res)=>{
+        this.loaderActive = false;
           this.userStats = res.data
         },
         error:(err)=>{

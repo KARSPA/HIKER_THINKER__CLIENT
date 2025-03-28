@@ -13,7 +13,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { blockingGuard } from './_helpers/guards/blocking.guard';
 
 export const routes: Routes = [
-    {path:'', component: HomeComponent},
+    {path: '', pathMatch: 'full', redirectTo: 'home'}, 
     {path:'home', component: HomeComponent},
     {path:'login', component: LoginComponent, canActivate: [authGuard], data: {requiresAuth : false}},
     {path:'logout', component: LogoutComponent, canActivate: [authGuard], data: {requiresAuth : true}},

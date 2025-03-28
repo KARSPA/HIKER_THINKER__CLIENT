@@ -13,9 +13,9 @@ import { errorInterceptor } from './_helpers/interceptors/errorInterceptor';
 function initializeApp(authService : AuthService, router : Router) {
   return () => {
     const publicRoutes = ['/', '/home', '/register'];
-    const currentUrl = router.url;
+    const currentPath = window.location.pathname;
     
-    if (publicRoutes.includes(currentUrl)) {
+    if (publicRoutes.includes(currentPath)) {
       // Si on est sur une route publique, on ne fait pas la vérification
       return Promise.resolve();
     }

@@ -7,60 +7,64 @@
     </button>
 </div>
 
-<div class="">
-    @for (grouped of inventory; track $index) {
+@if(loaderActive){
+    <app-basic-loader title="Récupération de l'inventaire" />
+}
+@else {
+    <div class="">
+        @for (grouped of inventory; track $index) {
 
-        <div class="category-equipments-container mb-5">
-            <div 
-            id="category-container-{{$index}}"
-            class="category-container cursor-pointer px-4 py-2 rounded-t-md rounded-b-md bg-[#6b9430] flex items-center justify-between transition-all duration-300 ease-in-out"
-            (click)="toggleCategoryContainer($index)">
+            <div class="category-equipments-container mb-5">
+                <div 
+                id="category-container-{{$index}}"
+                class="category-container cursor-pointer px-4 py-2 rounded-t-md rounded-b-md bg-[#6b9430] flex items-center justify-between transition-all duration-300 ease-in-out"
+                (click)="toggleCategoryContainer($index)">
 
-                <div class="icon-name-container flex items-center gap-5">
-                    @if(grouped[0].icon !== 'no_icon'){
-                        <img src="assets/category_icons/{{grouped[0].icon}}.svg" alt="?" class="h-8 aspect-square">
-                    }
-                    <p class="font-semibold">{{grouped[0].name}}</p>
-                </div>
-                <div class="btns-container flex gap-5">
+                    <div class="icon-name-container flex items-center gap-5">
+                        @if(grouped[0].icon !== 'no_icon'){
+                            <img src="assets/category_icons/{{grouped[0].icon}}.svg" alt="?" class="h-8 aspect-square">
+                        }
+                        <p class="font-semibold">{{grouped[0].name}}</p>
+                    </div>
+                    <div class="btns-container flex gap-5">
+                        <button
+                        stop-click-propagation
+                        class="p-2 rounded-full hover:outline-1 hover:outline-amber-500 cursor-pointer"
+                        (click)="openCategoryModal(grouped[0])">
+                        <img src="assets/modifyIcon.svg" alt="" class="h-4 aspect-square">
+                    </button>
                     <button
-                    stop-click-propagation
-                    class="p-2 rounded-full hover:outline-1 hover:outline-amber-500 cursor-pointer"
-                    (click)="openCategoryModal(grouped[0])">
-                    <img src="assets/modifyIcon.svg" alt="" class="h-4 aspect-square">
-                </button>
-                <button
-                    id="category-toggle-{{$index}}"
-                    class="p-2 rounded-full hover:outline-1 hover:outline-white cursor-pointer ">
-                    <img src="assets/down-chevron.svg" alt="" class="h-4 aspect-square transition-all duration-300 ease-in-out">
-                </button>
+                        id="category-toggle-{{$index}}"
+                        class="p-2 rounded-full hover:outline-1 hover:outline-white cursor-pointer ">
+                        <img src="assets/down-chevron.svg" alt="" class="h-4 aspect-square transition-all duration-300 ease-in-out">
+                    </button>
+                    </div>
+                </div>
+
+                <div
+                id="equipment-content-{{$index}}"
+                class="equipment-container grid grid-cols-3 gap-x-10 px-4 rounded-b-md max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                    @for(equipment of grouped[1]; track $index){
+                        <app-equipment-card [equipment]="equipment" (delete)="openRemoveEquipmentModal(equipment)"/>
+                    }
                 </div>
             </div>
 
-            <div
-            id="equipment-content-{{$index}}"
-            class="equipment-container grid grid-cols-3 gap-x-10 px-4 rounded-b-md max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
-                @for(equipment of grouped[1]; track $index){
-                    <app-equipment-card [equipment]="equipment" (delete)="openRemoveEquipmentModal(equipment)"/>
-                }
+        }
+
+        <div class="category-container px-4 py-2 rounded-sm bg-stone-300 flex justify-between">
+            <div class="flex items-center">
+                <p class="font-semibold">Ajouter une catégorie</p>
+            </div>
+            <div class="">
+                <button 
+                (click)="openCategoryModal()"
+                class="h-8 aspect-square rounded-full bg-amber-500 font-semibold text-white cursor-pointer shadow-sm hover:opacity-80">
+                    +
+                </button>
             </div>
         </div>
 
-    }
-
-    <div class="category-container px-4 py-2 rounded-sm bg-stone-300 flex justify-between">
-        <div class="flex items-center">
-            <p class="font-semibold">Ajouter une catégorie</p>
-        </div>
-        <div class="">
-            <button 
-            (click)="openCategoryModal()"
-            class="h-8 aspect-square rounded-full bg-amber-500 font-semibold text-white cursor-pointer shadow-sm hover:opacity-80">
-                +
-            </button>
-        </div>
     </div>
-
-</div>
-
+}
 

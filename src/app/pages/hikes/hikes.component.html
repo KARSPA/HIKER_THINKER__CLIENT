@@ -7,15 +7,19 @@
     </button>
 </div>
 
-<div class="">
-    
-    @for(hike of hikes; track $index){
-        <app-hike-card [hike]="hike"></app-hike-card>
-    }
-    @empty {
-        <p class="mt-10 text-center text-gray-600 italic">Aucune randonnée ...</p>
-    }
 
-</div>
+@if(loaderActive){
+    <app-basic-loader title="Récupération des randonnées"></app-basic-loader>
+}
+@else {
+    <div class="">
+        @for(hike of hikes; track $index){
+            <app-hike-card [hike]="hike"></app-hike-card>
+        }
+        @empty {
+            <p class="mt-10 text-center text-gray-600 italic">Aucune randonnée ...</p>
+        }
+    </div>
+}
 
 

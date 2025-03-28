@@ -1,13 +1,18 @@
 
-<app-hike-details-card [hike]="hike" (openModal)="openHikeModifyModal(hike)"/>
-
-<div class="hike-inventory-container mt-10">
-    <h2 class="text-center text-xl mb-4">Équipements</h2>
-    <app-hike-inventory 
+@if(loaderActive){
+  <app-basic-loader title="Récupération des données"></app-basic-loader>
+}
+@else{
+    <app-hike-details-card [hike]="hike" (openModal)="openHikeModifyModal(hike)"/>
+    
+    <div class="hike-inventory-container mt-10">
+        <h2 class="text-center text-xl mb-4">Équipements</h2>
+        <app-hike-inventory 
         [hikeInventory]="hikeInventory" 
         [hike]="hike"
         (categoryRemoved)="reloadHikeInventory()"
-    />
-</div>
+        />
+    </div>
+}
 
 
