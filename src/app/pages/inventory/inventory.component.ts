@@ -230,73 +230,93 @@ export class InventoryComponent implements OnInit{
     
 
 
-    // toggleCategoryContainer(id : string|undefined){
+    toggleCategoryContainer(id : string|undefined){
 
-    //   console.log(id)
+      console.log(id)
 
-    //   const content = document.getElementById('equipment-content-'+id);
-    //   const icon = document.querySelector(`#category-toggle-${id} img`);
-    //   const categoryContainer = document.querySelector(`#category-container-${id}`)
+      const content = document.getElementById('equipment-content-'+id);
+      const icon = document.querySelector(`#category-toggle-${id} img`);
+      const categoryContainer = document.querySelector(`#category-container-${id}`)
 
-    //   console.log(content, icon, categoryContainer)
+      if(!content || !icon || !categoryContainer){
+        return;
+      }
 
-    //   if(!content || !icon || !categoryContainer){
-    //     return;
-    //   }
+      if (content && content.style.maxHeight && content.style.maxHeight !== '0px') { // Si existe + taille max définie + taille max différente de 0, c'est qu'on est ouvert
 
-    //   if (content && content.style.maxHeight && content.style.maxHeight !== '0px') {
-
-    //     content.style.maxHeight = '0';
-    //     content.classList.toggle('border-stone-300')
-    //     content.classList.toggle('border')
+        //On ferme
+        content.style.maxHeight = '0';
+        content.style.paddingBottom = '0';
+        content.style.paddingTop = '0';
+        content.classList.toggle('border-stone-300')
+        content.classList.toggle('border')
         
-    //     icon.classList.toggle('rotate-180')
-    //     categoryContainer.classList.toggle('rounded-b-md')
+        icon.classList.toggle('rotate-180')
+        categoryContainer.classList.toggle('rounded-b-md')
 
-    //   } else if (content) {
-    //     if(content.scrollHeight !== 0){
-    //       content.style.maxHeight = content.scrollHeight + 'px';
-    //       content.style.removeProperty('height')
-    //     }
-    //     else{
-    //       content.style.maxHeight = categoryContainer.scrollHeight + 'px';
-    //       content.style.height = categoryContainer.scrollHeight + 'px';
-    //     }
+      } else { // On ouvre
 
-    //     content.classList.toggle('border-stone-300')
-    //     content.classList.toggle('border')
+        content.style.maxHeight = content.scrollHeight+500 + 'px'; //On ajoute 500 pixels de marge en vertical pour ajouter des éléments.
+        content.style.paddingBottom = '20px';
+        content.style.paddingTop = '20px';
+        
+        content.classList.toggle('border-stone-300')
+        content.classList.toggle('border')
 
-    //     icon.classList.toggle('rotate-180')
-    //     categoryContainer.classList.toggle('rounded-b-md')
-    //   }
-
-    // }
+        icon.classList.toggle('rotate-180')
+        categoryContainer.classList.toggle('rounded-b-md')
+      }
 
 
-    dropEquipment(event: CdkDragDrop<Category[]>) {
+      //Pour ouvrir : 
+
+      //Enlever la max-height fixée à 0.
+      //Mettre la height à fit.
+
+
+
+
+      //Pour fermer : 
+      //Mettre la max-height à 0.
+      //Mettre la height à 0.
+
+    }
+
+
+    dropEquipment(event: CdkDragDrop<Category>) {
       console.log(event)
 
-      //Récupérer l'id de la nouvelle catégorie (avec la data passée)
+      if (event.previousContainer === event.container) { // Si on change pas de catégorie
+        // Bouger dans le tableau d'équipement de la catégorie
+        moveItemInArray(this.inventory?.get(event.container.data) ?? [], event.previousIndex, event.currentIndex);
 
-      // console.log(this.inventory?.get(event.container.data) ?? "existe pas")
+        //Faire prende la bonne taille au container
+        //this.setHeightToFitElements(event.container.element.nativeElement, event.item.element.nativeElement)
 
-      // // moveItemInArray([], event.previousIndex, event.currentIndex);
+      } else {
+        transferArrayItem(
+          this.inventory?.get(event.previousContainer.data) ?? [],
+          this.inventory?.get(event.container.data) ?? [],
+          event.previousIndex,
+          event.currentIndex,
+        );
 
-      // if (event.previousContainer === event.container) { // Si on change pas de catégorie
-      //   // Bouger dans le tableau d'équipement de la catégorie
-      //   moveItemInArray(this.inventory?.get(event.container.data) ?? [], event.previousIndex, event.currentIndex);
-      // } else {
-      //   transferArrayItem(
-      //     this.inventory?.get(event.previousContainer.data) ?? [],
-      //     this.inventory?.get(event.container.data) ?? [],
-      //     event.previousIndex,
-      //     event.currentIndex,
-      //   );
-      // }
+        //this.setHeightToFitElements(event.container.element.nativeElement, event.item.element.nativeElement)
 
+      }
 
-      console.log(this.inventory)
     }
+
+    setHeightToFitElements(element : HTMLElement, item : HTMLElement){
+
+      let heightToFit = Math.max(element.scrollHeight, item.scrollHeight)
+
+      element.style.maxHeight = heightToFit+40 + 'px';
+      element.style.height = heightToFit+40 + 'px';
+      element.style.paddingBottom = '20px';
+      element.style.paddingTop = '20px';
+    }
+
 
     notCategoryPredicate(item: CdkDrag<object>) : boolean{
 

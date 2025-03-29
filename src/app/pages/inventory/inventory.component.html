@@ -18,8 +18,8 @@
                 <div 
                 id="category-container-{{grouped[0].id}}"
                 class="category-container cursor-pointer px-4 py-2 rounded-t-md rounded-b-md bg-[#6b9430] flex items-center justify-between transition-all duration-300 ease-in-out"
+                (click)="toggleCategoryContainer(grouped[0].id)"
                 >
-                <!-- (click)="toggleCategoryContainer(grouped[0].id)" -->
 
                     <div class="icon-name-container flex items-center gap-5">
                         @if(grouped[0].icon !== 'no_icon'){
@@ -44,8 +44,9 @@
 
                 <div
                 cdkDropList (cdkDropListDropped)="dropEquipment($event)" cdkDropListOrientation="mixed"
+                [cdkDropListData]="grouped[0]"
                 id="equipment-content-{{grouped[0].id}}"
-                class="equipment-container flex flex-wrap gap-10 px-4 rounded-b-md overflow-hidden w-full">
+                class="equipment-container flex flex-wrap gap-10 rounded-b-md w-full px-10 max-h-0 overflow-y-hidden transition-all duration-400 ease-in-out">
                     @for(equipment of grouped[1]; track $index){
                         <app-equipment-card [equipment]="equipment" (delete)="openRemoveEquipmentModal(equipment)" cdkDrag/>
                     }
