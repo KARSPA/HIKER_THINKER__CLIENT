@@ -15,6 +15,8 @@ function initializeApp(authService : AuthService, router : Router) {
     const publicRoutes = ['/', '/home', '/register'];
     const currentPath = window.location.pathname;
     
+    // TODO : Problème avec "/" qui logout si on reload
+
     if (publicRoutes.includes(currentPath)) {
       // Si on est sur une route publique, on ne fait pas la vérification
       return Promise.resolve();
