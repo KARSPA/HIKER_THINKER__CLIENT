@@ -231,9 +231,6 @@ export class InventoryComponent implements OnInit{
 
 
     toggleCategoryContainer(id : string|undefined){
-
-      console.log(id)
-
       const content = document.getElementById('equipment-content-'+id);
       const icon = document.querySelector(`#category-toggle-${id} img`);
       const categoryContainer = document.querySelector(`#category-container-${id}`)
@@ -266,63 +263,25 @@ export class InventoryComponent implements OnInit{
         icon.classList.toggle('rotate-180')
         categoryContainer.classList.toggle('rounded-b-md')
       }
-
-
-      //Pour ouvrir : 
-
-      //Enlever la max-height fixée à 0.
-      //Mettre la height à fit.
-
-
-
-
-      //Pour fermer : 
-      //Mettre la max-height à 0.
-      //Mettre la height à 0.
-
     }
 
 
-    dropEquipment(event: CdkDragDrop<Category>) {
+    dropEquipment(event: CdkDragDrop<Category, Category, Equipment>) { //<type_liste_départ, type_liste_arrivée, type_objet_transféré>
       console.log(event)
 
       if (event.previousContainer === event.container) { // Si on change pas de catégorie
         // Bouger dans le tableau d'équipement de la catégorie
         moveItemInArray(this.inventory?.get(event.container.data) ?? [], event.previousIndex, event.currentIndex);
 
-        //Faire prende la bonne taille au container
-        //this.setHeightToFitElements(event.container.element.nativeElement, event.item.element.nativeElement)
-
       } else {
+        //Changer l'équipement de catégorie
         transferArrayItem(
           this.inventory?.get(event.previousContainer.data) ?? [],
           this.inventory?.get(event.container.data) ?? [],
           event.previousIndex,
           event.currentIndex,
         );
-
-        //this.setHeightToFitElements(event.container.element.nativeElement, event.item.element.nativeElement)
-
       }
-
     }
 
-    setHeightToFitElements(element : HTMLElement, item : HTMLElement){
-
-      let heightToFit = Math.max(element.scrollHeight, item.scrollHeight)
-
-      element.style.maxHeight = heightToFit+40 + 'px';
-      element.style.height = heightToFit+40 + 'px';
-      element.style.paddingBottom = '20px';
-      element.style.paddingTop = '20px';
-    }
-
-
-    notCategoryPredicate(item: CdkDrag<object>) : boolean{
-
-      console.log(item)
-
-      return false;
-
-    }
 }

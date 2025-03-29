@@ -14,6 +14,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 export class EquipmentCardComponent {
 
   @Input() equipment : Equipment|null = null;
+  @Input() dragable : boolean = false;
 
   @Output() delete = new EventEmitter<Equipment>();
 

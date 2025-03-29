@@ -48,7 +48,7 @@
                 id="equipment-content-{{grouped[0].id}}"
                 class="equipment-container flex flex-wrap gap-10 rounded-b-md w-full px-10 max-h-0 overflow-y-hidden transition-all duration-400 ease-in-out">
                     @for(equipment of grouped[1]; track $index){
-                        <app-equipment-card [equipment]="equipment" (delete)="openRemoveEquipmentModal(equipment)" cdkDrag/>
+                        <app-equipment-card [equipment]="equipment" [dragable]="true" (delete)="openRemoveEquipmentModal(equipment)" cdkDrag [cdkDragData]="equipment"/>
                     }
                 </div>
             </div>
