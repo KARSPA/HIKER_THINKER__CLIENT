@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { CdkDrag, CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { InventoryService } from '../../services/inventory.service';
 import { Inventory } from '../../interfaces/Inventory';
 import { EquipmentCardComponent } from '../../components/equipment-card/equipment-card.component';
@@ -19,7 +20,7 @@ import { BasicLoaderComponent } from "../../_partials/basic-loader/basic-loader.
 
 @Component({
   selector: 'app-inventory',
-  imports: [EquipmentCardComponent, ClickStopPropagationDirective, BasicLoaderComponent],
+  imports: [EquipmentCardComponent, ClickStopPropagationDirective, BasicLoaderComponent ,DragDropModule],
   templateUrl: './inventory.component.html',
 })
 export class InventoryComponent implements OnInit{
@@ -229,42 +230,79 @@ export class InventoryComponent implements OnInit{
     
 
 
-    toggleCategoryContainer(index : number){
+    // toggleCategoryContainer(id : string|undefined){
 
-      const content = document.getElementById('equipment-content-'+index);
-      const icon = document.querySelector(`#category-toggle-${index} img`);
-      const categoryContainer = document.querySelector(`#category-container-${index}`)
+    //   console.log(id)
 
-      if(!content || !icon || !categoryContainer){
-        return;
-      }
+    //   const content = document.getElementById('equipment-content-'+id);
+    //   const icon = document.querySelector(`#category-toggle-${id} img`);
+    //   const categoryContainer = document.querySelector(`#category-container-${id}`)
 
-      if (content && content.style.maxHeight && content.style.maxHeight !== '0px') {
+    //   console.log(content, icon, categoryContainer)
 
-        content.style.maxHeight = '0';
-        content.classList.toggle('border-stone-300')
-        content.classList.toggle('border')
+    //   if(!content || !icon || !categoryContainer){
+    //     return;
+    //   }
+
+    //   if (content && content.style.maxHeight && content.style.maxHeight !== '0px') {
+
+    //     content.style.maxHeight = '0';
+    //     content.classList.toggle('border-stone-300')
+    //     content.classList.toggle('border')
         
-        icon.classList.toggle('rotate-180')
-        categoryContainer.classList.toggle('rounded-b-md')
+    //     icon.classList.toggle('rotate-180')
+    //     categoryContainer.classList.toggle('rounded-b-md')
 
-      } else if (content) {
-        if(content.scrollHeight !== 0){
-          content.style.maxHeight = content.scrollHeight + 'px';
-          content.style.removeProperty('height')
-        }
-        else{
-          content.style.maxHeight = categoryContainer.scrollHeight + 'px';
-          content.style.height = categoryContainer.scrollHeight + 'px';
-        }
+    //   } else if (content) {
+    //     if(content.scrollHeight !== 0){
+    //       content.style.maxHeight = content.scrollHeight + 'px';
+    //       content.style.removeProperty('height')
+    //     }
+    //     else{
+    //       content.style.maxHeight = categoryContainer.scrollHeight + 'px';
+    //       content.style.height = categoryContainer.scrollHeight + 'px';
+    //     }
 
-        content.classList.toggle('border-stone-300')
-        content.classList.toggle('border')
+    //     content.classList.toggle('border-stone-300')
+    //     content.classList.toggle('border')
 
-        icon.classList.toggle('rotate-180')
-        categoryContainer.classList.toggle('rounded-b-md')
-      }
+    //     icon.classList.toggle('rotate-180')
+    //     categoryContainer.classList.toggle('rounded-b-md')
+    //   }
 
+    // }
+
+
+    dropEquipment(event: CdkDragDrop<Category[]>) {
+      console.log(event)
+
+      //Récupérer l'id de la nouvelle catégorie (avec la data passée)
+
+      // console.log(this.inventory?.get(event.container.data) ?? "existe pas")
+
+      // // moveItemInArray([], event.previousIndex, event.currentIndex);
+
+      // if (event.previousContainer === event.container) { // Si on change pas de catégorie
+      //   // Bouger dans le tableau d'équipement de la catégorie
+      //   moveItemInArray(this.inventory?.get(event.container.data) ?? [], event.previousIndex, event.currentIndex);
+      // } else {
+      //   transferArrayItem(
+      //     this.inventory?.get(event.previousContainer.data) ?? [],
+      //     this.inventory?.get(event.container.data) ?? [],
+      //     event.previousIndex,
+      //     event.currentIndex,
+      //   );
+      // }
+
+
+      console.log(this.inventory)
     }
 
+    notCategoryPredicate(item: CdkDrag<object>) : boolean{
+
+      console.log(item)
+
+      return false;
+
+    }
 }

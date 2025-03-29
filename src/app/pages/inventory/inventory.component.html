@@ -11,14 +11,15 @@
     <app-basic-loader title="Récupération de l'inventaire" />
 }
 @else {
-    <div class="">
+    <div class="" cdkDropListGroup>
         @for (grouped of inventory; track $index) {
 
             <div class="category-equipments-container mb-5">
                 <div 
-                id="category-container-{{$index}}"
+                id="category-container-{{grouped[0].id}}"
                 class="category-container cursor-pointer px-4 py-2 rounded-t-md rounded-b-md bg-[#6b9430] flex items-center justify-between transition-all duration-300 ease-in-out"
-                (click)="toggleCategoryContainer($index)">
+                >
+                <!-- (click)="toggleCategoryContainer(grouped[0].id)" -->
 
                     <div class="icon-name-container flex items-center gap-5">
                         @if(grouped[0].icon !== 'no_icon'){
@@ -34,7 +35,7 @@
                         <img src="assets/modifyIcon.svg" alt="" class="h-4 aspect-square">
                     </button>
                     <button
-                        id="category-toggle-{{$index}}"
+                        id="category-toggle-{{grouped[0].id}}"
                         class="p-2 rounded-full hover:outline-1 hover:outline-white cursor-pointer ">
                         <img src="assets/down-chevron.svg" alt="" class="h-4 aspect-square transition-all duration-300 ease-in-out">
                     </button>
@@ -42,10 +43,11 @@
                 </div>
 
                 <div
-                id="equipment-content-{{$index}}"
-                class="equipment-container grid grid-cols-3 gap-x-10 px-4 rounded-b-md max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                cdkDropList (cdkDropListDropped)="dropEquipment($event)" cdkDropListOrientation="mixed"
+                id="equipment-content-{{grouped[0].id}}"
+                class="equipment-container flex flex-wrap gap-10 px-4 rounded-b-md overflow-hidden w-full">
                     @for(equipment of grouped[1]; track $index){
-                        <app-equipment-card [equipment]="equipment" (delete)="openRemoveEquipmentModal(equipment)"/>
+                        <app-equipment-card [equipment]="equipment" (delete)="openRemoveEquipmentModal(equipment)" cdkDrag/>
                     }
                 </div>
             </div>
