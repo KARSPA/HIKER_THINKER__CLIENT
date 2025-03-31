@@ -5,5 +5,6 @@ export interface AddEquipment {
     brand: string;
     categoryName: string;
     sourceId: string|null;
+    position: number;
 }
 

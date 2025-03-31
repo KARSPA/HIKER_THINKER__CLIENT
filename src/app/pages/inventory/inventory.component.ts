@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CdkDrag, CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { InventoryService } from '../../services/inventory.service';
 import { Inventory } from '../../interfaces/Inventory';
@@ -23,7 +23,7 @@ import { BasicLoaderComponent } from "../../_partials/basic-loader/basic-loader.
   imports: [EquipmentCardComponent, ClickStopPropagationDirective, BasicLoaderComponent ,DragDropModule],
   templateUrl: './inventory.component.html',
 })
-export class InventoryComponent implements OnInit{
+export class InventoryComponent implements OnInit, OnDestroy{
   
   private inventoryService : InventoryService = inject(InventoryService)
   private categoryService : CategoryService = inject(CategoryService)
@@ -34,6 +34,10 @@ export class InventoryComponent implements OnInit{
   rawInventory : Inventory | null = null;
 
   loaderActive : boolean = true;
+
+  ngOnDestroy(): void {
+    this.equipmentService.forceFlush();
+  }
 
   ngOnInit(): void {
 
@@ -73,6 +77,8 @@ export class InventoryComponent implements OnInit{
     // S'abonner aux évènements d'ajout/modification d'équipement.
     this.inventoryService.equipmentChange$.subscribe((equipment)=>{
 
+      // TODO : Différencier un ajout d'une modification d'équipement
+
       //Lors de l'ajout d'un nouvel équipement :
         //On trouve la catégorie dans lequel il se situe et on l'ajoute aux tableau de la map
       const category = Array.from(this.inventory?.keys() ?? []).find(cat => cat.id === equipment.categoryId);
@@ -81,7 +87,7 @@ export class InventoryComponent implements OnInit{
 
         const currentEquipments = this.inventory.get(category) ?? [];
 
-        currentEquipments.push(equipment);
+        currentEquipments.unshift(equipment);
 
         this.inventory.set(category, currentEquipments);
       }
@@ -164,6 +170,7 @@ export class InventoryComponent implements OnInit{
         next :(response) => {
           this.loaderActive = false;
           this.rawInventory = response.data;
+          console.log(response.data)
           this.inventory = this.inventoryService.restructureInventory(response.data);
         },
         error : (error)=> {
@@ -207,7 +214,9 @@ export class InventoryComponent implements OnInit{
       switch (evt.action) {
         case 'create':
           this.equipmentService.addInventoryEquipment(evt.equipment).subscribe({
-            next: response => this.inventoryService.notifyEquipmentChange(response.data),
+            next: response => {
+              // console.log(evt.equipment, response.data)
+              this.inventoryService.notifyEquipmentChange(response.data)},
             error: err => console.error(err.error)
           });
           break;
@@ -272,7 +281,6 @@ export class InventoryComponent implements OnInit{
       if (event.previousContainer === event.container) { // Si on change pas de catégorie
         // Bouger dans le tableau d'équipement de la catégorie
         moveItemInArray(this.inventory?.get(event.container.data) ?? [], event.previousIndex, event.currentIndex);
-
       } else {
         //Changer l'équipement de catégorie
         transferArrayItem(
@@ -282,6 +290,18 @@ export class InventoryComponent implements OnInit{
           event.currentIndex,
         );
       }
+
+
+      // Notifier le changement au service qui stockera les modifications et fera des appels API par buffer.
+      const previousCategory = event.previousContainer.data
+      const previousCatEquipments = this.inventory?.get(previousCategory);
+      const category = event.container.data
+      const catEquipments = this.inventory?.get(category);
+
+      console.log(previousCatEquipments, catEquipments)
+
+      this.equipmentService.addEquipmentUpdate({categoryId : previousCategory.id, orderedIds : previousCatEquipments?.map(eq => eq.id) ?? []})
+      this.equipmentService.addEquipmentUpdate({categoryId : category.id, orderedIds : catEquipments?.map(eq => eq.id) ?? []})
     }
 
 }

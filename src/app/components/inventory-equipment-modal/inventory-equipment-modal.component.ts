@@ -53,7 +53,8 @@ export class InventoryEquipmentModalComponent implements OnInit{
         weight : Number(formValue.weight) ?? 0,
         brand : formValue.brand ?? '',
         categoryName : formValue.categoryName ?? '',
-        sourceId : null
+        sourceId : null,
+        position: 0
       }
   
       this.result.emit({
