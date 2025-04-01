@@ -6,35 +6,73 @@ import { ResponseModel } from '../interfaces/ResponseModel';
 import { RefEquipment } from '../interfaces/equipment/RefEquipment';
 import { environment } from '../../environments/environment';
 import { EquipmentsOrderUpdate } from '../interfaces/equipment/EquipmentUpdate';
+import { Category } from '../interfaces/equipment/Category';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EquipmentService {
 
-  private INVENTORY_EQUIP_BASE_URL = `${environment.apiUrl}/inventory/equipments`;
-  private HIKE_BASE_URL = `${environment.apiUrl}/hikes`;
+  private mode: 'inventory' | 'hike' | 'model' = 'inventory';
 
-  private httpClient : HttpClient = inject(HttpClient);
-
-
-  private updateBuffer = new Map<string, string[]>();
+  
+  //url des requetes qui sera configuré via le mode lors de l'instanciation des composants l'utilisant
+  private url: string = `${environment.apiUrl}`;
+  
+  private httpClient: HttpClient = inject(HttpClient);
+  
+  private updateBuffer = new Map<Category, string[]>();
   private updateInterval = 10000; // 10 secondes
   private updateSubject = new Subject<void>();
 
-  constructor(){
-    //Défini un interval pour faire les requetes de modifications d'équipements de manière répétée
-    interval(this.updateInterval).subscribe(()=>this.flushEquipmentUpdates());
+  private currentOrders = new Map<Category, string[]>();
+
+  constructor() {
+    // Par défaut, on initialise en mode inventory (sans identifiant)
+    this.setMode('inventory');
+    interval(this.updateInterval).subscribe(() => this.flushEquipmentUpdates());
+  }
+
+  /**
+   * Configure le mode du service.
+   * @param mode - Le mode ('inventory', 'hike' ou 'model')
+   * @param contextId - L'identifiant contextuel (par exemple, le hikeId ou modelId) si nécessaire.
+   */
+  setMode(mode: 'inventory' | 'hike' | 'model', contextId?: string): void {
+    this.mode = mode;
+
+    switch (mode) {
+      case 'inventory':
+        this.url = `${environment.apiUrl}/inventory/equipments`;
+        break;
+      case 'hike':
+        if (!contextId) {
+          throw new Error("Un identifiant de randonnée (hikeId) est requis pour le mode 'hike'");
+        }
+        this.url = `${environment.apiUrl}/hikes/${contextId}/equipments`;
+        break;
+      case 'model':
+        if (!contextId) {
+          throw new Error("Un identifiant de modèle (modelId) est requis pour le mode 'model'");
+        }
+        this.url = `${environment.apiUrl}/models/${contextId}/equipments`;
+        break;
+    }
+  }
+
+  setOrders(initialOrders : Map<Category, string[]>){
+    this.currentOrders = initialOrders;
+    console.log(this.currentOrders);
   }
 
   getEquipmentById(equipmentId : string) : Observable<ResponseModel<Equipment>>{
-    return this.httpClient.get<ResponseModel<Equipment>>(this.INVENTORY_EQUIP_BASE_URL+`/${equipmentId}`)
+    return this.httpClient.get<ResponseModel<Equipment>>(this.url+`/${equipmentId}`)
   }
 
 
 
   addInventoryEquipment(equipmentFormValue : any) : Observable<ResponseModel<Equipment>>{
-    return this.httpClient.post<ResponseModel<Equipment>>(this.INVENTORY_EQUIP_BASE_URL, {
+    return this.httpClient.post<ResponseModel<Equipment>>(this.url, {
       name : equipmentFormValue.name,
       weight : equipmentFormValue.weight,
       description : equipmentFormValue.description,
@@ -46,41 +84,38 @@ export class EquipmentService {
 
   removeInventoryEquipment(equipmentId : string) : Observable<ResponseModel<string>>{
 
-    return this.httpClient.delete<ResponseModel<string>>(this.INVENTORY_EQUIP_BASE_URL+`/${equipmentId}`)
+    return this.httpClient.delete<ResponseModel<string>>(this.url+`/${equipmentId}`)
   }
 
 
-  addHikeEquipment(hikeId : string, refEquipment : RefEquipment) : Observable<ResponseModel<Equipment>>{
-    return this.httpClient.post<ResponseModel<Equipment>>(this.buildBaseHikeEquipmentUrl(hikeId), {...refEquipment})
+  addHikeEquipment(refEquipment : RefEquipment) : Observable<ResponseModel<Equipment>>{
+    return this.httpClient.post<ResponseModel<Equipment>>(this.url, {...refEquipment})
   }
 
-  removeHikeEquipment(hikeId : string, equipmentId : string) : Observable<ResponseModel<string>>{
-    return this.httpClient.delete<ResponseModel<string>>(this.buildBaseHikeEquipmentUrl(hikeId)+`/${equipmentId}`)
+  removeHikeEquipment(equipmentId : string) : Observable<ResponseModel<string>>{
+    return this.httpClient.delete<ResponseModel<string>>(this.url+`/${equipmentId}`)
   }
 
-
-  private buildBaseHikeEquipmentUrl(hikeId : string){
-    return `${this.HIKE_BASE_URL}/${hikeId}/equipments`;
-  }
 
 
   /* SECTION DES MODIFS DE POSITIONS ET CATÉGORIES D'ÉQUIPEMENT */
 
   // Ajoute ou met à jour une modification dans le buffer
   addEquipmentUpdate(update: EquipmentsOrderUpdate): void {
-    this.updateBuffer.set(update.categoryId ?? '', update.orderedIds);
+    this.updateBuffer.set(update.category, update.orderedIds);
 
-    console.log(this.updateBuffer)
+    // Changer valeur d'un subject pour afficher si enregistrements à faire ou pas.
+
+    // console.log(this.updateBuffer)
   }
 
 
 
   flushEquipmentUpdates() : void{
-    console.log('UPDATE : ')
     if(this.updateBuffer.size === 0) return // Si on a rien a modifier, on modifie rien ....
 
-    const payload = Array.from(this.updateBuffer.entries()).map(([categoryId, newPositions])=>({
-      categoryId,
+    const payload = Array.from(this.updateBuffer.entries()).map(([category, newPositions])=>({
+      categoryId : category?.id,
       orderedEquipmentIds : newPositions
     }))
 
@@ -89,7 +124,7 @@ export class EquipmentService {
     this.updateBuffer.clear(); // On vide la map de modifications.
 
     //On fait l'appel API
-    this.httpClient.patch(`${this.INVENTORY_EQUIP_BASE_URL}`, payload).subscribe({
+    this.httpClient.patch(`${this.url}`, payload).subscribe({
       next : (response)=>{
         console.log(response)
       },

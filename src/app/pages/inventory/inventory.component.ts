@@ -43,7 +43,9 @@ export class InventoryComponent implements OnInit, OnDestroy{
 
     // Charger l'inventaire depuis l'API
     this.loadInventory();
-
+    
+    //Mettre le mode du service
+    this.equipmentService.setMode('inventory')
 
     // S'abonner aux évènements d'ajout/modification de catégorie.
     this.inventoryService.categoryChange$.subscribe((category)=>{
@@ -162,15 +164,13 @@ export class InventoryComponent implements OnInit, OnDestroy{
 
 
     loadInventory(){
-
       this.loaderActive = true;
-
 
       this.inventoryService.getInventory().subscribe({
         next :(response) => {
           this.loaderActive = false;
           this.rawInventory = response.data;
-          console.log(response.data)
+          // console.log(response.data)
           this.inventory = this.inventoryService.restructureInventory(response.data);
         },
         error : (error)=> {
@@ -276,32 +276,38 @@ export class InventoryComponent implements OnInit, OnDestroy{
 
 
     dropEquipment(event: CdkDragDrop<Category, Category, Equipment>) { //<type_liste_départ, type_liste_arrivée, type_objet_transféré>
-      console.log(event)
+      let notifyService = false;
 
       if (event.previousContainer === event.container) { // Si on change pas de catégorie
-        // Bouger dans le tableau d'équipement de la catégorie
-        moveItemInArray(this.inventory?.get(event.container.data) ?? [], event.previousIndex, event.currentIndex);
-      } else {
-        //Changer l'équipement de catégorie
+
+        if(event.previousIndex !== event.currentIndex){ // Si pas de changement, pas besoin de modifier et notifier le service
+          // Bouger dans le tableau d'équipement de la catégorie
+          moveItemInArray(this.inventory?.get(event.container.data) ?? [], event.previousIndex, event.currentIndex);
+          notifyService = true;
+        }
+
+      } else { //Si on change de catégorie, on bouge et notifie le service
         transferArrayItem(
           this.inventory?.get(event.previousContainer.data) ?? [],
           this.inventory?.get(event.container.data) ?? [],
           event.previousIndex,
           event.currentIndex,
         );
+        notifyService = true;
       }
 
-
-      // Notifier le changement au service qui stockera les modifications et fera des appels API par buffer.
-      const previousCategory = event.previousContainer.data
-      const previousCatEquipments = this.inventory?.get(previousCategory);
-      const category = event.container.data
-      const catEquipments = this.inventory?.get(category);
-
-      console.log(previousCatEquipments, catEquipments)
-
-      this.equipmentService.addEquipmentUpdate({categoryId : previousCategory.id, orderedIds : previousCatEquipments?.map(eq => eq.id) ?? []})
-      this.equipmentService.addEquipmentUpdate({categoryId : category.id, orderedIds : catEquipments?.map(eq => eq.id) ?? []})
+      if(notifyService){
+        // Notifier le changement au service qui stockera les modifications et fera des appels API par buffer.
+        const previousCategory = event.previousContainer.data
+        const previousCatEquipments = this.inventory?.get(previousCategory);
+        const category = event.container.data
+        const catEquipments = this.inventory?.get(category);
+        
+        // console.log(previousCatEquipments, catEquipments)
+        
+        this.equipmentService.addEquipmentUpdate({category : previousCategory, orderedIds : previousCatEquipments?.map(eq => eq.id) ?? []})
+        this.equipmentService.addEquipmentUpdate({category : category, orderedIds : catEquipments?.map(eq => eq.id) ?? []})
+      }
     }
 
 }

@@ -1,14 +1,14 @@
 <div class="modal-content h-fit max-h-[10%] pb-4 w-3xl">
-    <div class="modal-title text-lg text-center">
+    <div class="modal-title text-center">
         @if(this.context === 'Hike'){
-            <p>Ajouter un équipement à cette randonnée</p>
+            <p class="text-lg font-semibold">Ajouter un équipement à cette randonnée</p>
         }
         @else if(this.context === 'Model'){
-            <p>Ajouter un équipement à cet modèle</p>
+            <p class="text-lg font-semibold">Ajouter un équipement à cet modèle</p>
         }
     </div>
 
-    <div class="mt-10 equipments-container grid grid-cols-3 gap-5 overflow-y-scroll h-[10%]">
+    <div class="mt-10 equipments-container grid grid-cols-3 gap-5 overflow-y-scroll h-[10%] px-1">
         @for(equipment of filteredEquipments; track $index){
             <div class="my-4 pb-2 bg-[#DEB887] outline-1 outline-stone-300 rounded-md shadow-md shadow-stone-400 h-40">
 

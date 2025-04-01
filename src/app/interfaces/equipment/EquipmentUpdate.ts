@@ -1,4 +1,6 @@
+import { Category } from "./Category";
+
 export interface EquipmentsOrderUpdate {
-    categoryId? : string;
+    category : Category;
     orderedIds : string[];
 }

@@ -35,6 +35,9 @@ export class HikeInventoryComponent implements OnInit{
 
   ngOnInit(): void {
 
+      //Mettre le mode du service à 'hike'
+      this.equipmentService.setMode('hike', this.hike?.id ?? '');
+
       // S'abonner aux évènements d'ajout/modification d'équipement
       this.inventoryService.equipmentChange$.subscribe((equipment)=>{
 
@@ -141,7 +144,7 @@ export class HikeInventoryComponent implements OnInit{
       }
     })
     .subscribe((refEquipment)=>{
-      this.equipmentService.addHikeEquipment(this.hike?.id!, refEquipment).subscribe({
+      this.equipmentService.addHikeEquipment(refEquipment).subscribe({
         next:(res)=>{
           this.inventoryService.notifyEquipmentChange(res.data)
         },
@@ -155,7 +158,7 @@ export class HikeInventoryComponent implements OnInit{
   removeHikeEquipment(equipment : Equipment){
     // Ouvrir une modale de confirmation ??? 
 
-    this.equipmentService.removeHikeEquipment(this.hike?.id!, equipment.id).subscribe({
+    this.equipmentService.removeHikeEquipment(equipment.id).subscribe({
       next:(res)=>{
         this.inventoryService.notifyEquipmentRemove(res.data)
       }
@@ -192,41 +195,39 @@ export class HikeInventoryComponent implements OnInit{
     }
   }
 
-  toggleCategoryContainer(index : number){
+  toggleCategoryContainer(id : string|undefined){
 
-    const content = document.getElementById('equipment-content-'+index);
-    const icon = document.querySelector(`#category-toggle-${index} img`);
-    const categoryContainer = document.querySelector(`#category-container-${index}`)
+    const content = document.getElementById('equipment-content-'+id);
+    const icon = document.querySelector(`#category-toggle-${id} img`);
+    const categoryContainer = document.querySelector(`#category-container-${id}`)
 
     if(!content || !icon || !categoryContainer){
       return;
     }
 
-    if (content && content.style.maxHeight && content.style.maxHeight !== '0px') {
+    if (content && content.style.maxHeight && content.style.maxHeight !== '0px') { // Si existe + taille max définie + taille max différente de 0, c'est qu'on est ouvert
 
+      //On ferme
       content.style.maxHeight = '0';
+      content.style.paddingBottom = '0';
+      content.style.paddingTop = '0';
       content.classList.toggle('border-stone-300')
       content.classList.toggle('border')
       
       icon.classList.toggle('rotate-180')
       categoryContainer.classList.toggle('rounded-b-md')
 
-    } else if (content) {
-      if(content.scrollHeight !== 0){
-        content.style.maxHeight = content.scrollHeight + 'px';
-        content.style.removeProperty('height')
-      }
-      else{
-        content.style.maxHeight = categoryContainer.scrollHeight + 'px';
-        content.style.height = categoryContainer.scrollHeight + 'px';
-      }
+    } else { // On ouvre
 
+      content.style.maxHeight = content.scrollHeight+500 + 'px'; //On ajoute 500 pixels de marge en vertical pour ajouter des éléments.
+      content.style.paddingBottom = '20px';
+      content.style.paddingTop = '20px';
+      
       content.classList.toggle('border-stone-300')
       content.classList.toggle('border')
 
       icon.classList.toggle('rotate-180')
       categoryContainer.classList.toggle('rounded-b-md')
     }
-
   }
 }

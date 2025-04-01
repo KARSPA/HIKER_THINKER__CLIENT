@@ -75,7 +75,7 @@ export class InventoryEquipmentModalComponent implements OnInit{
       case 'required':
         errorMessage = 'Champ requis.';
         break;
-      case 'maxlength':
+      case 'maxLength':
         errorMessage = `Au plus ${length} caractères.`;
         break;
       case 'number':
@@ -84,6 +84,10 @@ export class InventoryEquipmentModalComponent implements OnInit{
     }
 
     return errorMessage;
+  }
+
+  onlyDigits(e : KeyboardEvent){
+    if(!['1','2','3','4','5','6','7','8','9','0','Backspace'].includes(e.key)) e.preventDefault();
   }
 
 
