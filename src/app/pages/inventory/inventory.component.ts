@@ -170,6 +170,8 @@ export class InventoryComponent implements OnInit, OnDestroy{
         next :(response) => {
           this.loaderActive = false;
           this.rawInventory = response.data;
+          this.rawInventory.categories.sort((catA, catB)=>(catA.order)-(catB.order));
+          console.log(this.rawInventory)
           // console.log(response.data)
           this.inventory = this.inventoryService.restructureInventory(response.data);
         },
@@ -274,39 +276,61 @@ export class InventoryComponent implements OnInit, OnDestroy{
       }
     }
 
+    getEquipmentsForCategory(categoryId: string): Equipment[] {
+      return this.rawInventory?.equipments
+        .filter(eq => eq.categoryId === categoryId)
+        .sort((a, b) => (a.position ?? 0) - (b.position ?? 0)) ?? [];
+    }
+    
 
-    dropEquipment(event: CdkDragDrop<Category, Category, Equipment>) { //<type_liste_départ, type_liste_arrivée, type_objet_transféré>
+
+    dropEquipment(event: CdkDragDrop<Equipment[], Equipment[], Equipment>, targetCategory : Category) { //<type_liste_départ, type_liste_arrivée, type_objet_transféré>
       let notifyService = false;
 
-      if (event.previousContainer === event.container) { // Si on change pas de catégorie
+      const previousCategoryId = event.item.data.categoryId;
+      const newCategoryId = targetCategory.id!;
 
+      if (event.previousContainer === event.container) { // Si on change pas de catégorie
         if(event.previousIndex !== event.currentIndex){ // Si pas de changement, pas besoin de modifier et notifier le service
           // Bouger dans le tableau d'équipement de la catégorie
-          moveItemInArray(this.inventory?.get(event.container.data) ?? [], event.previousIndex, event.currentIndex);
+          moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
           notifyService = true;
         }
 
       } else { //Si on change de catégorie, on bouge et notifie le service
         transferArrayItem(
-          this.inventory?.get(event.previousContainer.data) ?? [],
-          this.inventory?.get(event.container.data) ?? [],
+          event.previousContainer.data,
+          event.container.data,
           event.previousIndex,
           event.currentIndex,
         );
         notifyService = true;
+
+        // Mettre à jour la catégorie de l'équipement déplacé 
+        const movedEquipment = event.container.data[event.currentIndex];
+        movedEquipment.categoryId = targetCategory.id!;
+      }
+
+
+      // Pour le conteneur source et cible, recalculer les positions de chaque équipement
+      // Par exemple, on peut faire pour la catégorie cible :
+      event.container.data.forEach((eq, index) => eq.position = index);
+      
+      // Et, si nécessaire, faire de même pour le conteneur source si différent
+      if (event.previousContainer !== event.container) {
+        event.previousContainer.data.forEach((eq, index) => eq.position = index);
       }
 
       if(notifyService){
         // Notifier le changement au service qui stockera les modifications et fera des appels API par buffer.
-        const previousCategory = event.previousContainer.data
-        const previousCatEquipments = this.inventory?.get(previousCategory);
-        const category = event.container.data
-        const catEquipments = this.inventory?.get(category);
+
+        console.log(event.previousContainer.data, event.container.data, targetCategory )
+
+        const previousCatEquipments = this.getEquipmentsForCategory(previousCategoryId);
+        const newCatEquipments = this.getEquipmentsForCategory(newCategoryId);
         
-        // console.log(previousCatEquipments, catEquipments)
-        
-        this.equipmentService.addEquipmentUpdate({category : previousCategory, orderedIds : previousCatEquipments?.map(eq => eq.id) ?? []})
-        this.equipmentService.addEquipmentUpdate({category : category, orderedIds : catEquipments?.map(eq => eq.id) ?? []})
+        this.equipmentService.addEquipmentUpdate({categoryId : previousCategoryId, orderedIds : previousCatEquipments?.map(eq => eq.id) ?? []})
+        this.equipmentService.addEquipmentUpdate({categoryId : newCategoryId, orderedIds : newCatEquipments?.map(eq => eq.id) ?? []})
       }
     }
 

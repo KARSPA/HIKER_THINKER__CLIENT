@@ -21,11 +21,10 @@ export class EquipmentService {
   
   private httpClient: HttpClient = inject(HttpClient);
   
-  private updateBuffer = new Map<Category, string[]>();
+  private updateBuffer = new Map<string, string[]>();
   private updateInterval = 10000; // 10 secondes
   private updateSubject = new Subject<void>();
 
-  private currentOrders = new Map<Category, string[]>();
 
   constructor() {
     // Par défaut, on initialise en mode inventory (sans identifiant)
@@ -60,10 +59,7 @@ export class EquipmentService {
     }
   }
 
-  setOrders(initialOrders : Map<Category, string[]>){
-    this.currentOrders = initialOrders;
-    console.log(this.currentOrders);
-  }
+  
 
   getEquipmentById(equipmentId : string) : Observable<ResponseModel<Equipment>>{
     return this.httpClient.get<ResponseModel<Equipment>>(this.url+`/${equipmentId}`)
@@ -102,7 +98,7 @@ export class EquipmentService {
 
   // Ajoute ou met à jour une modification dans le buffer
   addEquipmentUpdate(update: EquipmentsOrderUpdate): void {
-    this.updateBuffer.set(update.category, update.orderedIds);
+    this.updateBuffer.set(update.categoryId, update.orderedIds);
 
     // Changer valeur d'un subject pour afficher si enregistrements à faire ou pas.
 
@@ -114,8 +110,8 @@ export class EquipmentService {
   flushEquipmentUpdates() : void{
     if(this.updateBuffer.size === 0) return // Si on a rien a modifier, on modifie rien ....
 
-    const payload = Array.from(this.updateBuffer.entries()).map(([category, newPositions])=>({
-      categoryId : category?.id,
+    const payload = Array.from(this.updateBuffer.entries()).map(([categoryId, newPositions])=>({
+      categoryId : categoryId,
       orderedEquipmentIds : newPositions
     }))
 
