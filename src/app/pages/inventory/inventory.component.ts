@@ -30,8 +30,7 @@ export class InventoryComponent implements OnInit, OnDestroy{
   private equipmentService : EquipmentService = inject(EquipmentService)
   private modalService : ModalService = inject(ModalService);
 
-  inventory : Map<Category, Equipment[]> | null = null;
-  rawInventory : Inventory | null = null;
+  inventory : Inventory = {categories: [], equipments : []};
 
   loaderActive : boolean = true;
 
@@ -48,74 +47,39 @@ export class InventoryComponent implements OnInit, OnDestroy{
     this.equipmentService.setMode('inventory')
 
     // S'abonner aux évènements d'ajout/modification de catégorie.
-    this.inventoryService.categoryChange$.subscribe((category)=>{
+    this.inventoryService.categoryChange$.subscribe((category)=>{ // Le réindexage à la création et mouvement est gérer ailleurs.
+        let categoryIndex = this.inventory.categories.findIndex(cat => cat.id === category.id);
+        if(categoryIndex != -1) this.inventory.categories.splice(categoryIndex, 1, category); // Si modification, on remplace 
+        else this.inventory.categories.unshift(category) // SI ajout l'insérer au début (order à 0 à la création)
 
-      const previousCategory = Array.from(this.inventory?.keys() ?? []).find(cat => cat.id === category.id);
+        console.log(categoryIndex, this.inventory.categories)
+      })
 
-      if(previousCategory){
-        const tempSave = this.inventory?.get(previousCategory);
-        this.inventory?.delete(previousCategory);
-        this.inventory?.set(category, tempSave ?? []);
-      }else{
-        this.inventory?.set(category, []);
-      }
-      //Retrier la Map de l'inventaire pour afficher les catégories correctement
-      if(this.inventory){
-        this.inventory = new Map([...this.inventory.entries()].sort(
-          ([catA], [catB]) => (catA.order ?? 0) - (catB.order ?? 0) 
-        ))
-      }
-    })
+      //S'abonner aux évènement de suppression d'un catégorie
+          // Si ça arrive : 
+      // Redemander l'inventaire à l'API car les équipements seront mis à jours.
 
-    //S'abonner aux évènement de suppression d'un catégorie
-        // Si ça arrive : 
-    // Redemander l'inventaire à l'API car les équipements seront mis à jours.
-
-    this.inventoryService.categoryRemove$.subscribe((categoryId)=>{
-      this.loadInventory();
-    })
+      this.inventoryService.categoryRemove$.subscribe((categoryId)=>{
+        this.loadInventory();
+      })
 
 
-    // S'abonner aux évènements d'ajout/modification d'équipement.
-    this.inventoryService.equipmentChange$.subscribe((equipment)=>{
+      // S'abonner aux évènements d'ajout/modification d'équipement.
+      this.inventoryService.equipmentChange$.subscribe((equipment)=>{
 
-      // TODO : Différencier un ajout d'une modification d'équipement
+        // TODO : Différencier un ajout d'une modification d'équipement
 
-      //Lors de l'ajout d'un nouvel équipement :
-        //On trouve la catégorie dans lequel il se situe et on l'ajoute aux tableau de la map
-      const category = Array.from(this.inventory?.keys() ?? []).find(cat => cat.id === equipment.categoryId);
+        //Ajout
+        this.inventory.equipments.push(equipment)
 
-      if (category && this.inventory) {
+      })
 
-        const currentEquipments = this.inventory.get(category) ?? [];
+      //S'abonner aux évènement de suppression d'équipements
+      this.inventoryService.equipmentRemove$.subscribe((equipmentId)=>{
+        const equipmentIndex = this.inventory.equipments.findIndex(eq => eq.id === equipmentId);
+        this.inventory.equipments.splice(equipmentIndex, 1)
+      })
 
-        currentEquipments.unshift(equipment);
-
-        this.inventory.set(category, currentEquipments);
-      }
-    })
-
-    //S'abonner aux évènement de suppression d'équipements
-    this.inventoryService.equipmentRemove$.subscribe({
-      next:(equipmentId)=>{
-
-        if (!this.inventory) return;
-
-        // Parcourir chaque entrée de la Map (chaque catégorie et son tableau d'équipements)
-        this.inventory.forEach((equipments, category) => {
-          // Rechercher l'index de l'équipement à supprimer dans le tableau
-          const index = equipments.findIndex(eq => eq.id === equipmentId);
-          if (index !== -1) {
-
-            // Supprimer l'équipement du tableau
-            equipments.splice(index, 1);
-  
-          }
-        })
-      }
-    })
-
-      
     }
 
 
@@ -128,7 +92,7 @@ export class InventoryComponent implements OnInit, OnDestroy{
         data: {
           requestType : requestType,
           category : category,
-          existingCategories : this.rawInventory?.categories}
+          existingCategories : this.inventory?.categories}
       })
       .subscribe(({action, category})=>{
         this.sendCategoryRequestAndNotify(action, category);
@@ -139,7 +103,7 @@ export class InventoryComponent implements OnInit, OnDestroy{
     openEquipmentModal(equipment? : Equipment): void{
       this.modalService.openModal<InventoryEquipmentModalComponent, EquipmentEvent>({
         component : InventoryEquipmentModalComponent,
-        data: {categories : Array.from(this.inventory?.keys() ?? [])}
+        data: {categories : Array.from(this.inventory.categories)}
       })
       .subscribe((event)=>{
         this.sendEquipmentRequestAndNotify(event);
@@ -169,11 +133,10 @@ export class InventoryComponent implements OnInit, OnDestroy{
       this.inventoryService.getInventory().subscribe({
         next :(response) => {
           this.loaderActive = false;
-          this.rawInventory = response.data;
-          this.rawInventory.categories.sort((catA, catB)=>(catA.order)-(catB.order));
-          console.log(this.rawInventory)
+          this.inventory = response.data;
+          this.inventory.categories.sort((catA, catB)=>(catA.order)-(catB.order));
+          console.log(this.inventory)
           // console.log(response.data)
-          this.inventory = this.inventoryService.restructureInventory(response.data);
         },
         error : (error)=> {
           console.log(error)
@@ -277,7 +240,7 @@ export class InventoryComponent implements OnInit, OnDestroy{
     }
 
     getEquipmentsForCategory(categoryId: string): Equipment[] {
-      return this.rawInventory?.equipments
+      return this.inventory?.equipments
         .filter(eq => eq.categoryId === categoryId)
         .sort((a, b) => (a.position ?? 0) - (b.position ?? 0)) ?? [];
     }
