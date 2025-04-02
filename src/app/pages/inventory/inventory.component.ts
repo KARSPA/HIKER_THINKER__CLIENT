@@ -55,19 +55,21 @@ export class InventoryComponent implements OnInit, OnDestroy{
         console.log(categoryIndex, this.inventory.categories)
       })
 
-      //S'abonner aux évènement de suppression d'un catégorie
-          // Si ça arrive : 
-      // Redemander l'inventaire à l'API car les équipements seront mis à jours.
-
+      // S'abonner aux évènement de suppression d'un catégorie
+      // Mettre les équipements de cette catégorie (avec ce categoryId) dans la catégorie "DEFAULT"
+      // Supprimer la catégorie de la liste ...
       this.inventoryService.categoryRemove$.subscribe((categoryId)=>{
-        this.loadInventory();
+        this.getEquipmentsForCategory(categoryId).forEach(equipment => equipment.categoryId = "DEFAULT")
+
+        let categoryIndex = this.inventory.categories.findIndex(cat => cat.id === categoryId);
+        this.inventory.categories.splice(categoryIndex, 1)
       })
 
 
       // S'abonner aux évènements d'ajout/modification d'équipement.
       this.inventoryService.equipmentChange$.subscribe((equipment)=>{
 
-        // TODO : Différencier un ajout d'une modification d'équipement
+        // TODO : Différencier un ajout d'une modification d'équipement ???
 
         //Ajout
         this.inventory.equipments.push(equipment)
@@ -80,6 +82,25 @@ export class InventoryComponent implements OnInit, OnDestroy{
         this.inventory.equipments.splice(equipmentIndex, 1)
       })
 
+    }
+
+    // TODO : Implémenter la mise a jour des 'order' des catégories pour persister les changements
+    moveCategoryUp(categoryId : string){
+      if(categoryId === "DEFAULT") return
+      // Récupérer l'index actuel de la catégorie et le suivant (-1)
+      const categoryIndex = this.inventory.categories.findIndex(cat => cat.id === categoryId);
+      console.log(categoryIndex)
+      //moveItemInArray du CDK avec condition sur l'index (supérieur à 1)
+      if(categoryIndex >= 1) moveItemInArray(this.inventory.categories, categoryIndex, categoryIndex-1);
+
+    }
+    moveCategoryDown(categoryId : string, ){
+      if(categoryId === "DEFAULT") return
+      // Récupérer l'index actuel de la catégorie et le suivant (-1)
+      const categoryIndex = this.inventory.categories.findIndex(cat => cat.id === categoryId);
+      console.log(categoryIndex)
+      //moveItemInArray du CDK avec condition sur l'index (pas dernier ou avant dernier (DEFAULT est toujours dernier))
+      if(categoryIndex < this.inventory.categories.length-2) moveItemInArray(this.inventory.categories, categoryIndex, categoryIndex+1);
     }
 
 
@@ -133,10 +154,10 @@ export class InventoryComponent implements OnInit, OnDestroy{
       this.inventoryService.getInventory().subscribe({
         next :(response) => {
           this.loaderActive = false;
-          this.inventory = response.data;
-          this.inventory.categories.sort((catA, catB)=>(catA.order)-(catB.order));
-          console.log(this.inventory)
-          // console.log(response.data)
+          this.inventory = {
+            categories : response.data.categories.sort((catA, catB)=>(catA.order)-(catB.order)),
+            equipments : response.data.equipments
+          };
         },
         error : (error)=> {
           console.log(error)
@@ -269,17 +290,16 @@ export class InventoryComponent implements OnInit, OnDestroy{
         );
         notifyService = true;
 
-        // Mettre à jour la catégorie de l'équipement déplacé 
+        // Mettre à jour la catégorie de l'équipement déplacé (pour l'affichage)
         const movedEquipment = event.container.data[event.currentIndex];
         movedEquipment.categoryId = targetCategory.id!;
       }
 
 
-      // Pour le conteneur source et cible, recalculer les positions de chaque équipement
-      // Par exemple, on peut faire pour la catégorie cible :
+      // Pour la liste d'arrivée, recalculer les positions de chaque équipement
       event.container.data.forEach((eq, index) => eq.position = index);
       
-      // Et, si nécessaire, faire de même pour le conteneur source si différent
+      // Pareil pour celui de départ si différent
       if (event.previousContainer !== event.container) {
         event.previousContainer.data.forEach((eq, index) => eq.position = index);
       }

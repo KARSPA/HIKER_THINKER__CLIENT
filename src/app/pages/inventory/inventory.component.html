@@ -13,13 +13,21 @@
 @else {
     <div class="" cdkDropListGroup>
         @for (category of inventory.categories; track $index) {
-            <div class="flex gap-2">
-
-                <div class="flex flex-col justify-center h-12">
-                    <button><img src="assets/down-chevron.svg" alt="move up" class="h-4 rotate-180 cursor-pointer hover:opacity-40"></button>
-                    <button><img src="assets/down-chevron.svg" alt="move down" class="h-4 cursor-pointer hover:opacity-40"></button>
-
-                </div>
+            <div class="flex gap-2 relative">
+                @if(category.id !== "DEFAULT"){
+                    <div class="flex flex-col justify-center absolute -left-8 top-0 h-12">
+                        @if(!$first){
+                            <button (click)="moveCategoryUp(category.id!)" class="w-8 h-8 flex justify-center items-center hover:opacity-40 hover:outline-1 outline-amber-500 rounded-md">
+                                <img src="assets/down-chevron.svg" alt="move up" class="h-4 rotate-180 cursor-pointer ">
+                            </button>
+                        }
+                        @if(!($index == inventory.categories.length-2)){
+                            <button (click)="moveCategoryDown(category.id!)" class="w-8 h-8 flex justify-center items-center hover:opacity-40 hover:outline-1 outline-amber-500 rounded-md">
+                                <img src="assets/down-chevron.svg" alt="move down" class="h-4 cursor-pointer ">
+                            </button>
+                        }
+                    </div>   
+                }
                 
                 <div class="category-equipments-container mb-5 flex-grow">
                     <div 
