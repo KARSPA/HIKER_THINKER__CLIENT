@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Category } from '../../interfaces/equipment/Category';
 import { Equipment } from '../../interfaces/equipment/Equipment';
 import { EquipmentCardComponent } from '../equipment-card/equipment-card.component';
@@ -13,103 +13,108 @@ import { AddEquipmentModalComponent } from '../add-equipment-modal/add-equipment
 import { EquipmentEvent } from '../../interfaces/equipment/EquipmentEvent';
 import { RefEquipment } from '../../interfaces/equipment/RefEquipment';
 import { InventoryService } from '../../services/inventory.service';
+import { Inventory } from '../../interfaces/Inventory';
+import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-hike-inventory',
-  imports: [EquipmentCardComponent],
+  imports: [EquipmentCardComponent, DragDropModule],
   templateUrl: './hike-inventory.component.html'
 })
-export class HikeInventoryComponent implements OnInit{
+export class HikeInventoryComponent implements OnInit, OnDestroy{
 
-  @Input() hikeInventory : Map<Category, Equipment[]>|null = null;
-  @Input() hike : Hike|null = null;
+  @Input() inventory : Inventory = {categories: [], equipments : []};
+  @Input() hike !: Hike;
 
-  @Output() categoryRemoved = new EventEmitter<void>();
 
-  private categoryService : CategoryService = inject(CategoryService)
   private hikeService : HikeService = inject(HikeService)
   private inventoryService : InventoryService = inject(InventoryService)
+  private categoryService : CategoryService = inject(CategoryService)
   private equipmentService : EquipmentService = inject(EquipmentService)
   private modalService : ModalService = inject(ModalService)
 
+  ngOnDestroy(): void {
+    this.equipmentService.forceFlush();
+    this.categoryService.forceFlush();
+  }
 
   ngOnInit(): void {
 
       //Mettre le mode du service à 'hike'
-      this.equipmentService.setMode('hike', this.hike?.id ?? '');
+      this.equipmentService.setMode('hike', this.hike.id ?? '');
+      this.categoryService.setMode('hike', this.hike.id ?? '');
 
       // S'abonner aux évènements d'ajout/modification d'équipement
       this.inventoryService.equipmentChange$.subscribe((equipment)=>{
+        this.inventory.equipments.push(equipment)
 
-        //Lors de l'ajout d'un nouvel équipement :
-          //On trouve la catégorie dans lequel il se situe et on l'ajoute aux tableau de la map
-        const category = Array.from(this.hikeInventory?.keys() ?? []).find(cat => cat.id === equipment.categoryId);
-  
-        if (category && this.hikeInventory) {
-  
-          const currentEquipments = this.hikeInventory.get(category) ?? [];
-  
-          currentEquipments.push(equipment);
-  
-          category.accumulatedWeight += equipment.weight
-          if(this.hike) this.hike.totalWeight += equipment.weight // Modification par référence de l'objet Hike (pas ouf mais fonctionne)
-
-          this.hikeInventory.set(category, currentEquipments);
-        }
+        const categoryIndex = this.inventory.categories.findIndex(cat => cat.id === equipment.categoryId);
+        if(categoryIndex != -1) this.inventory.categories[categoryIndex].accumulatedWeight += equipment.weight;
       })
 
       // S'abonner au retrait d'équipement
-      this.inventoryService.equipmentRemove$.subscribe({
-        next:(equipmentId)=>{
-  
-          if (!this.hikeInventory) return;
-  
-          // Parcourir chaque entrée de la Map (chaque catégorie et son tableau d'équipements)
-          this.hikeInventory.forEach((equipments, category) => {
-            // Rechercher l'index de l'équipement à supprimer dans le tableau
-            const index = equipments.findIndex(eq => eq.id === equipmentId);
-            if (index !== -1) {
-  
-              // Supprimer l'équipement du tableau
-              category.accumulatedWeight -= equipments[index].weight;
-              if(this.hike) this.hike.totalWeight -= equipments[index].weight // Modification par référence de l'objet Hike (pas ouf mais fonctionne)
+      this.inventoryService.equipmentRemove$.subscribe((equipmentId)=>{
+        const equipmentIndex = this.inventory.equipments.findIndex(eq => eq.id === equipmentId);
+        const equipment = this.inventory.equipments[equipmentIndex];
 
-              equipments.splice(index, 1);
-    
-            }
-          })
-        }
+        this.inventory.equipments.splice(equipmentIndex, 1)
+
+        const categoryIndex = this.inventory.categories.findIndex(cat => cat.id === equipment.categoryId);
+        if(categoryIndex != -1) this.inventory.categories[categoryIndex].accumulatedWeight -= equipment.weight;
       })
 
 
       // S'abonner aux évènements d'ajout/modification de catégorie.
       this.hikeService.categoryChange$.subscribe((category)=>{
-
-        const previousCategory = Array.from(this.hikeInventory?.keys() ?? []).find(cat => cat.id === category.id);
-
-        if(previousCategory){
-          const tempSave = this.hikeInventory?.get(previousCategory);
-          this.hikeInventory?.delete(previousCategory);
-          this.hikeInventory?.set(category, tempSave ?? []);
-        }else{
-          this.hikeInventory?.set(category, []);
-        }
-        //Retrier la Map de l'inventaire pour afficher les catégories correctement
-        if(this.hikeInventory){
-          this.hikeInventory = new Map([...this.hikeInventory.entries()].sort(
-            ([catA], [catB]) => (catA.order ?? 0) - (catB.order ?? 0) 
-          ))
-        }
+        let categoryIndex = this.inventory.categories.findIndex(cat => cat.id === category.id);
+        if(categoryIndex != -1) this.inventory.categories.splice(categoryIndex, 1, category); // Si modification, on remplace 
+        else this.inventory.categories.unshift(category) // SI ajout l'insérer au début (order à 0 à la création)
+  
+        this.categoryService.addCategoriesUpdate(this.inventory.categories) // Notifier pour persister l'ordre
+  
       })
 
       //S'abonner aux évènement de suppression d'une catégorie
       this.hikeService.categoryRemove$.subscribe((categoryId)=>{
-        //Rechercher l'inventaire car mis à jour par l'API
-        //Émettre un évènement au parent, qui rechargera l'inventaire :)
-        this.categoryRemoved.emit();
+
+        let addedWeight = 0;
+
+        this.getEquipmentsForCategory(categoryId).forEach(equipment => {
+          addedWeight += equipment.weight;
+          equipment.categoryId = "DEFAULT";
+        })
+        this.inventory.categories[this.inventory.categories.length-1].accumulatedWeight += addedWeight; // Ajouter au poids de la catégorie par défaut
+
+        let categoryIndex = this.inventory.categories.findIndex(cat => cat.id === categoryId);
+        this.inventory.categories.splice(categoryIndex, 1)
       })
   }
 
+  getEquipmentsForCategory(categoryId: string): Equipment[] {
+    return this.inventory?.equipments
+      .filter(eq => eq.categoryId === categoryId)
+      .sort((a, b) => (a.position ?? 0) - (b.position ?? 0)) ?? [];
+  }
+
+  moveCategoryUp(categoryId : string){
+    if(categoryId === "DEFAULT") return
+    // Récupérer l'index actuel de la catégorie et le suivant (-1)
+    const categoryIndex = this.inventory.categories.findIndex(cat => cat.id === categoryId);
+    //moveItemInArray du CDK avec condition sur l'index (supérieur à 1)
+    if(categoryIndex >= 1) moveItemInArray(this.inventory.categories, categoryIndex, categoryIndex-1);
+
+    this.categoryService.addCategoriesUpdate(this.inventory.categories) // Persister changement
+
+  }
+  moveCategoryDown(categoryId : string, ){
+    if(categoryId === "DEFAULT") return
+    // Récupérer l'index actuel de la catégorie et le suivant (-1)
+    const categoryIndex = this.inventory.categories.findIndex(cat => cat.id === categoryId);
+    //moveItemInArray du CDK avec condition sur l'index (pas dernier ou avant dernier (DEFAULT est toujours dernier))
+    if(categoryIndex < this.inventory.categories.length-2) moveItemInArray(this.inventory.categories, categoryIndex, categoryIndex+1);
+
+    this.categoryService.addCategoriesUpdate(this.inventory.categories) // Persister changement
+  }
 
 
   openCategoryModal(category? : Category): void{
@@ -121,7 +126,7 @@ export class HikeInventoryComponent implements OnInit{
       data: {
         requestType : requestType,
         category : category,
-        existingCategories : Array.from(this.hikeInventory?.keys() ?? [])}
+        existingCategories : this.inventory.categories}
     })
     .subscribe(({action, category})=>{
       this.sendCategoryRequestAndNotify(action, category);
@@ -138,7 +143,7 @@ export class HikeInventoryComponent implements OnInit{
     this.modalService.openModal<AddEquipmentModalComponent, RefEquipment>({
       component : AddEquipmentModalComponent,
       data: {
-        alreadyInEquipments : Array.from(this.hikeInventory?.values() ?? []).flat(),
+        alreadyInEquipments : this.inventory.equipments,
         categoryIdRef : category.id,
         context : 'Hike'
       }
@@ -156,7 +161,7 @@ export class HikeInventoryComponent implements OnInit{
   }
 
   removeHikeEquipment(equipment : Equipment){
-    // Ouvrir une modale de confirmation ??? 
+    // ? => Ouvrir une modale de confirmation
 
     this.equipmentService.removeHikeEquipment(equipment.id).subscribe({
       next:(res)=>{
@@ -166,10 +171,10 @@ export class HikeInventoryComponent implements OnInit{
   }
 
 
-  sendCategoryRequestAndNotify(action : string, category : Category ){
+  sendCategoryRequestAndNotify(action : string, category : Category){
 
     if(action === 'delete'){
-      this.categoryService.removeHikeCategory(this.hike?.id!, category?.id ?? '').subscribe({
+      this.categoryService.removeHikeCategory(category?.id ?? '').subscribe({
         next:(response)=>{
           this.hikeService.notifyCategoryRemove(category?.id ?? '')
         },
@@ -181,8 +186,8 @@ export class HikeInventoryComponent implements OnInit{
     }else{
 
       let returnObs$;
-      if(action === 'create') returnObs$ = this.categoryService.addHikeCategory(this.hike?.id!, category)
-      else returnObs$ = this.categoryService.modifyHikeCategory(this.hike?.id!, category)
+      if(action === 'create') returnObs$ = this.categoryService.addHikeCategory(category)
+      else returnObs$ = this.categoryService.modifyHikeCategory(category)
 
       returnObs$.subscribe({
         next:(response)=>{
@@ -196,7 +201,6 @@ export class HikeInventoryComponent implements OnInit{
   }
 
   toggleCategoryContainer(id : string|undefined){
-
     const content = document.getElementById('equipment-content-'+id);
     const icon = document.querySelector(`#category-toggle-${id} img`);
     const categoryContainer = document.querySelector(`#category-container-${id}`)
@@ -211,7 +215,6 @@ export class HikeInventoryComponent implements OnInit{
       content.style.maxHeight = '0';
       content.style.paddingBottom = '0';
       content.style.paddingTop = '0';
-      content.classList.toggle('border-stone-300')
       content.classList.toggle('border')
       
       icon.classList.toggle('rotate-180')
@@ -222,12 +225,70 @@ export class HikeInventoryComponent implements OnInit{
       content.style.maxHeight = content.scrollHeight+500 + 'px'; //On ajoute 500 pixels de marge en vertical pour ajouter des éléments.
       content.style.paddingBottom = '20px';
       content.style.paddingTop = '20px';
-      
-      content.classList.toggle('border-stone-300')
       content.classList.toggle('border')
 
       icon.classList.toggle('rotate-180')
       categoryContainer.classList.toggle('rounded-b-md')
     }
   }
+
+  dropEquipment(event: CdkDragDrop<Equipment[], Equipment[], Equipment>, targetCategory : Category) { //<type_liste_départ, type_liste_arrivée, type_objet_transféré>
+    let notifyService = false;
+
+    const previousCategoryId = event.item.data.categoryId;
+    const newCategoryId = targetCategory.id!;
+
+    if (event.previousContainer === event.container) { // Si on change pas de catégorie
+      if(event.previousIndex !== event.currentIndex){ // Si pas de changement, pas besoin de modifier et notifier le service
+        // Bouger dans le tableau d'équipement de la catégorie
+        moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+        notifyService = true;
+      }
+
+    } else { //Si on change de catégorie, on bouge et notifie le service
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
+      notifyService = true;
+
+      //Mettre à jour les poids des catégories
+      targetCategory.accumulatedWeight += event.item.data.weight;
+
+      const previousCategory = this.inventory.categories.find(cat => cat.id === previousCategoryId)
+      if(previousCategory) previousCategory.accumulatedWeight -= event.item.data.weight;
+
+
+      // Mettre à jour la catégorie de l'équipement déplacé (pour l'affichage)
+      const movedEquipment = event.container.data[event.currentIndex];
+      movedEquipment.categoryId = targetCategory.id!;
+    }
+
+
+    // Pour la liste d'arrivée, recalculer les positions de chaque équipement
+    event.container.data.forEach((eq, index) => eq.position = index);
+    
+    // Pareil pour celui de départ si différent
+    if (event.previousContainer !== event.container) {
+      event.previousContainer.data.forEach((eq, index) => eq.position = index);
+    }
+
+    if(notifyService){
+      // Notifier le changement aux services qui stockeront les modifications et feront des appels API par buffer.
+
+      // CATÉGORIES
+      this.categoryService.addCategoriesUpdate(this.inventory.categories); // Modif faites plus haut dans la méthode
+
+      // ÉQUIPEMENTS 
+
+      const previousCatEquipments = this.getEquipmentsForCategory(previousCategoryId);
+      const newCatEquipments = this.getEquipmentsForCategory(newCategoryId);
+      
+      this.equipmentService.addEquipmentUpdate({categoryId : previousCategoryId, orderedIds : previousCatEquipments?.map(eq => eq.id) ?? []})
+      this.equipmentService.addEquipmentUpdate({categoryId : newCategoryId, orderedIds : newCatEquipments?.map(eq => eq.id) ?? []})
+    }
+  }
+
 }

@@ -115,8 +115,6 @@ export class EquipmentService {
       orderedEquipmentIds : newPositions
     }))
 
-    console.log(payload)
-
     this.updateBuffer.clear(); // On vide la map de modifications.
 
     //On fait l'appel API

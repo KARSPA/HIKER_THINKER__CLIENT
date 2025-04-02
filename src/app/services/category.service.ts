@@ -17,7 +17,7 @@ export class CategoryService {
 
   private httpClient : HttpClient = inject(HttpClient);
 
-  private updateBuffer : string[] = [];
+  private updateBuffer : Category[] = [];
   private updateInterval = 10000; // 10 secondes
   private updateSubject = new Subject<void>();
 
@@ -80,7 +80,7 @@ export class CategoryService {
 
 
   
-  addHikeCategory(hikeId : string, category : Category) : Observable<ResponseModel<Category>>{
+  addHikeCategory(category : Category) : Observable<ResponseModel<Category>>{
 
     return this.httpClient.post<ResponseModel<Category>>(this.url, {
       name : category.name,
@@ -89,7 +89,7 @@ export class CategoryService {
     });
 
   }
-  modifyHikeCategory(hikeId : string, category : Category) : Observable<ResponseModel<Category>>{
+  modifyHikeCategory(category : Category) : Observable<ResponseModel<Category>>{
 
     return this.httpClient.patch<ResponseModel<Category>>(this.url+`/${category.id}`, {
       name : category.name,
@@ -97,7 +97,7 @@ export class CategoryService {
       order : category.order
     })
   }
-  removeHikeCategory(hikeId : string, categoryId : string) : Observable<ResponseModel<Category>>{
+  removeHikeCategory(categoryId : string) : Observable<ResponseModel<Category>>{
 
     return this.httpClient.delete<ResponseModel<Category>>(this.url+`/${categoryId}`);
     
@@ -109,20 +109,15 @@ export class CategoryService {
   /* SECTION DES MODIFS D'ORDRE DES CATÉGORIES */
   
     // Ajoute ou met à jour une modification dans le buffer
-    addCategoriesUpdate(categoryIds: string[]): void {
-      this.updateBuffer = [...categoryIds]; //On remplace/modifie totalement le tableaux des modifs pour éviter d'envoyer des modifs périmées
-
-      console.log("Buffer actuel : ", this.updateBuffer)
+    addCategoriesUpdate(categories: Category[]): void {
+      this.updateBuffer = [...categories]; //On remplace/modifie totalement le tableaux des modifs pour éviter d'envoyer des modifs périmées
     }
   
   
     flushCategoryOrdersUpdates() : void{
-      console.log("LANCEMENT OK")
       if(this.updateBuffer.length === 0) return // Si on a rien a modifier, on modifie rien ....
   
       const payload = [...this.updateBuffer];
-  
-      console.log(payload)
   
       this.updateBuffer = []; // On vide le tableau de modifications.
   
