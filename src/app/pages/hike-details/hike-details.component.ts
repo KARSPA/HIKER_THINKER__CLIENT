@@ -112,6 +112,7 @@ export class HikeDetailsComponent implements OnInit{
               categories : response.data.inventory!.categories.sort((catA, catB)=>(catA.order)-(catB.order)),
               equipments : response.data.inventory!.equipments
             };
+            console.log("Depuis page totale : ", this.inventory)
           }
         },
         error: (err) => {

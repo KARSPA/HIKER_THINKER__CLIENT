@@ -17,6 +17,7 @@ import { AddEquipment } from '../../interfaces/equipment/AddEquipment';
 import { RemoveEquipmentConfirmModalComponent } from '../../components/remove-equipment-confirm-modal/remove-equipment-confirm-modal.component';
 import { filter } from 'rxjs/internal/operators/filter';
 import { BasicLoaderComponent } from "../../_partials/basic-loader/basic-loader.component";
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-inventory',
@@ -24,6 +25,8 @@ import { BasicLoaderComponent } from "../../_partials/basic-loader/basic-loader.
   templateUrl: './inventory.component.html',
 })
 export class InventoryComponent implements OnInit, OnDestroy{
+
+  private destroy$ = new Subject<void>();
   
   private inventoryService : InventoryService = inject(InventoryService)
   private categoryService : CategoryService = inject(CategoryService)
@@ -35,8 +38,8 @@ export class InventoryComponent implements OnInit, OnDestroy{
   loaderActive : boolean = true;
 
   ngOnDestroy(): void {
-    this.equipmentService.forceFlush();
-    this.categoryService.forceFlush();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngOnInit(): void {
@@ -49,19 +52,19 @@ export class InventoryComponent implements OnInit, OnDestroy{
     this.categoryService.setMode('inventory')
 
     // S'abonner aux évènements d'ajout/modification de catégorie.
-    this.inventoryService.categoryChange$.subscribe((category)=>{ // Le réindexage à la création et mouvement est gérer ailleurs.
+    this.inventoryService.categoryChange$.pipe(takeUntil(this.destroy$)).subscribe((category)=>{ // Le réindexage à la création et mouvement est gérer ailleurs.
       let categoryIndex = this.inventory.categories.findIndex(cat => cat.id === category.id);
       if(categoryIndex != -1) this.inventory.categories.splice(categoryIndex, 1, category); // Si modification, on remplace 
       else this.inventory.categories.unshift(category) // SI ajout l'insérer au début (order à 0 à la création)
 
-      this.categoryService.addCategoriesUpdate(this.inventory.categories) // Notifier pour persister l'ordre
+      // this.categoryService.addCategoriesUpdate(this.inventory.categories) // Notifier pour persister l'ordre
 
     })
 
 
     // Mettre les équipements de cette catégorie (avec ce categoryId) dans la catégorie "DEFAULT"
     // Supprimer la catégorie de la liste ...
-    this.inventoryService.categoryRemove$.subscribe((categoryId)=>{
+    this.inventoryService.categoryRemove$.pipe(takeUntil(this.destroy$)).subscribe((categoryId)=>{
       this.getEquipmentsForCategory(categoryId).forEach(equipment => equipment.categoryId = "DEFAULT")
 
       let categoryIndex = this.inventory.categories.findIndex(cat => cat.id === categoryId);
@@ -70,7 +73,7 @@ export class InventoryComponent implements OnInit, OnDestroy{
 
 
     // S'abonner aux évènements d'ajout/modification d'équipement.
-    this.inventoryService.equipmentChange$.subscribe((equipment)=>{
+    this.inventoryService.equipmentChange$.pipe(takeUntil(this.destroy$)).subscribe((equipment)=>{
       // TODO : Différencier un ajout d'une modification d'équipement ???
       //Ajout
       this.inventory.equipments.push(equipment)
@@ -78,7 +81,7 @@ export class InventoryComponent implements OnInit, OnDestroy{
     })
 
     //S'abonner aux évènement de suppression d'équipements
-    this.inventoryService.equipmentRemove$.subscribe((equipmentId)=>{
+    this.inventoryService.equipmentRemove$.pipe(takeUntil(this.destroy$)).subscribe((equipmentId)=>{
       const equipmentIndex = this.inventory.equipments.findIndex(eq => eq.id === equipmentId);
       this.inventory.equipments.splice(equipmentIndex, 1)
     })
@@ -92,7 +95,15 @@ export class InventoryComponent implements OnInit, OnDestroy{
     //moveItemInArray du CDK avec condition sur l'index (supérieur à 1)
     if(categoryIndex >= 1) moveItemInArray(this.inventory.categories, categoryIndex, categoryIndex-1);
 
-    this.categoryService.addCategoriesUpdate(this.inventory.categories) // Persister changement
+    // this.categoryService.addCategoriesUpdate(this.inventory.categories) // Persister changement
+    this.categoryService.modifyCategoriesOrder(this.inventory.categories).subscribe({
+      next:(res)=>{
+        // console.log(res)
+      },
+      error:(err)=>{
+        console.log(err)
+      }
+    });
 
   }
   moveCategoryDown(categoryId : string, ){
@@ -102,7 +113,15 @@ export class InventoryComponent implements OnInit, OnDestroy{
     //moveItemInArray du CDK avec condition sur l'index (pas dernier ou avant dernier (DEFAULT est toujours dernier))
     if(categoryIndex < this.inventory.categories.length-2) moveItemInArray(this.inventory.categories, categoryIndex, categoryIndex+1);
 
-    this.categoryService.addCategoriesUpdate(this.inventory.categories) // Persister changement
+    // this.categoryService.addCategoriesUpdate(this.inventory.categories) // Persister changement
+    this.categoryService.modifyCategoriesOrder(this.inventory.categories).subscribe({
+      next:(res)=>{
+        // console.log(res)
+      },
+      error:(err)=>{
+        console.log(err)
+      }
+    });
   }
 
 
@@ -172,7 +191,7 @@ export class InventoryComponent implements OnInit, OnDestroy{
   sendCategoryRequestAndNotify(action : string, category : Category ){
 
     if(action === 'delete'){
-      this.categoryService.removeInventoryCategory(category?.id ?? '').subscribe({
+      this.categoryService.removeInventoryCategory(category).subscribe({
         next:(response)=>{
           this.inventoryService.notifyCategoryRemove(category?.id ?? '')
         },
@@ -268,7 +287,6 @@ export class InventoryComponent implements OnInit, OnDestroy{
 
 
   dropEquipment(event: CdkDragDrop<Equipment[], Equipment[], Equipment>, targetCategory : Category) { //<type_liste_départ, type_liste_arrivée, type_objet_transféré>
-    let notifyService = false;
 
     const previousCategoryId = event.item.data.categoryId;
     const newCategoryId = targetCategory.id!;
@@ -277,9 +295,9 @@ export class InventoryComponent implements OnInit, OnDestroy{
       if(event.previousIndex !== event.currentIndex){ // Si pas de changement, pas besoin de modifier et notifier le service
         // Bouger dans le tableau d'équipement de la catégorie
         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-        notifyService = true;
+      }else{ //Si équipement placé au même endroit (pas bougé), on quitte, rien besoin de modifier.
+        return
       }
-
     } else { //Si on change de catégorie, on bouge et notifie le service
       transferArrayItem(
         event.previousContainer.data,
@@ -287,33 +305,35 @@ export class InventoryComponent implements OnInit, OnDestroy{
         event.previousIndex,
         event.currentIndex,
       );
-      notifyService = true;
 
-      // Mettre à jour la catégorie de l'équipement déplacé (pour l'affichage)
-      const movedEquipment = event.container.data[event.currentIndex];
-      movedEquipment.categoryId = targetCategory.id!;
+      // Mettre à jour la catégorie de l'équipement déplacé (pour l'affichage et la persistence)
+      event.item.data.categoryId = targetCategory.id!;
     }
 
-
-    // Pour la liste d'arrivée, recalculer les positions de chaque équipement
+    // Recalculer les positions de chaque équipement
     event.container.data.forEach((eq, index) => eq.position = index);
-    
-    // Pareil pour celui de départ si différent
     if (event.previousContainer !== event.container) {
       event.previousContainer.data.forEach((eq, index) => eq.position = index);
     }
 
-    if(notifyService){
-      // Notifier le changement au service qui stockera les modifications et fera des appels API par buffer.
+    // Demander au service d'envoyer le payload à l'API pour persister les modifs;
+    console.log(event.previousContainer.data, event.container.data, targetCategory )
 
-      console.log(event.previousContainer.data, event.container.data, targetCategory )
+    // Mettre à jour l'ancienne et nouvelle catégorie
+    const updatePayload = [
+      {categoryId : previousCategoryId, orderedEquipmentIds : this.getEquipmentsForCategory(previousCategoryId).map(eq => eq.id)},
+      {categoryId : newCategoryId, orderedEquipmentIds : this.getEquipmentsForCategory(newCategoryId).map(eq => eq.id)},
+    ]
 
-      const previousCatEquipments = this.getEquipmentsForCategory(previousCategoryId);
-      const newCatEquipments = this.getEquipmentsForCategory(newCategoryId);
-      
-      this.equipmentService.addEquipmentUpdate({categoryId : previousCategoryId, orderedIds : previousCatEquipments?.map(eq => eq.id) ?? []})
-      this.equipmentService.addEquipmentUpdate({categoryId : newCategoryId, orderedIds : newCatEquipments?.map(eq => eq.id) ?? []})
-    }
+    // Faire la requete de modification pour persister
+    this.equipmentService.modifyEquipmentsPosition(updatePayload).subscribe({
+      next:(res)=>{
+        console.log(res)
+      },
+      error:(err)=>{
+        console.log(err)
+      }
+    });
   }
 
 }

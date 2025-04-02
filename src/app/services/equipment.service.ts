@@ -20,16 +20,10 @@ export class EquipmentService {
   private url: string = `${environment.apiUrl}`;
   
   private httpClient: HttpClient = inject(HttpClient);
-  
-  private updateBuffer = new Map<string, string[]>();
-  private updateInterval = 10000; // 10 secondes
-  private updateSubject = new Subject<void>();
-
 
   constructor() {
     // Par défaut, on initialise en mode inventory (sans identifiant)
     this.setMode('inventory');
-    interval(this.updateInterval).subscribe(() => this.flushEquipmentUpdates());
   }
 
   /**
@@ -93,45 +87,12 @@ export class EquipmentService {
   }
 
 
+  modifyEquipmentsPosition(payload : EquipmentsOrderUpdate[]) {
 
-  /* SECTION DES MODIFS DE POSITIONS ET CATÉGORIES D'ÉQUIPEMENT */
-
-  // Ajoute ou met à jour une modification dans le buffer
-  addEquipmentUpdate(update: EquipmentsOrderUpdate): void {
-    this.updateBuffer.set(update.categoryId, update.orderedIds);
-
-    // Changer valeur d'un subject pour afficher si enregistrements à faire ou pas.
-
-    // console.log(this.updateBuffer)
+    console.log(payload)
+    return this.httpClient.patch(`${this.url}`, payload);
   }
-
-
-
-  flushEquipmentUpdates() : void{
-    if(this.updateBuffer.size === 0) return // Si on a rien a modifier, on modifie rien ....
-
-    const payload = Array.from(this.updateBuffer.entries()).map(([categoryId, newPositions])=>({
-      categoryId : categoryId,
-      orderedEquipmentIds : newPositions
-    }))
-
-    this.updateBuffer.clear(); // On vide la map de modifications.
-
-    //On fait l'appel API
-    this.httpClient.patch(`${this.url}`, payload).subscribe({
-      next : (response)=>{
-        console.log(response)
-      },
-      error: (err)=>{
-        console.error(err.error.message)
-      }
-    })
-  }
-
-  // Permet de forcer l'envoi (si jamais on quitte un composant avant l'envoi des modifs : avec ngOnDestroy ...)
-  forceFlush(): void {
-    this.flushEquipmentUpdates();
-  }
-
 
 }
+
+

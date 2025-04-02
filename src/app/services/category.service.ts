@@ -17,14 +17,11 @@ export class CategoryService {
 
   private httpClient : HttpClient = inject(HttpClient);
 
-  private updateBuffer : Category[] = [];
-  private updateInterval = 10000; // 10 secondes
-  private updateSubject = new Subject<void>();
 
   constructor() {
       // Par défaut, on initialise en mode inventory (sans identifiant)
       this.setMode('inventory');
-      interval(this.updateInterval).subscribe(() => this.flushCategoryOrdersUpdates());
+
     }
   
     /**
@@ -72,14 +69,10 @@ export class CategoryService {
       order : category.order
     })
   }
-  removeInventoryCategory(categoryId : string) : Observable<ResponseModel<Category>>{
-
-    return this.httpClient.delete<ResponseModel<Category>>(this.url+`/${categoryId}`);
-    
+  removeInventoryCategory(category : Category) : Observable<ResponseModel<Category>>{
+    return this.httpClient.delete<ResponseModel<Category>>(this.url+`/${category.id}`);
   }
 
-
-  
   addHikeCategory(category : Category) : Observable<ResponseModel<Category>>{
 
     return this.httpClient.post<ResponseModel<Category>>(this.url, {
@@ -97,44 +90,13 @@ export class CategoryService {
       order : category.order
     })
   }
-  removeHikeCategory(categoryId : string) : Observable<ResponseModel<Category>>{
-
-    return this.httpClient.delete<ResponseModel<Category>>(this.url+`/${categoryId}`);
-    
+  removeHikeCategory(category : Category) : Observable<ResponseModel<Category>>{
+    return this.httpClient.delete<ResponseModel<Category>>(this.url+`/${category.id}`);
   }
 
 
-
-
-  /* SECTION DES MODIFS D'ORDRE DES CATÉGORIES */
-  
-    // Ajoute ou met à jour une modification dans le buffer
-    addCategoriesUpdate(categories: Category[]): void {
-      this.updateBuffer = [...categories]; //On remplace/modifie totalement le tableaux des modifs pour éviter d'envoyer des modifs périmées
-    }
-  
-  
-    flushCategoryOrdersUpdates() : void{
-      if(this.updateBuffer.length === 0) return // Si on a rien a modifier, on modifie rien ....
-  
-      const payload = [...this.updateBuffer];
-  
-      this.updateBuffer = []; // On vide le tableau de modifications.
-  
-      //On fait l'appel API
-      this.httpClient.patch(`${this.url}`, payload).subscribe({
-        next : (response)=>{
-          console.log(response)
-        },
-        error: (err)=>{
-          console.error(err.error.message)
-        }
-      })
-    }
-  
-    // Permet de forcer l'envoi (si jamais on quitte un composant avant l'envoi des modifs : avec ngOnDestroy ...)
-    forceFlush(): void {
-      this.flushCategoryOrdersUpdates();
-    }
+  modifyCategoriesOrder(categories : Category[]) {
+    return this.httpClient.patch(`${this.url}`, categories);
+  }
 
 }

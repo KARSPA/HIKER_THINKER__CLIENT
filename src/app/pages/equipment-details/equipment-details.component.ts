@@ -25,6 +25,8 @@ export class EquipmentDetailsComponent implements OnInit{
 
   ngOnInit(): void {
 
+    this.equipmentService.setMode('inventory')
+
     // Récupérer l'id depuis l'URL et charger la randonnée
     this.route.paramMap.subscribe(params => {
       const equipmentId = params.get('equipmentId');
