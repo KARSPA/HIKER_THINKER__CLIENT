@@ -240,7 +240,6 @@ export class InventoryComponent implements OnInit, OnDestroy{
         content.style.maxHeight = '0';
         content.style.paddingBottom = '0';
         content.style.paddingTop = '0';
-        content.classList.toggle('border-stone-300')
         content.classList.toggle('border')
         
         icon.classList.toggle('rotate-180')
@@ -251,8 +250,6 @@ export class InventoryComponent implements OnInit, OnDestroy{
         content.style.maxHeight = content.scrollHeight+500 + 'px'; //On ajoute 500 pixels de marge en vertical pour ajouter des éléments.
         content.style.paddingBottom = '20px';
         content.style.paddingTop = '20px';
-        
-        content.classList.toggle('border-stone-300')
         content.classList.toggle('border')
 
         icon.classList.toggle('rotate-180')
