@@ -15,13 +15,15 @@ function initializeApp(authService : AuthService, router : Router) {
     const publicRoutes = ['/', '/home', '/register'];
     const currentPath = window.location.pathname;
     
-    // TODO : Problème avec "/" qui logout si on reload
+    // Vérifier si un token est stocké
+    const token = localStorage.getItem('HT_Token');
 
-    if (publicRoutes.includes(currentPath)) {
-      // Si on est sur une route publique, on ne fait pas la vérification
+    if (!token && publicRoutes.includes(currentPath)) {
+      // Si on est sur une route publique et qu'on a pas de token, on ne fait pas la vérification
       return Promise.resolve();
     }
     
+    // Si on a un tokne sur une route privée on vérifie sa validité
     return firstValueFrom(authService.verifyConnected())
       .then(response => authService.handleLoginSuccess(response.data))
       .catch(() => authService.logout());
