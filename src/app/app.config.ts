@@ -30,8 +30,6 @@ function initializeApp(authService : AuthService, router : Router) {
   };
 }
 
-
-
 export const appConfig: ApplicationConfig = {
   providers: [
     {

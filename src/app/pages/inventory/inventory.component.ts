@@ -36,6 +36,7 @@ export class InventoryComponent implements OnInit, OnDestroy{
 
   ngOnDestroy(): void {
     this.equipmentService.forceFlush();
+    this.categoryService.forceFlush();
   }
 
   ngOnInit(): void {
@@ -45,6 +46,7 @@ export class InventoryComponent implements OnInit, OnDestroy{
     
     //Mettre le mode du service
     this.equipmentService.setMode('inventory')
+    this.categoryService.setMode('inventory')
 
     // S'abonner aux évènements d'ajout/modification de catégorie.
     this.inventoryService.categoryChange$.subscribe((category)=>{ // Le réindexage à la création et mouvement est gérer ailleurs.
@@ -52,10 +54,12 @@ export class InventoryComponent implements OnInit, OnDestroy{
         if(categoryIndex != -1) this.inventory.categories.splice(categoryIndex, 1, category); // Si modification, on remplace 
         else this.inventory.categories.unshift(category) // SI ajout l'insérer au début (order à 0 à la création)
 
-        console.log(categoryIndex, this.inventory.categories)
+        this.categoryService.addCategoriesUpdate(this.inventory.categories.map(cat => cat.id!)) // Notifier pour persister l'ordre
+
+        console.log("Index : ", categoryIndex, "Catégories : ", this.inventory.categories)
       })
 
-      // S'abonner aux évènement de suppression d'un catégorie
+      
       // Mettre les équipements de cette catégorie (avec ce categoryId) dans la catégorie "DEFAULT"
       // Supprimer la catégorie de la liste ...
       this.inventoryService.categoryRemove$.subscribe((categoryId)=>{
@@ -93,6 +97,8 @@ export class InventoryComponent implements OnInit, OnDestroy{
       //moveItemInArray du CDK avec condition sur l'index (supérieur à 1)
       if(categoryIndex >= 1) moveItemInArray(this.inventory.categories, categoryIndex, categoryIndex-1);
 
+      this.categoryService.addCategoriesUpdate(this.inventory.categories.map(cat => cat.id!))
+
     }
     moveCategoryDown(categoryId : string, ){
       if(categoryId === "DEFAULT") return
@@ -101,6 +107,8 @@ export class InventoryComponent implements OnInit, OnDestroy{
       console.log(categoryIndex)
       //moveItemInArray du CDK avec condition sur l'index (pas dernier ou avant dernier (DEFAULT est toujours dernier))
       if(categoryIndex < this.inventory.categories.length-2) moveItemInArray(this.inventory.categories, categoryIndex, categoryIndex+1);
+
+      this.categoryService.addCategoriesUpdate(this.inventory.categories.map(cat => cat.id!))
     }
 
 

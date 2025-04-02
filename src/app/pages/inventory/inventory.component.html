@@ -64,7 +64,9 @@
                         [cdkDropListData]="getEquipmentsForCategory(category.id!)"
                         class="drag-list-container grid grid-cols-3 gap-10 min-h-10">
                             @for(equipment of getEquipmentsForCategory(category.id!); track $index){
-                                <app-equipment-card [equipment]="equipment" [dragable]="true" (delete)="openRemoveEquipmentModal(equipment)" cdkDrag [cdkDragData]="equipment"/>
+                                <app-equipment-card [equipment]="equipment" [dragable]="true" [context]="'Inventory'"
+                                (delete)="openRemoveEquipmentModal(equipment)" 
+                                cdkDrag [cdkDragData]="equipment"/>
                             }
                          </div>
                         </div>

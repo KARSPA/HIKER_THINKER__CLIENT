@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Category } from '../interfaces/equipment/Category';
-import { Observable } from 'rxjs';
+import { interval, Observable, Subject } from 'rxjs';
 import { ResponseModel } from '../interfaces/ResponseModel';
 import { environment } from '../../environments/environment';
 
@@ -10,16 +10,54 @@ import { environment } from '../../environments/environment';
 })
 export class CategoryService {
 
-  private INVENTORY_BASE_URL = `${environment.apiUrl}/inventory/categories`;
-  private HIKE_BASE_URL = `${environment.apiUrl}/hikes`;
+  private mode: 'inventory' | 'hike' | 'model' = 'inventory';
 
+  // Initialisé via setMode en fonction du mode passé.
+  private url: string = `${environment.apiUrl}`;
 
   private httpClient : HttpClient = inject(HttpClient);
+
+  private updateBuffer : string[] = [];
+  private updateInterval = 10000; // 10 secondes
+  private updateSubject = new Subject<void>();
+
+  constructor() {
+      // Par défaut, on initialise en mode inventory (sans identifiant)
+      this.setMode('inventory');
+      interval(this.updateInterval).subscribe(() => this.flushCategoryOrdersUpdates());
+    }
+  
+    /**
+     * Configure le mode du service.
+     * @param mode - Le mode ('inventory', 'hike' ou 'model')
+     * @param contextId - L'identifiant contextuel (par exemple, le hikeId ou modelId)
+     */
+    setMode(mode: 'inventory' | 'hike' | 'model', contextId?: string): void {
+      this.mode = mode;
+  
+      switch (mode) {
+        case 'inventory':
+          this.url = `${environment.apiUrl}/inventory/categories`;
+          break;
+        case 'hike':
+          if (!contextId) {
+            throw new Error("Un identifiant de randonnée (hikeId) est requis pour le mode 'hike'");
+          }
+          this.url = `${environment.apiUrl}/hikes/${contextId}/categories`;
+          break;
+        case 'model':
+          if (!contextId) {
+            throw new Error("Un identifiant de modèle (modelId) est requis pour le mode 'model'");
+          }
+          this.url = `${environment.apiUrl}/models/${contextId}/categories`;
+          break;
+      }
+    }
 
 
   addInventoryCategory(category : Category) : Observable<ResponseModel<Category>>{
 
-    return this.httpClient.post<ResponseModel<Category>>(this.INVENTORY_BASE_URL, {
+    return this.httpClient.post<ResponseModel<Category>>(this.url, {
       name : category.name,
       icon : category.icon,
       order : category.order
@@ -28,7 +66,7 @@ export class CategoryService {
   }
   modifyInventoryCategory(category : Category) : Observable<ResponseModel<Category>>{
 
-    return this.httpClient.patch<ResponseModel<Category>>(this.INVENTORY_BASE_URL+`/${category.id}`, {
+    return this.httpClient.patch<ResponseModel<Category>>(this.url+`/${category.id}`, {
       name : category.name,
       icon : category.icon,
       order : category.order
@@ -36,7 +74,7 @@ export class CategoryService {
   }
   removeInventoryCategory(categoryId : string) : Observable<ResponseModel<Category>>{
 
-    return this.httpClient.delete<ResponseModel<Category>>(this.INVENTORY_BASE_URL+`/${categoryId}`);
+    return this.httpClient.delete<ResponseModel<Category>>(this.url+`/${categoryId}`);
     
   }
 
@@ -44,7 +82,7 @@ export class CategoryService {
   
   addHikeCategory(hikeId : string, category : Category) : Observable<ResponseModel<Category>>{
 
-    return this.httpClient.post<ResponseModel<Category>>(this.buildBaseHikeCategoryUrl(hikeId), {
+    return this.httpClient.post<ResponseModel<Category>>(this.url, {
       name : category.name,
       icon : category.icon,
       order : category.order
@@ -53,7 +91,7 @@ export class CategoryService {
   }
   modifyHikeCategory(hikeId : string, category : Category) : Observable<ResponseModel<Category>>{
 
-    return this.httpClient.patch<ResponseModel<Category>>(this.buildBaseHikeCategoryUrl(hikeId)+`/${category.id}`, {
+    return this.httpClient.patch<ResponseModel<Category>>(this.url+`/${category.id}`, {
       name : category.name,
       icon : category.icon,
       order : category.order
@@ -61,13 +99,47 @@ export class CategoryService {
   }
   removeHikeCategory(hikeId : string, categoryId : string) : Observable<ResponseModel<Category>>{
 
-    return this.httpClient.delete<ResponseModel<Category>>(this.buildBaseHikeCategoryUrl(hikeId)+`/${categoryId}`);
+    return this.httpClient.delete<ResponseModel<Category>>(this.url+`/${categoryId}`);
     
   }
 
 
-  private buildBaseHikeCategoryUrl(hikeId : string){
-    return `${this.HIKE_BASE_URL}/${hikeId}/categories`;
-  }
+
+
+  /* SECTION DES MODIFS D'ORDRE DES CATÉGORIES */
+  
+    // Ajoute ou met à jour une modification dans le buffer
+    addCategoriesUpdate(categoryIds: string[]): void {
+      this.updateBuffer = [...categoryIds]; //On remplace/modifie totalement le tableaux des modifs pour éviter d'envoyer des modifs périmées
+
+      console.log("Buffer actuel : ", this.updateBuffer)
+    }
+  
+  
+    flushCategoryOrdersUpdates() : void{
+      console.log("LANCEMENT OK")
+      if(this.updateBuffer.length === 0) return // Si on a rien a modifier, on modifie rien ....
+  
+      const payload = [...this.updateBuffer];
+  
+      console.log(payload)
+  
+      this.updateBuffer = []; // On vide le tableau de modifications.
+  
+      //On fait l'appel API
+      this.httpClient.patch(`${this.url}`, payload).subscribe({
+        next : (response)=>{
+          console.log(response)
+        },
+        error: (err)=>{
+          console.error(err.error.message)
+        }
+      })
+    }
+  
+    // Permet de forcer l'envoi (si jamais on quitte un composant avant l'envoi des modifs : avec ngOnDestroy ...)
+    forceFlush(): void {
+      this.flushCategoryOrdersUpdates();
+    }
 
 }

@@ -5,7 +5,7 @@ import { interval, Observable, Subject } from 'rxjs';
 import { ResponseModel } from '../interfaces/ResponseModel';
 import { RefEquipment } from '../interfaces/equipment/RefEquipment';
 import { environment } from '../../environments/environment';
-import { EquipmentsOrderUpdate } from '../interfaces/equipment/EquipmentUpdate';
+import { EquipmentsOrderUpdate } from '../interfaces/equipment/EquipmentOrderUpdate';
 import { Category } from '../interfaces/equipment/Category';
 
 @Injectable({
