@@ -15,6 +15,7 @@ import { RefEquipment } from '../../interfaces/equipment/RefEquipment';
 import { InventoryService } from '../../services/inventory.service';
 import { Inventory } from '../../interfaces/Inventory';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-hike-inventory',
@@ -23,9 +24,10 @@ import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from 
 })
 export class HikeInventoryComponent implements OnInit, OnDestroy{
 
+  private destroy$ = new Subject<void>();
+
   @Input() inventory : Inventory = {categories: [], equipments : []};
   @Input() hike !: Hike;
-
 
   private hikeService : HikeService = inject(HikeService)
   private inventoryService : InventoryService = inject(InventoryService)
@@ -34,18 +36,20 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
   private modalService : ModalService = inject(ModalService)
 
   ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngOnInit(): void {
 
-    console.log("Dans composant inventaire : ",this.inventory)
+    // console.log("Dans composant inventaire : ",this.inventory)
 
       //Mettre le mode du service à 'hike'
       this.equipmentService.setMode('hike', this.hike.id ?? '');
       this.categoryService.setMode('hike', this.hike.id ?? '');
 
       // S'abonner aux évènements d'ajout/modification d'équipement
-      this.inventoryService.equipmentChange$.subscribe((equipment)=>{
+      this.inventoryService.equipmentChange$.pipe(takeUntil(this.destroy$)).subscribe((equipment)=>{
         this.inventory.equipments.push(equipment)
 
         const categoryIndex = this.inventory.categories.findIndex(cat => cat.id === equipment.categoryId);
@@ -55,7 +59,7 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
       })
 
       // S'abonner au retrait d'équipement
-      this.inventoryService.equipmentRemove$.subscribe((equipmentId)=>{
+      this.inventoryService.equipmentRemove$.pipe(takeUntil(this.destroy$)).subscribe((equipmentId)=>{
 
         // Supprimer l'équipement de l'inventaire
         const equipmentIndex = this.inventory.equipments.findIndex(eq => eq.id === equipmentId);
@@ -72,14 +76,14 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
 
 
       // S'abonner aux évènements d'ajout/modification de catégorie.
-      this.hikeService.categoryChange$.subscribe((category)=>{
+      this.hikeService.categoryChange$.pipe(takeUntil(this.destroy$)).subscribe((category)=>{
         let categoryIndex = this.inventory.categories.findIndex(cat => cat.id === category.id);
         if(categoryIndex != -1) this.inventory.categories.splice(categoryIndex, 1, category); // Si modification, on remplace 
         else this.inventory.categories.unshift(category) // SI ajout l'insérer au début (order à 0 à la création)  
       })
 
       //S'abonner aux évènement de suppression d'une catégorie
-      this.hikeService.categoryRemove$.subscribe((categoryId)=>{
+      this.hikeService.categoryRemove$.pipe(takeUntil(this.destroy$)).subscribe((categoryId)=>{
 
         let addedWeight = 0;
 
@@ -107,7 +111,7 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
     //moveItemInArray du CDK avec condition sur l'index (supérieur à 1)
     if(categoryIndex >= 1) moveItemInArray(this.inventory.categories, categoryIndex, categoryIndex-1);
 
-    this.categoryService.modifyCategoriesOrder(this.inventory.categories).subscribe({
+    this.categoryService.modifyCategoriesOrder(this.inventory.categories).pipe(takeUntil(this.destroy$)).subscribe({
       next:(res)=>{
         // console.log(res)
       },
@@ -124,7 +128,7 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
     if(categoryIndex < this.inventory.categories.length-2) moveItemInArray(this.inventory.categories, categoryIndex, categoryIndex+1);
 
     // this.categoryService.addCategoriesUpdate(this.inventory.categories) // Persister changement
-    this.categoryService.modifyCategoriesOrder(this.inventory.categories).subscribe({
+    this.categoryService.modifyCategoriesOrder(this.inventory.categories).pipe(takeUntil(this.destroy$)).subscribe({
       next:(res)=>{
         // console.log(res)
       },

@@ -107,12 +107,10 @@ export class HikeDetailsComponent implements OnInit{
 
           this.hike = response.data;
           if (this.hike.inventory) {
-            // console.log(response.data)
             this.inventory = {
               categories : response.data.inventory!.categories.sort((catA, catB)=>(catA.order)-(catB.order)),
               equipments : response.data.inventory!.equipments
             };
-            console.log("Depuis page totale : ", this.inventory)
           }
         },
         error: (err) => {

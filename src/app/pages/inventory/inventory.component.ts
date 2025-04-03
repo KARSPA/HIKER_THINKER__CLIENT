@@ -317,7 +317,7 @@ export class InventoryComponent implements OnInit, OnDestroy{
     }
 
     // Demander au service d'envoyer le payload à l'API pour persister les modifs;
-    console.log(event.previousContainer.data, event.container.data, targetCategory )
+    // console.log(event.previousContainer.data, event.container.data, targetCategory )
 
     // Mettre à jour l'ancienne et nouvelle catégorie
     const updatePayload = [
