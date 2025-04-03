@@ -328,7 +328,7 @@ export class InventoryComponent implements OnInit, OnDestroy{
     // Faire la requete de modification pour persister
     this.equipmentService.modifyEquipmentsPosition(updatePayload).subscribe({
       next:(res)=>{
-        console.log(res)
+        // console.log(res)
       },
       error:(err)=>{
         console.log(err)

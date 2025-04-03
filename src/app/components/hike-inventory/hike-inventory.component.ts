@@ -184,7 +184,7 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
 
     this.equipmentService.removeHikeEquipment(equipment.id).subscribe({
       next:(res)=>{
-        console.log(res)
+        // console.log(res)
         this.inventoryService.notifyEquipmentRemove(res.data)
       }
     })
@@ -296,7 +296,7 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
     // Persister les modifications des catégories affectées :
     this.categoryService.modifyCategoriesOrder(this.inventory.categories).subscribe({
       next:(res)=>{
-        console.log(res)
+        // console.log(res)
       },
       error:(err)=>{
         console.log(err)
@@ -311,7 +311,7 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
     // Faire la requete de modification pour persister les équipements
     this.equipmentService.modifyEquipmentsPosition(updatePayload).subscribe({
       next:(res)=>{
-        console.log(res)
+        // console.log(res)
       },
       error:(err)=>{
         console.log(err)

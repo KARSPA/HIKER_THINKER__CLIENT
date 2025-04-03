@@ -89,7 +89,7 @@ export class EquipmentService {
 
   modifyEquipmentsPosition(payload : EquipmentsOrderUpdate[]) {
 
-    console.log(payload)
+    // console.log(payload)
     return this.httpClient.patch(`${this.url}`, payload);
   }
 
