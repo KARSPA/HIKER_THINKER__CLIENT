@@ -6,6 +6,7 @@ import { ResponseModel } from '../interfaces/ResponseModel';
 import { Equipment } from '../interfaces/equipment/Equipment';
 import { Category } from '../interfaces/equipment/Category';
 import { environment } from '../../environments/environment';
+import { EquipmentEvent } from '../interfaces/equipment/EquipmentEvent';
 
 @Injectable({
   providedIn: 'root'
@@ -69,7 +70,17 @@ export class InventoryService{
 
       const category = inventory.categories.find(category => equipment.categoryId === category.id);
       if(category){
-          groupedEquipements.get(category)?.push(equipment); 
+        const equipments = groupedEquipements.get(category);
+        if (equipments) {
+          // Trouver l'index où l'équipement doit être inséré (pas besoin de dichotomie car tableau pas grand normalement)
+          let insertIndex = equipments.findIndex(eq => (eq.position ?? 0) > (equipment.position ?? 0));
+          if (insertIndex === -1) {
+            // Aucun équipement avec une position supérieure, on ajoute à la fin
+            equipments.push(equipment);
+          } else {
+            equipments.splice(insertIndex, 0, equipment);
+          }
+        }
       }
 
     })

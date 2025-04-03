@@ -11,7 +11,7 @@ import { Hike } from '../../interfaces/hike/Hike';
 })
 export class HikeDetailsCardComponent {
 
-  @Input() hike : Hike|null = null;
+  @Input() hike !: Hike;
 
   @Output() openModal = new EventEmitter<void>();
 

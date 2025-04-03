@@ -11,6 +11,7 @@ import { HikeInventoryComponent } from '../../components/hike-inventory/hike-inv
 import { HikeModalComponent } from '../../components/hike-modal/hike-modal.component';
 import { HikeEvent } from '../../interfaces/hike/HikeEvent';
 import { BasicLoaderComponent } from "../../_partials/basic-loader/basic-loader.component";
+import { Inventory } from '../../interfaces/Inventory';
 
 @Component({
   selector: 'app-hike-details',
@@ -26,7 +27,7 @@ export class HikeDetailsComponent implements OnInit{
     private route : ActivatedRoute = inject(ActivatedRoute);
   
     hike !: Hike;
-    hikeInventory : Map<Category, Equipment[]> | null = null;
+    inventory : Inventory = {categories: [], equipments : []};
 
     loaderActive : boolean = true; 
     
@@ -97,7 +98,6 @@ export class HikeDetailsComponent implements OnInit{
       // On relance le loader
       this.loaderActive = true
       
-      
       this.hikeService.getHikeById(hikeId).subscribe({
         next: (response) => {
 
@@ -107,8 +107,10 @@ export class HikeDetailsComponent implements OnInit{
 
           this.hike = response.data;
           if (this.hike.inventory) {
-            // console.log(response.data)
-            this.hikeInventory = this.inventoryService.restructureInventory(this.hike.inventory);
+            this.inventory = {
+              categories : response.data.inventory!.categories.sort((catA, catB)=>(catA.order)-(catB.order)),
+              equipments : response.data.inventory!.equipments
+            };
           }
         },
         error: (err) => {
@@ -116,13 +118,4 @@ export class HikeDetailsComponent implements OnInit{
         }
       });
     }
-  
-    // Méthode pour recharger l'inventaire, par exemple après un changement
-    reloadHikeInventory(): void {
-      if (this.hike?.id) {
-        this.loadHike(this.hike.id);
-      }
-    }
-
-
 }

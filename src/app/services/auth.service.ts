@@ -37,6 +37,11 @@ export class AuthService {
   }
 
   login(credentials : LoginInfos) : Observable<ResponseModel<UserInterface>>{
+    // Vérifier si un token est présent et, le cas échéant, le supprimer
+    const token = localStorage.getItem('HT_Token');
+    if (token) {
+      localStorage.removeItem('HT_Token');
+    }
     return this.httpClient.post<ResponseModel<UserInterface>>(this.LOGIN_URL, credentials);
   }
 

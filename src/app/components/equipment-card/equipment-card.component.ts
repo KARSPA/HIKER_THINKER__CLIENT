@@ -1,18 +1,19 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
-import { ModalService } from '../../services/modal.service';
-import { RemoveEquipmentConfirmModalComponent } from '../remove-equipment-confirm-modal/remove-equipment-confirm-modal.component';
 import { Equipment } from '../../interfaces/equipment/Equipment';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-equipment-card',
-  imports: [RouterLink],
+  imports: [RouterLink, DragDropModule],
   templateUrl: './equipment-card.component.html'
 })
 export class EquipmentCardComponent {
 
   @Input() equipment : Equipment|null = null;
+  @Input() context : string = '';
+  @Input() dragable : boolean = false;
 
   @Output() delete = new EventEmitter<Equipment>();
 

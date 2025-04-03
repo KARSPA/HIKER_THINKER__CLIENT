@@ -6,7 +6,7 @@
 
     <form [formGroup]="equipmentForm" (ngSubmit)="onSubmit()">
     
-        <div class="form-errors text-orange-400 h-[20px] mb-8 flex flex-col items-center">
+        <div class="form-errors text-orange-400 h-[20px] mb-6 flex flex-col items-center">
     
             <p class="text-red-600 text-lg">{{equipmentHttpError}}</p>
     
@@ -17,7 +17,7 @@
         </div>
     
     
-        <div class="flex flex-col items-center w-full mb-10">
+        <div class="flex flex-col items-center w-full mb-6">
             <input type="text" formControlName="name" placeholder="Le nom de votre équipement"
             class="w-[90%] bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2">
     
@@ -31,10 +31,10 @@
             </div>
         </div>
 
-        <div class="flex flex-col items-center w-full mb-10">
+        <div class="flex flex-col items-center w-full mb-6">
             <input type="text" formControlName="weight" placeholder="Le poids de votre équipement (en grammes)"
             class="w-[90%] bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2"
-            maxLength="5">
+            maxLength="5" (keydown)="onlyDigits($event)">
     
             <div class="input-errors text-orange-500 h-8">
                 @if ((weight?.touched) && weight?.hasError('required')) {
@@ -46,7 +46,7 @@
             </div>
         </div>
 
-        <div class="flex flex-col items-center w-full mb-10">
+        <div class="flex flex-col items-center w-full mb-6">
             <input type="text" formControlName="brand" placeholder="La marque de votre équipement"
             class="w-[90%] bg-[#F1F1F1] border-b-2 border-slate-500 px-1 py-2"
             maxLength="20">
@@ -61,7 +61,7 @@
             </div>
         </div>
 
-        <div class="flex flex-col items-center w-full mb-10">
+        <div class="flex flex-col items-center w-full mb-2">
             <textarea type="text" formControlName="description" placeholder="Une description de votre équipement ..." 
             class="w-[90%] bg-[#F1F1F1] border-2 rounded-md border-slate-500 px-1 py-2 h-30 resize-none"
             maxLength="500">
@@ -86,18 +86,15 @@
                 }
             </select>
     
-            <div class="input-errors text-orange-500 h-8">
+            <div class="input-errors text-orange-500">
                 
             </div>
         </div>
         
-       
-
-    
-        <div class="btns-container flex justify-center items-center gap-10">
+        <div class="btns-container flex justify-center items-center gap-10 mt-6">
             
             <button type="submit" [disabled]="this.equipmentForm.invalid" 
-                class="text-white mt-10 disabled:cursor-not-allowed not-disabled:hover:opacity-80 rounded-md bg-amber-500 px-2 py-3 shadow-md disabled:bg-gray-500 cursor-pointer">
+                class="text-white  disabled:cursor-not-allowed not-disabled:hover:opacity-80 rounded-md bg-amber-500 px-2 py-3 shadow-md disabled:bg-gray-500 cursor-pointer">
                 Ajouter l'équipement
             </button>
             
