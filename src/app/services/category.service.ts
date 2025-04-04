@@ -87,7 +87,8 @@ export class CategoryService {
     return this.httpClient.patch<ResponseModel<Category>>(this.url+`/${category.id}`, {
       name : category.name,
       icon : category.icon,
-      order : category.order
+      order : category.order,
+      accumulatedWeight : category.accumulatedWeight
     })
   }
   removeHikeCategory(category : Category) : Observable<ResponseModel<Category>>{

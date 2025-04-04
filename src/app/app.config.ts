@@ -23,7 +23,7 @@ function initializeApp(authService : AuthService, router : Router) {
       return Promise.resolve();
     }
     
-    // Si on a un tokne sur une route privée on vérifie sa validité
+    // Si on a un token sur une route privée on vérifie sa validité
     return firstValueFrom(authService.verifyConnected())
       .then(response => authService.handleLoginSuccess(response.data))
       .catch(() => authService.logout());

@@ -6,6 +6,7 @@ import { EquipmentCardComponent } from '../../components/equipment-card/equipmen
 import { ModalService } from '../../services/modal.service';
 import { RemoveEquipmentConfirmModalComponent } from '../../components/remove-equipment-confirm-modal/remove-equipment-confirm-modal.component';
 import { InventoryService } from '../../services/inventory.service';
+import { EquipmentDetails } from '../../interfaces/equipment/EquipmentDetails';
 
 @Component({
   selector: 'app-equipment-details',
@@ -14,14 +15,13 @@ import { InventoryService } from '../../services/inventory.service';
 })
 export class EquipmentDetailsComponent implements OnInit{
   
-
   private equipmentService : EquipmentService = inject(EquipmentService);
   private inventoryService : InventoryService = inject(InventoryService);
   private modalService : ModalService = inject(ModalService);
   private router : Router = inject(Router);
   private route : ActivatedRoute = inject(ActivatedRoute);
 
-  equipment ?: Equipment;
+  equipment ?: EquipmentDetails;
 
   ngOnInit(): void {
 
@@ -34,6 +34,7 @@ export class EquipmentDetailsComponent implements OnInit{
         this.equipmentService.getEquipmentById(equipmentId).subscribe({
           next : (response)=>{
             this.equipment = response.data
+            console.log(response)
           },
           error: (err)=>{
             console.log(err);

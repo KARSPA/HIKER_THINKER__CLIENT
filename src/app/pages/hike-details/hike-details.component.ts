@@ -104,7 +104,6 @@ export class HikeDetailsComponent implements OnInit{
           // Enlever le loader
           this.loaderActive = false
 
-
           this.hike = response.data;
           if (this.hike.inventory) {
             this.inventory = {

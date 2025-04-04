@@ -7,6 +7,7 @@ import { RefEquipment } from '../interfaces/equipment/RefEquipment';
 import { environment } from '../../environments/environment';
 import { EquipmentsOrderUpdate } from '../interfaces/equipment/EquipmentOrderUpdate';
 import { Category } from '../interfaces/equipment/Category';
+import { EquipmentDetails } from '../interfaces/equipment/EquipmentDetails';
 
 @Injectable({
   providedIn: 'root'
@@ -55,8 +56,8 @@ export class EquipmentService {
 
   
 
-  getEquipmentById(equipmentId : string) : Observable<ResponseModel<Equipment>>{
-    return this.httpClient.get<ResponseModel<Equipment>>(this.url+`/${equipmentId}`)
+  getEquipmentById(equipmentId : string) : Observable<ResponseModel<EquipmentDetails>>{
+    return this.httpClient.get<ResponseModel<EquipmentDetails>>(this.url+`/${equipmentId}`)
   }
 
 

@@ -7,22 +7,48 @@
 <div class="mt-10 grid grid-cols-[3fr_1fr] gap-10">
     <div class="left-content border border-stone-300 rounded-md shadow-md p-6">
         <div class="img-models-row grid grid-cols-[1fr_2fr] gap-10">
-            <img src="assets/placeholder-image.jpg" alt="" class="aspect-square">
-            <div class="models border border-stone-300 rounded-md shadow-md">
-                <p class="text-center font-semibold">Randonnées et modèles</p>
-                <p class="text-center mt-20 italic text-xs text-gray-600">À venir ...</p>
+            <img src="assets/placeholder-image.jpg" alt="" class="h-60 aspect-square">
+            <div class="models border border-stone-300 rounded-md shadow-md min-h-[200px] flex flex-col">
+                <div class="hikes-container flex-grow">
+                    <p class="text-center font-semibold">Randonnées</p>
+                    <div class="hikes-list overflow-y-scroll px-1 mt-2">
+                        @for(summary of equipment?.hikes; track $index){
+                            <div class="flex justify-between px-2 py-1 border border-stone-300 rounded-md text-sm">
+                                <p class="w-[50%]">{{summary.title}}</p>
+                                <p>{{(summary.totalWeight + summary.weightCorrection)/1000}} <span class="italic text-sm">kg</span></p>
+                                <a [routerLink]="['/hikes/', summary.id]" class="flex items-center justify-center outline-green-800 hover:outline rounded-md">
+                                    <img src="assets/eyeIcon.svg" alt="" class="h-6 aspect-square">
+                                </a>
+                            </div>
+                        }
+                        @empty {
+                            <p class="text-center text-sm">Non utilisé</p>
+                        }
+                    </div>
+                </div>
+                <div class="models-container flex-grow">
+                    <p class="text-center font-semibold">Modèles</p>
+                    <div class="models-list overflow-y-scroll px-1 mt-2">
+                        @for(summary of equipment?.hikes; track $index){
+                            <p class="text-center text-sm italic">À venir</p>
+                        }
+                        @empty {
+                            <p class="text-center text-sm italic">À venir</p>
+                        }
+                    </div>
+                </div>
             </div>
         </div>
         <div class="equipment-infos-row grid grid-cols-[2fr_1fr] mt-10 gap-10">
-            <textarea class="min-h-[100px] resize-none border border-stone-300 rounded-md shadow-md" readonly>
-                {{equipment?.description}}
+            <textarea class="min-h-[100px] resize-none border border-stone-300 rounded-md shadow-md p-2" readonly [value]="equipment?.description">
+                
             </textarea>
 
             <div class="category-weight-brand flex flex-col justify-between">
 
-                <p>Poids : <span class="font-semibold">{{equipment?.weight}}</span> grammes</p>
+                <p>Poids : <span class="font-semibold">{{equipment?.weight}}</span> <span class="italic text-sm"> grammes</span></p>
                 <p>Marque : <span class="font-semibold">{{equipment?.brand}}</span></p>
-                <p>Catégorie : <span class="text-center mt-20 italic text-xs text-gray-600">À venir ...</span></p>
+                <p>Catégorie : <span class="font-semibold">{{equipment?.categoryName}}</span></p>
 
             </div>
         </div>

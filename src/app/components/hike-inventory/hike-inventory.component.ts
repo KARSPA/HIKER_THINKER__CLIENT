@@ -144,6 +144,8 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
   
     const requestType = category?.id ? 'Modification':'Ajout';
 
+    console.log('depuis page : ', category)
+
     this.modalService.openModal<CategoryModalComponent, CategoryEvent>({
       component: CategoryModalComponent,
       data: {
@@ -172,6 +174,7 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
       }
     })
     .subscribe((refEquipment)=>{
+      console.log(refEquipment)
       this.equipmentService.addHikeEquipment(refEquipment).subscribe({
         next:(res)=>{
           this.inventoryService.notifyEquipmentChange(res.data)
