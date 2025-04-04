@@ -7,6 +7,8 @@ import { ModalService } from '../../services/modal.service';
 import { RemoveEquipmentConfirmModalComponent } from '../../components/remove-equipment-confirm-modal/remove-equipment-confirm-modal.component';
 import { InventoryService } from '../../services/inventory.service';
 import { EquipmentDetails } from '../../interfaces/equipment/EquipmentDetails';
+import { StatisticsService } from '../../services/statistics.service';
+import { EquipmentStats } from '../../interfaces/statistics/EquipmentStats';
 
 @Component({
   selector: 'app-equipment-details',
@@ -15,13 +17,15 @@ import { EquipmentDetails } from '../../interfaces/equipment/EquipmentDetails';
 })
 export class EquipmentDetailsComponent implements OnInit{
   
-  private equipmentService : EquipmentService = inject(EquipmentService);
-  private inventoryService : InventoryService = inject(InventoryService);
-  private modalService : ModalService = inject(ModalService);
-  private router : Router = inject(Router);
-  private route : ActivatedRoute = inject(ActivatedRoute);
+  private equipmentService = inject(EquipmentService);
+  private inventoryService = inject(InventoryService);
+  private statisticsService = inject(StatisticsService);
+  private modalService = inject(ModalService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   equipment ?: EquipmentDetails;
+  statistics ?: EquipmentStats;
 
   ngOnInit(): void {
 
@@ -34,15 +38,26 @@ export class EquipmentDetailsComponent implements OnInit{
         this.equipmentService.getEquipmentById(equipmentId).subscribe({
           next : (response)=>{
             this.equipment = response.data
-            console.log(response)
           },
           error: (err)=>{
             console.log(err);
             this.router.navigate(["/error404"], {state: {message: err.error?.message}})
           }
         })
+
+        this.statisticsService.getEquipmentStatistics(equipmentId).subscribe({
+          next: (res)=>{
+              this.statistics = res.data
+              console.log(res)
+          },
+          error: (err)=>{
+            console.log(err);
+          }
+        })
       }
     });
+
+    
 
 
     // S'abonner à la suppression

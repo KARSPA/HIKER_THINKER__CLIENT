@@ -4,6 +4,7 @@ import { UserStats } from '../interfaces/statistics/UserStats';
 import { ResponseModel } from '../interfaces/ResponseModel';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { EquipmentStats } from '../interfaces/statistics/EquipmentStats';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,10 @@ export class StatisticsService {
 
   getUserStatistics(userId : string) : Observable<ResponseModel<UserStats>>{
     return this.httpClient.get<ResponseModel<UserStats>>(this.STATS_BASE_URL+`/users/${userId}`)
+  }
+
+  getEquipmentStatistics(equipmentId : string) : Observable<ResponseModel<EquipmentStats>>{
+    return this.httpClient.get<ResponseModel<EquipmentStats>>(this.STATS_BASE_URL+`/equipments/${equipmentId}`)
   }
 
 }

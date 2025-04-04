@@ -14,7 +14,7 @@
                     <div class="hikes-list overflow-y-scroll px-1 mt-2">
                         @for(summary of equipment?.hikes; track $index){
                             <div class="flex justify-between px-2 py-1 border border-stone-300 rounded-md text-sm">
-                                <p class="w-[50%]">{{summary.title}}</p>
+                                <p class="w-[40%]">{{summary.title}}</p>
                                 <p>{{(summary.totalWeight + summary.weightCorrection)/1000}} <span class="italic text-sm">kg</span></p>
                                 <a [routerLink]="['/hikes/', summary.id]" class="flex items-center justify-center outline-green-800 hover:outline rounded-md">
                                     <img src="assets/eyeIcon.svg" alt="" class="h-6 aspect-square">
