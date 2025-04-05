@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, LOCALE_ID, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, Router, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
@@ -7,6 +7,8 @@ import { authInterceptor } from './_helpers/interceptors/authInterceptor';
 import { AuthService } from './services/auth.service';
 import { firstValueFrom } from 'rxjs';
 import { errorInterceptor } from './_helpers/interceptors/errorInterceptor';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
 
 
 
@@ -30,6 +32,8 @@ function initializeApp(authService : AuthService, router : Router) {
   };
 }
 
+registerLocaleData(localeFr);
+
 export const appConfig: ApplicationConfig = {
   providers: [
     {
@@ -40,5 +44,6 @@ export const appConfig: ApplicationConfig = {
     },
     provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, withComponentInputBinding())]
+    provideRouter(routes, withComponentInputBinding()),
+    {provide: LOCALE_ID, useValue: 'fr-FR'}]
 };

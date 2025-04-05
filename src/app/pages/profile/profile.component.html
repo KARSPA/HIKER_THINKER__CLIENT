@@ -42,27 +42,27 @@
                 </div>
                 <div class="flex justify-between mt-4">
                     <p class="stat-label text-sm italic">Distance totale :</p>
-                    <p class="stat-value">{{userStats?.totalDistance ?? 0}} <span class="italic">km</span></p>   
+                    <p class="stat-value">{{userStats?.totalDistance ?? 0 | number:'1.0-1':'fr-FR'}} <span class="italic">km</span></p>   
                 </div>
                 <div class="flex justify-between">
                     <p class="stat-label text-sm italic">Distance moyenne :</p>
-                    <p class="stat-value">{{userStats?.averageDistance ?? 0}} <span class="italic">km</span></p>   
+                    <p class="stat-value">{{userStats?.averageDistance ?? 0 | number:'1.0-1':'fr-FR'}} <span class="italic">km</span></p>   
                 </div>
                 <div class="flex justify-between mt-4">
                     <p class="stat-label text-sm italic">Dénivelé positif total :</p>
-                    <p class="stat-value">{{userStats?.totalPositive ?? 0}} <span class="italic">m</span></p>   
+                    <p class="stat-value">{{userStats?.totalPositive ?? 0 | number:'1.0-0':'fr-FR'}} <span class="italic">m</span></p>   
                 </div>
                 <div class="flex justify-between">
                     <p class="stat-label text-sm italic">Dénivelé positif moyen :</p>
-                    <p class="stat-value">{{userStats?.averagePositive ?? 0}} <span class="italic">m</span></p>   
+                    <p class="stat-value">{{userStats?.averagePositive ?? 0 | number:'1.0-0':'fr-FR'}} <span class="italic">m</span></p>   
                 </div>
                 <div class="flex justify-between mt-4">
                     <p class="stat-label text-sm italic">Dénivelé négatif total :</p>
-                    <p class="stat-value">{{userStats?.totalNegative ?? 0}} <span class="italic">m</span></p>   
+                    <p class="stat-value">{{userStats?.totalNegative ?? 0 | number:'1.0-0':'fr-FR'}} <span class="italic">m</span></p>   
                 </div>
                 <div class="flex justify-between">
                     <p class="stat-label text-sm italic">Dénivelé négatif moyen :</p>
-                    <p class="stat-value">{{userStats?.averageNegative ?? 0}} <span class="italic">m</span></p>   
+                    <p class="stat-value">{{userStats?.averageNegative ?? 0 | number:'1.0-0':'fr-FR'}} <span class="italic">m</span></p>   
                 </div>
                 <div class="flex justify-between mt-4">
                     <p class="stat-label text-sm italic">Durée totale :</p>
@@ -74,7 +74,7 @@
                 </div>
                 <div class="flex justify-between my-4">
                     <p class="stat-label text-sm italic">Poids moyen :</p>
-                    <p class="stat-value">{{(userStats?.averageWeight ?? 0)/1000}} <span class="italic">kg</span></p>   
+                    <p class="stat-value">{{(userStats?.averageWeight ?? 0)/1000 | number:'1.0-3':'fr-FR'}} <span class="italic">kg</span></p>   
                 </div>
             </div>
         }

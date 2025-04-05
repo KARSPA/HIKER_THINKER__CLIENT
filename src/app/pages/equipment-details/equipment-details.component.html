@@ -8,12 +8,12 @@
     <div class="left-content border border-stone-300 rounded-md shadow-md p-6">
         <div class="img-models-row grid grid-cols-[1fr_2fr] gap-10">
             <img src="assets/placeholder-image.jpg" alt="" class="h-60 aspect-square">
-            <div class="models border border-stone-300 rounded-md shadow-md min-h-[200px] flex flex-col">
-                <div class="hikes-container flex-grow">
+            <div class="hikes-models border border-stone-300 rounded-md shadow-md min-h-[200px] flex flex-col">
+                <div class="hikes-container flex-grow min-h-[50%]">
                     <p class="text-center font-semibold">Randonnées</p>
-                    <div class="hikes-list overflow-y-scroll px-1 mt-2">
+                    <div class="hikes-list overflow-y-scroll px-1 mt-2 h-20">
                         @for(summary of equipment?.hikes; track $index){
-                            <div class="flex justify-between px-2 py-1 border border-stone-300 rounded-md text-sm">
+                            <div class="flex justify-between px-2 py-1 border border-stone-300 rounded-md text-sm mt-1">
                                 <p class="w-[40%]">{{summary.title}}</p>
                                 <p>{{(summary.totalWeight + summary.weightCorrection)/1000}} <span class="italic text-sm">kg</span></p>
                                 <a [routerLink]="['/hikes/', summary.id]" class="flex items-center justify-center outline-green-800 hover:outline rounded-md">
@@ -26,21 +26,17 @@
                         }
                     </div>
                 </div>
-                <div class="models-container flex-grow">
+                <div class="models-container flex-grow min-h-[50%]">
                     <p class="text-center font-semibold">Modèles</p>
                     <div class="models-list overflow-y-scroll px-1 mt-2">
-                        @for(summary of equipment?.hikes; track $index){
-                            <p class="text-center text-sm italic">À venir</p>
-                        }
-                        @empty {
-                            <p class="text-center text-sm italic">À venir</p>
-                        }
+                        <p class="text-center text-sm italic">À venir</p>
+
                     </div>
                 </div>
             </div>
         </div>
         <div class="equipment-infos-row grid grid-cols-[2fr_1fr] mt-10 gap-10">
-            <textarea class="min-h-[100px] resize-none border border-stone-300 rounded-md shadow-md p-2" readonly [value]="equipment?.description">
+            <textarea class="min-h-[100px] resize-none border border-stone-300 rounded-md shadow-md p-2 outline-none" readonly [value]="equipment?.description">
                 
             </textarea>
 
@@ -55,9 +51,53 @@
     </div>
     <div class="right-content border border-stone-300 rounded-md shadow-md p-2">
         <h2 class="text-center text-xl font-semibold">Statistiques</h2>
-        <div class="stats-container">
-            <p class="text-center mt-30 italic text-xs text-gray-600">À venir ...</p>
-        </div>
+        @if(loaderActive){
+            <app-basic-loader title="Calcul en cours" />
+        }
+        @else {
+            <div class="stats-container mt-4">
+                <div class="flex justify-between">
+                    <p class="stat-label text-sm italic">Nombre de randonnée(s) :</p>
+                    <p class="stat-value">{{statistics?.hikeUsedCount ?? 0}}</p>   
+                </div>
+                <div class="flex justify-between my-4">
+                    <p class="stat-label text-sm italic">Pourcentage d'utilisation :</p>
+                    <p class="stat-value">{{(statistics?.usagePercentage ?? 0 | number:'1.0-2':'fr-FR')}} <span class="italic">%</span></p>   
+                </div>
+                <div class="flex justify-between mt-4">
+                    <p class="stat-label text-sm italic">Distance totale :</p>
+                    <p class="stat-value">{{statistics?.totalDistance ?? 0 | number:'1.0-1':'fr-FR'}} <span class="italic">km</span></p>   
+                </div>
+                <div class="flex justify-between">
+                    <p class="stat-label text-sm italic">Distance moyenne :</p>
+                    <p class="stat-value">{{statistics?.averageDistance ?? 0 | number:'1.0-0':'fr-FR'}} <span class="italic">km</span></p>   
+                </div>
+                <div class="flex justify-between mt-4">
+                    <p class="stat-label text-sm italic">Dénivelé positif total :</p>
+                    <p class="stat-value">{{statistics?.totalPositive ?? 0 | number:'1.0-0':'fr-FR'}} <span class="italic">m</span></p>   
+                </div>
+                <div class="flex justify-between">
+                    <p class="stat-label text-sm italic">Dénivelé positif moyen :</p>
+                    <p class="stat-value">{{statistics?.averagePositive ?? 0 | number:'1.0-0'}} <span class="italic">m</span></p>   
+                </div>
+                <div class="flex justify-between mt-4">
+                    <p class="stat-label text-sm italic">Dénivelé négatif total :</p>
+                    <p class="stat-value">{{statistics?.totalNegative ?? 0 | number:'1.0-0':'fr-FR'}} <span class="italic">m</span></p>   
+                </div>
+                <div class="flex justify-between">
+                    <p class="stat-label text-sm italic">Dénivelé négatif moyen :</p>
+                    <p class="stat-value">{{statistics?.averageNegative ?? 0 | number:'1.0-0':'fr-FR'}} <span class="italic">m</span></p>   
+                </div>
+                <div class="flex justify-between mt-4">
+                    <p class="stat-label text-sm italic">Durée totale :</p>
+                    <p class="stat-value">{{statistics?.totalDurationHours ?? 0}}<span class="italic">h</span> | {{(statistics?.totalDurationHours ?? 0) / 24 | number:'1.0-2' }} <span class="italic">j</span></p>   
+                </div>
+                <div class="flex justify-between">
+                    <p class="stat-label text-sm italic">Durée moyenne :</p>
+                    <p class="stat-value">{{statistics?.averageDurationHours ?? 0}}<span class="italic">h</span> | {{(statistics?.averageDurationHours ?? 0) / 24 | number:'1.0-2' }} <span class="italic">j</span></p>   
+                </div>
+            </div>
+        }
     </div>
 </div>
 

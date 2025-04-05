@@ -9,10 +9,13 @@ import { InventoryService } from '../../services/inventory.service';
 import { EquipmentDetails } from '../../interfaces/equipment/EquipmentDetails';
 import { StatisticsService } from '../../services/statistics.service';
 import { EquipmentStats } from '../../interfaces/statistics/EquipmentStats';
+import { BasicLoaderComponent } from '../../_partials/basic-loader/basic-loader.component';
+import { NumberFormatPipe } from '../../_helpers/pipes/number-format.pipe';
+import { DecimalPipe, PercentPipe } from '@angular/common';
 
 @Component({
   selector: 'app-equipment-details',
-  imports: [RouterLink],
+  imports: [RouterLink, BasicLoaderComponent, DecimalPipe],
   templateUrl: './equipment-details.component.html'
 })
 export class EquipmentDetailsComponent implements OnInit{
@@ -26,6 +29,8 @@ export class EquipmentDetailsComponent implements OnInit{
 
   equipment ?: EquipmentDetails;
   statistics ?: EquipmentStats;
+
+  loaderActive : boolean = true;
 
   ngOnInit(): void {
 
@@ -47,6 +52,7 @@ export class EquipmentDetailsComponent implements OnInit{
 
         this.statisticsService.getEquipmentStatistics(equipmentId).subscribe({
           next: (res)=>{
+              this.loaderActive = false;
               this.statistics = res.data
               console.log(res)
           },
