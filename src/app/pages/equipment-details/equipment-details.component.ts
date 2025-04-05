@@ -54,7 +54,6 @@ export class EquipmentDetailsComponent implements OnInit{
           next: (res)=>{
               this.loaderActive = false;
               this.statistics = res.data
-              console.log(res)
           },
           error: (err)=>{
             console.log(err);

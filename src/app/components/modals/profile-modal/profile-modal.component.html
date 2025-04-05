@@ -1,11 +1,11 @@
 
-<div class="modal-content h-fit pb-4 w-2xl">
-    <div class="modal-title text-lg text-center mb-10">
+<div class="modal-content h-fit pb-4 w-xl">
+    <div class="modal-title text-lg text-center mb-2">
         <p class="font-semibold">Modifier vos informations personnelles</p>
     </div>
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="px-10">
     
-        <div class="form-errors text-orange-400 h-[20px] mb-8 flex flex-col items-center">
+        <div class="form-errors text-orange-400 h-[20px] mb-2 flex flex-col items-center">
     
             <p class="text-red-600 text-lg"></p>
     
@@ -15,7 +15,7 @@
         
         </div>
 
-        <div class="flex flex-col mb-10">
+        <div class="flex flex-col mb-4">
             <label for="formLastName" class="text-sm italic ">Nom :</label>
             <input id="formLastName" type="text" formControlName="lastName" required placeholder="Nom" 
             class="bg-[#F1F1F1] border-b-2 border-slate-500 py-2">
@@ -31,7 +31,7 @@
     
         </div>
     
-        <div class="flex flex-col mb-10">
+        <div class="flex flex-col mb-4">
             <label for="formFirstName" class="text-sm italic">Prénom :</label>
             <input id="formFirstName" type="text" formControlName="firstName" required placeholder="Prénom" 
             class="bg-[#F1F1F1] border-b-2 border-slate-500 py-2">
@@ -46,7 +46,7 @@
             </div>
         </div>
 
-        <div class="flex flex-col mb-10">
+        <div class="flex flex-col mb-4">
             <label for="formPassword" class="text-sm italic ">Mot de passe :</label>
             <input id="formPassword" type="password" formControlName="password" placeholder="Votre mot de passe"
             class="bg-[#F1F1F1] border-b-2 border-slate-500 py-2">
@@ -55,12 +55,12 @@
                 @if ((password?.touched || hasBeenSubmitted) && password?.hasError('required')) {
                     <p class="text-sm">Champs requis</p>
                 }
-                @if ((password?.touched) && password?.hasError('maxLength')) {
-                    <p class="text-sm">TROP LONG</p>
+                @if ((password?.touched) && password?.hasError('minlength')) {
+                    <p class="text-sm">Pas assez long</p>
                 }
             </div>
         </div>
-        <div class="flex flex-col mb-10">
+        <div class="flex flex-col mb-4">
             <label for="formNewPassword" class="text-sm italic ">Nouveau mot de passe :</label>
             <input id="formNewPassword" type="password" formControlName="newPassword" placeholder="Nouveau mot de passe"
             class="bg-[#F1F1F1] border-b-2 border-slate-500 py-2">
@@ -69,16 +69,16 @@
                 @if ((newPassword?.touched || hasBeenSubmitted) && newPassword?.hasError('required')) {
                     <p class="text-sm">Champs requis</p>
                 }
-                @if ((newPassword?.touched || hasBeenSubmitted) && newPassword?.hasError('maxLength')) {
-                    <p class="text-sm">TROP LONG</p>
+                @if ((newPassword?.touched || hasBeenSubmitted) && newPassword?.hasError('minlength')) {
+                    <p class="text-sm">Pas assez long</p>
                 }
             </div>
         </div>
     
-        <div class="btns-container flex justify-center items-center gap-10">
+        <div class="btns-container flex justify-center items-center">
             
             <button type="submit" [disabled]="this.userForm.invalid" 
-                class="text-white mt-10 disabled:cursor-not-allowed not-disabled:hover:opacity-80 rounded-md bg-amber-500 px-2 py-3 shadow-md disabled:bg-gray-500 cursor-pointer">
+                class="text-white mt-2 disabled:cursor-not-allowed not-disabled:hover:opacity-80 rounded-md bg-amber-500 px-2 py-3 shadow-md disabled:bg-gray-500 cursor-pointer">
                 Confirmer
             </button>
             
