@@ -174,7 +174,7 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
       }
     })
     .subscribe((refEquipment)=>{
-      console.log(refEquipment)
+      // console.log(refEquipment)
       this.equipmentService.addHikeEquipment(refEquipment).subscribe({
         next:(res)=>{
           this.inventoryService.notifyEquipmentChange(res.data)

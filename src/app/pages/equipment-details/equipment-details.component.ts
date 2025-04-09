@@ -1,7 +1,7 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { Equipment } from '../../interfaces/equipment/Equipment';
 import { EquipmentService } from '../../services/equipment.service';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterLink } from '@angular/router';
 import { EquipmentCardComponent } from '../../components/equipment-card/equipment-card.component';
 import { ModalService } from '../../services/modal.service';
 import { RemoveEquipmentConfirmModalComponent } from '../../components/remove-equipment-confirm-modal/remove-equipment-confirm-modal.component';
@@ -11,7 +11,8 @@ import { StatisticsService } from '../../services/statistics.service';
 import { EquipmentStats } from '../../interfaces/statistics/EquipmentStats';
 import { BasicLoaderComponent } from '../../_partials/basic-loader/basic-loader.component';
 import { NumberFormatPipe } from '../../_helpers/pipes/number-format.pipe';
-import { DecimalPipe, PercentPipe } from '@angular/common';
+import { DecimalPipe, Location, PercentPipe } from '@angular/common';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-equipment-details',
@@ -25,6 +26,7 @@ export class EquipmentDetailsComponent implements OnInit{
   private statisticsService = inject(StatisticsService);
   private modalService = inject(ModalService);
   private router = inject(Router);
+  private location = inject(Location);
   private route = inject(ActivatedRoute);
 
   equipment ?: EquipmentDetails;
@@ -87,5 +89,10 @@ export class EquipmentDetailsComponent implements OnInit{
       })
     }
   
+
+
+  goBack(){
+    this.location.back();
+  }
 
 }

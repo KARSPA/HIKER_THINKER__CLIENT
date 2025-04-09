@@ -1,5 +1,5 @@
 
-<a [routerLink]="['/inventory']" class="absolute top-0 left-0">
+<a (click)="goBack()" class="absolute top-0 left-0">
     <img src="assets/back-chevron.svg" alt="" class="h-6 aspect-square hover:opacity-60 hover:outline-2 outline-green-800 rounded-full">
 </a>
 <h1 class="text-center text-2xl font-semibold italic">{{equipment?.name}}</h1>
