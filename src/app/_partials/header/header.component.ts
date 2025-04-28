@@ -1,6 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -13,5 +14,6 @@ export class HeaderComponent{
   isLogged = this.authService.isLogged;
 
   appLogoUrl : string = 'assets/logoApp.png';
+  appVersion : string = `${environment.appVersion}`;
 
 }

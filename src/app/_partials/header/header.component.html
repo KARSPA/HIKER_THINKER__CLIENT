@@ -6,7 +6,7 @@
         <!-- LOGO -->
          <img [src]="appLogoUrl" alt="Logo HikerThinker" class="h-20 w-20">
       <span routerLink="/home" routerLinkActive="active-link" class="text-xl">HikerThinker</span>
-      <span class="ml-6 text-sm text-white">v0.2.0</span>
+      <span class="ml-6 text-sm text-white">{{appVersion}}</span>
     </a>
     <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
       @if (isLogged()) {

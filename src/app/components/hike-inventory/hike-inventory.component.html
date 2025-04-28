@@ -33,6 +33,8 @@
                         <p>{{category.accumulatedWeight}} g</p>
                     </div>
                     <div class="btns-container flex gap-5">
+                        <p class="px-2 flex justify-center items-center italic"> {{ getEquipmentsForCategory(category.id!).length }}</p>
+
                         <button
                         stop-click-propagation
                         class="p-2 rounded-full hover:outline-1 hover:outline-amber-500 cursor-pointer"
