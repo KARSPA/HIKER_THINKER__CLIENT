@@ -51,6 +51,11 @@ export class CategoryService {
       }
     }
 
+  getCategories() : Observable<ResponseModel<Category[]>>{
+
+    return this.httpClient.get<ResponseModel<Category[]>>(this.url)
+
+  }
 
   addInventoryCategory(category : Category) : Observable<ResponseModel<Category>>{
 

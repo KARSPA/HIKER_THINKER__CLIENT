@@ -13,6 +13,11 @@ import { BasicLoaderComponent } from '../../_partials/basic-loader/basic-loader.
 import { NumberFormatPipe } from '../../_helpers/pipes/number-format.pipe';
 import { DecimalPipe, Location, PercentPipe } from '@angular/common';
 import { filter } from 'rxjs';
+import { ModifyEquipmentModalComponent } from '../../modify-equipment-modal/modify-equipment-modal.component';
+import { Category } from '../../interfaces/equipment/Category';
+import { CategoryService } from '../../services/category.service';
+import { ModifyEquipmentEvent } from '../../interfaces/equipment/ModifyEquipmentEvent';
+import { EquipmentEvent } from '../../interfaces/equipment/EquipmentEvent';
 
 @Component({
   selector: 'app-equipment-details',
@@ -23,6 +28,7 @@ export class EquipmentDetailsComponent implements OnInit{
   
   private equipmentService = inject(EquipmentService);
   private inventoryService = inject(InventoryService);
+  private categoryService = inject(CategoryService);
   private statisticsService = inject(StatisticsService);
   private modalService = inject(ModalService);
   private router = inject(Router);
@@ -32,11 +38,18 @@ export class EquipmentDetailsComponent implements OnInit{
   equipment ?: EquipmentDetails;
   statistics ?: EquipmentStats;
 
+  categories ?: Category[];
+
   loaderActive : boolean = true;
 
   ngOnInit(): void {
 
     this.equipmentService.setMode('inventory')
+
+    this.categoryService.getCategories().subscribe({
+      next : (res) => this.categories = res.data,
+      error : (err) => console.error(err)
+    })
 
     // Récupérer l'id depuis l'URL et charger la randonnée
     this.route.paramMap.subscribe(params => {
@@ -76,20 +89,34 @@ export class EquipmentDetailsComponent implements OnInit{
   }
 
   openRemoveEquipmentConfirmationModal(){
-      this.modalService.openModal<RemoveEquipmentConfirmModalComponent, boolean>({
-        component: RemoveEquipmentConfirmModalComponent,
-        data: {context : 'Inventory'}
-      })
-      .pipe(confirm => confirm) //On garde que les réponses true (confirmations)
-      .subscribe(()=>{
-          if (this.equipment) {
-            this.equipmentService.removeInventoryEquipment(this.equipment.id)
-            .subscribe((response)=>this.inventoryService.notifyEquipmentRemove(response.data))
-          }
-      })
-    }
-  
+    this.modalService.openModal<RemoveEquipmentConfirmModalComponent, boolean>({
+      component: RemoveEquipmentConfirmModalComponent,
+      data: {context : 'Inventory'}
+    })
+    .pipe(confirm => confirm) //On garde que les réponses true (confirmations)
+    .subscribe(()=>{
+        if (this.equipment) {
+          this.equipmentService.removeInventoryEquipment(this.equipment.id)
+          .subscribe((response)=>this.inventoryService.notifyEquipmentRemove(response.data))
+        }
+    })
+  }
 
+  openModifyEquipmentModal(){
+    this.modalService.openModal<ModifyEquipmentModalComponent, ModifyEquipmentEvent>({
+      component: ModifyEquipmentModalComponent,
+      data: {categories : this.categories, equipment : this.equipment}
+    })
+    .subscribe((res)=>{
+      console.log("RETOUR MODAL :", res.equipment)
+      
+      this.equipmentService.modifyEquipment(res).subscribe({
+        next:(response)=>console.log(response),
+        error:(err)=>console.error(err)
+      })
+    })
+  }
+  
 
   goBack(){
     this.location.back();

@@ -1,0 +1,107 @@
+
+<div class="modal-content max-h-[70vh] w-lg ">
+    <div class="modal-title text-lg text-center">
+        <p>Modifier l'équipement</p>
+    </div>
+
+    <form [formGroup]="equipmentForm" (ngSubmit)="onSubmit()" class="pb-6 overflow-y-auto">
+    
+        <div class="form-errors text-orange-400 h-[20px] mb-6 flex flex-col items-center">
+    
+            <p class="text-red-600 text-lg">{{equipmentHttpError}}</p>
+    
+            @if (this.allFieldsTouched() && equipmentForm.invalid) {
+                <p class="text-lg ">Informations manquantes.</p>
+            }
+        
+        </div>
+    
+    
+        <div class="flex flex-col mb-1 w-[90%] mx-auto">
+            <label for="formName" class="text-sm italic ">Nom de l'équipement :</label>
+            <input id="formName" type="text" formControlName="name" required placeholder="Nom" 
+            class="bg-[#F1F1F1] border-b-2 border-slate-500 py-1">
+    
+            <div class="input-errors text-center text-orange-500 h-6">
+                @if ((name?.touched) && name?.hasError('required')) {
+                    <p class="text-sm">{{getErrorMessage('required')}}</p>
+                }
+                @if ((name?.touched) && name?.hasError('minlength')) {
+                    <p class="text-sm">{{getErrorMessage('minlength',1)}}</p>
+                }
+            </div>
+        </div>
+
+        <div class="flex flex-col mb-1 w-[90%] mx-auto">
+            <label for="formWeight" class="text-sm italic ">Poids <span class="text-xs">(en grammes)</span> :</label>
+            <input id="formWeight" type="text" formControlName="weight" required placeholder="Poids (en grammes)" 
+            class="bg-[#F1F1F1] border-b-2 border-slate-500 py-1">
+    
+            <div class="input-errors text-orange-500 h-6">
+                @if ((weight?.touched) && weight?.hasError('required')) {
+                    <p class="text-sm">{{getErrorMessage('required')}}</p>
+                }
+                @if ((weight?.touched) && weight?.hasError('pattern')) {
+                    <p class="text-sm">{{getErrorMessage('number')}}</p>
+                }
+            </div>
+        </div>
+        <div class="flex flex-col mb-1 w-[90%] mx-auto">
+            <label for="formBrand" class="text-sm italic">Marque :</label>
+            <input id="formBrand" type="text" formControlName="brand" required placeholder="Nom de la marque" 
+            class="bg-[#F1F1F1] border-b-2 border-slate-500 py-1">
+    
+            <div class="input-errors text-orange-500 h-6">
+                @if ((brand?.touched) && brand?.hasError('required')) {
+                    <p class="text-sm">{{getErrorMessage('required')}}</p>
+                }
+            </div>
+        </div>
+
+        <div class="flex flex-col mb-1 w-[90%] mx-auto">
+            <label for="formDescription" class="text-sm italic mb-1">Description :</label>
+            <textarea id="formDescription" type="text" formControlName="description" required placeholder="Une description de votre équipement ..." 
+            class="bg-[#F1F1F1] border-2 rounded-md border-slate-500 p-1 h-30 resize-none text-sm" maxLength="500">
+            </textarea>
+
+            <div class="input-errors text-orange-500 h-6">
+                @if ((description?.touched) && description?.hasError('maxLength')) {
+                    <p class="text-sm">{{getErrorMessage('maxLength', 500)}}</p>
+                }
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center w-[90%] mx-auto mb-6">
+            <p class="">Les modifications doivent-elles être rétroactives ?</p>
+
+            <label for="hasConsequences" class="flex items-center cursor-pointer">
+                <input type="checkbox" id="hasConsequences" name="formHasConsequences" formControlName="hasConsequences" class="sr-only peer">
+                <div class="block relative bg-gray-300 w-10 h-6 p-1 rounded-full transition-all duration-300
+                before:absolute before:bg-white before:w-4 before:h-4 before:p-1 before:rounded-full before:transition-all before:duration-300 before:left-1 
+                peer-checked:before:left-5 peer-checked:bg-green-600"></div>
+              </label>
+        </div>
+
+        @if (hasConsequences?.value) {
+            <div class="flex flex-col w-[90%] mx-auto ">
+                <label for="hikeForm-date" class="text-sm italic">Date limite de rétroactivité : </label>
+                <input id="hikeForm-date" type="date" formControlName="consequencesLimitDate"
+                class="bg-[#F1F1F1] border-b-2 border-slate-500 p-1 mb-1">
+                
+                <div class="consequences-infos h-6 text-xs text-yellow-600 text-justify">
+                    L'équipement sera modifié dans les randonnées les plus récentes et allant jusqu'à la date limite. (Si l'équipement est utilisé dedans évidemment)
+                </div>
+            </div>
+        }
+        
+        <div class="btns-container flex justify-center items-center gap-10 mt-6">
+            
+            <button type="submit" [disabled]="this.equipmentForm.invalid" 
+                class="text-white disabled:cursor-not-allowed not-disabled:hover:opacity-80 rounded-md bg-amber-500 px-2 py-3 shadow-md disabled:bg-gray-500 cursor-pointer">
+                Modifier l'équipement
+            </button>
+            
+        </div>
+    </form>
+    </div>
+

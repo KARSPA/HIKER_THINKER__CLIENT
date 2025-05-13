@@ -102,7 +102,9 @@
 </div>
 
 <div class="mt-10 btns-container flex justify-center items-center gap-10">
-    <button disabled class="disabled:bg-gray-500 disabled:cursor-not-allowed py-2 px-3 rounded-md bg-amber-500 text-white not-disabled:hover:opacity-80 cursor-pointer shadow-lg">
+    <button 
+    (click)="openModifyEquipmentModal()"
+    class="disabled:bg-gray-500 disabled:cursor-not-allowed py-2 px-3 rounded-md bg-amber-500 text-white not-disabled:hover:opacity-80 cursor-pointer shadow-lg">
         Modifier
     </button>
     <button 

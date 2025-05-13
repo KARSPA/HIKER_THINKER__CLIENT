@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment';
 import { EquipmentsOrderUpdate } from '../interfaces/equipment/EquipmentOrderUpdate';
 import { Category } from '../interfaces/equipment/Category';
 import { EquipmentDetails } from '../interfaces/equipment/EquipmentDetails';
+import { ModifyEquipmentEvent } from '../interfaces/equipment/ModifyEquipmentEvent';
 
 @Injectable({
   providedIn: 'root'
@@ -73,6 +74,11 @@ export class EquipmentService {
     })
   }
 
+  modifyEquipment(modifyEquipmentValue : ModifyEquipmentEvent){
+    console.log("ID : ", modifyEquipmentValue.equipment.id)
+    return this.httpClient.patch(this.url+`/${modifyEquipmentValue.equipment.id}`, modifyEquipmentValue)
+  }
+
   removeInventoryEquipment(equipmentId : string) : Observable<ResponseModel<string>>{
 
     return this.httpClient.delete<ResponseModel<string>>(this.url+`/${equipmentId}`)
@@ -89,7 +95,6 @@ export class EquipmentService {
 
 
   modifyEquipmentsPosition(payload : EquipmentsOrderUpdate[]) {
-
     // console.log(payload)
     return this.httpClient.patch(`${this.url}`, payload);
   }

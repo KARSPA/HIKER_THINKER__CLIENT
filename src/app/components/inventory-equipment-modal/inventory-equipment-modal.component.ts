@@ -43,8 +43,6 @@ export class InventoryEquipmentModalComponent implements OnInit{
 
     if(!this.equipmentForm.valid) return
 
-      //Remonter l'évènement au parent
-    
       const formValue = this.equipmentForm.value;
 
       const payload: AddEquipment = { 
