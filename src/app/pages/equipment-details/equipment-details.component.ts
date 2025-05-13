@@ -35,7 +35,7 @@ export class EquipmentDetailsComponent implements OnInit{
   private location = inject(Location);
   private route = inject(ActivatedRoute);
 
-  equipment ?: EquipmentDetails;
+  equipment !: EquipmentDetails;
   statistics ?: EquipmentStats;
 
   categories ?: Category[];
@@ -108,10 +108,13 @@ export class EquipmentDetailsComponent implements OnInit{
       data: {categories : this.categories, equipment : this.equipment}
     })
     .subscribe((res)=>{
-      console.log("RETOUR MODAL :", res.equipment)
-      
       this.equipmentService.modifyEquipment(res).subscribe({
-        next:(response)=>console.log(response),
+        next:(response)=>{
+          this.equipment.brand = response.data.brand;
+          this.equipment.weight = response.data.weight;
+          this.equipment.name = response.data.name;
+          this.equipment.description = response.data.description;
+        },
         error:(err)=>console.error(err)
       })
     })

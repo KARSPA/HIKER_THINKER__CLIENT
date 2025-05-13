@@ -49,7 +49,7 @@ export class ModifyEquipmentModalComponent {
     if(!this.equipmentForm.valid) return
 
       const formValue = this.equipmentForm.value;
-      console.log(formValue)
+      // console.log(formValue)
 
       const payload: ModifyEquipmentEvent = { 
         equipment : {
@@ -67,7 +67,7 @@ export class ModifyEquipmentModalComponent {
         consequencesLimitDate : formValue.consequencesLimitDate ? new Date(formValue.consequencesLimitDate) : null
       }
 
-      console.log(payload)
+      // console.log(payload)
   
       this.result.emit(payload)
   

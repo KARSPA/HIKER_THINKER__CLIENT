@@ -76,7 +76,7 @@ export class EquipmentService {
 
   modifyEquipment(modifyEquipmentValue : ModifyEquipmentEvent){
     console.log("ID : ", modifyEquipmentValue.equipment.id)
-    return this.httpClient.patch(this.url+`/${modifyEquipmentValue.equipment.id}`, modifyEquipmentValue)
+    return this.httpClient.patch<ResponseModel<Equipment>>(this.url+`/${modifyEquipmentValue.equipment.id}`, modifyEquipmentValue)
   }
 
   removeInventoryEquipment(equipmentId : string) : Observable<ResponseModel<string>>{
