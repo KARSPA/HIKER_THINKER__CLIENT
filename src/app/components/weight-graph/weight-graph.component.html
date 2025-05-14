@@ -45,14 +45,30 @@
 <div class="graph-tests mt-10 ml-100 border border-orange-300 h-[123px] aspect-square relative flex justify-center items-center">
 
     @if(graphInfos.isUnique){
-        <p>UNIQUE</p>
+        <div class="absolute section h-[121px] aspect-square rounded-full opacity-95 outline-1 outline-black"
+            [ngStyle]="{'background' : graphInfos.infos[0].sectionStyle}">
+            </div>
+            <div class="section-content absolute origin-center z-20 flex flex-col justify-center"
+            [ngStyle]="{'transform' : graphInfos.infos[0].iconStyle}">
+                <img src="assets/category_icons/{{graphInfos.infos[0].category.icon}}.svg" alt="" 
+                class="h-4 aspect-square">
+                <p class="italic text-[10px] font-semibold">{{graphInfos.infos[0].percentage.toFixed(0)}}%</p>
+              </div>
     }
     @else{
         @for(categoryInfos of graphInfos.infos; track $index){
-            <div class="absolute section h-[121px] aspect-square rounded-full opacity-80 outline-1 outline-black"
-            [ngStyle]="{'background' : categoryInfos.sectionStyle}"
-            >
+            <div class="absolute section h-[121px] aspect-square rounded-full opacity-95 outline-1 outline-black"
+            [ngStyle]="{'background' : categoryInfos.sectionStyle}">
             </div>
+            <span class="absolute -translate-y-1/2 bg-black h-[61px] w-[1px] z-10 origin-bottom"
+            [ngStyle]="{'transform' : categoryInfos.endBorderRotationStyle}">
+            </span>
+            <div class="section-content absolute origin-center z-20 flex flex-col justify-center"
+            [ngStyle]="{'transform' : categoryInfos.iconStyle}">
+                <img src="assets/category_icons/{{categoryInfos.category.icon}}.svg" alt="" 
+                class="h-4 aspect-square">
+                <p class="italic text-[10px] font-semibold">{{categoryInfos.percentage.toFixed(0)}}%</p>
+              </div>
         }
     }
 

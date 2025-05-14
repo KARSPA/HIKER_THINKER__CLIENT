@@ -6,4 +6,6 @@ export interface GraphCategory{
     startAngle : number;
     endAngle : number;
     sectionStyle : string;
+    endBorderRotationStyle : string;
+    iconStyle : string;
 }

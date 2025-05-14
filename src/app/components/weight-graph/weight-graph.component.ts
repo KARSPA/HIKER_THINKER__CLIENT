@@ -49,7 +49,9 @@ export class WeightGraphComponent implements OnChanges{
         percentage,
         startAngle,
         endAngle,
-        sectionStyle : ""}
+        sectionStyle : `conic-gradient(from ${startAngle}deg, ${this.getCategoryColor(categories[0].icon)} ${endAngle - startAngle}deg, transparent 0)`,
+        endBorderRotationStyle : "",
+        iconStyle : ""}
       )
 
       baseAngle = endAngle;
@@ -67,13 +69,18 @@ export class WeightGraphComponent implements OnChanges{
       let startAngle = baseAngle
       let endAngle = Math.min(Math.ceil(baseAngle + percentage*3.6),360);
 
+      let rotateAngle = (startAngle+endAngle)/2-90
+      console.log(rotateAngle)
+
       this.graphInfos.infos.push({
               category : category,
               percentage,
               startAngle,
               endAngle,
-              sectionStyle : `conic-gradient(from ${startAngle}deg, ${this.getCategoryColor(category.icon)} ${endAngle - startAngle}deg, transparent 0)`}
-            )
+              sectionStyle : `conic-gradient(from ${startAngle}deg, ${this.getCategoryColor(category.icon)} ${endAngle - startAngle}deg, transparent 0)`,
+              endBorderRotationStyle : `rotate(${endAngle}deg)`,
+              iconStyle : `rotate(${rotateAngle}deg) translateX(35px) rotate(${-rotateAngle}deg)`
+      })
 
       baseAngle = endAngle;
       })
