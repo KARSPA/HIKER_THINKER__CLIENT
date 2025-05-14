@@ -12,10 +12,11 @@ import { HikeModalComponent } from '../../components/hike-modal/hike-modal.compo
 import { HikeEvent } from '../../interfaces/hike/HikeEvent';
 import { BasicLoaderComponent } from "../../_partials/basic-loader/basic-loader.component";
 import { Inventory } from '../../interfaces/Inventory';
+import { WeightGraphComponent } from "../../components/weight-graph/weight-graph.component";
 
 @Component({
   selector: 'app-hike-details',
-  imports: [HikeDetailsCardComponent, HikeInventoryComponent, BasicLoaderComponent],
+  imports: [HikeDetailsCardComponent, HikeInventoryComponent, BasicLoaderComponent, WeightGraphComponent],
   templateUrl: './hike-details.component.html'
 })
 export class HikeDetailsComponent implements OnInit{
