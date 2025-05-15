@@ -1,48 +1,5 @@
-<div class="graph-tests mt-10 ml-100 border border-blue-300 h-[123px] aspect-square relative flex justify-center items-center">
-    <div class="absolute section h-[121px] aspect-square rounded-full opacity-80 bg-conic from-green-600 via-green-600 via-[33.33%] to-transparent to-[0%] outline-1 outline-black">
-    </div>
-    <div class="section-content absolute origin-center z-20 transform-[rotate(-30deg)_translateX(35px)_rotate(30deg)] flex flex-col justify-center">
-      <img src="assets/category_icons/icon_backpack.svg" alt="" 
-      class=" h-4 aspect-square ">
-      <p class="italic text-[10px] font-semibold">33%</p>
-    </div>
-  
-    <span class="absolute -translate-y-1/2 bg-black h-[61px] w-[1px] z-10"></span>
-    <span class="absolute -translate-y-1/2 bg-black h-[61px] w-[1px] z-10 origin-bottom rotate-120"></span>
-  
-    <div class="absolute section h-[121px] aspect-square rounded-full opacity-80 bg-conic-120 from-blue-600 via-blue-600 via-[20%] to-transparent to-[0%] outline-1 outline-black">
-    </div>
-  
-    <div class="section-content absolute origin-center z-20 transform-[rotate(66deg)_translateX(35px)_rotate(-66deg)] flex flex-col justify-center">
-      <img src="assets/category_icons/icon_bottle.svg" alt="" 
-      class="h-4 aspect-square ">
-      <p class="italic text-[10px] font-semibold">20%</p>
-    </div>
-  
-    <span class="absolute -translate-y-1/2 bg-black h-[61px] w-[1px] z-10 origin-bottom rotate-192"></span>
-  
-  
-    <div class="absolute section h-[121px] aspect-square rounded-full opacity-80 bg-conic-192 from-red-600 via-red-600 via-[25%] to-transparent to-[0%] outline-1 outline-black">
-    </div>
-    <div class="section-content absolute origin-center z-20 transform-[rotate(147deg)_translateX(35px)_rotate(-147deg)] flex flex-col justify-center">
-      <img src="assets/category_icons/icon_bed.svg" alt="" 
-      class="h-4 aspect-square ">
-      <p class="italic text-[10px] font-semibold">25%</p>
-    </div>
-    <span class="absolute -translate-y-1/2 bg-black h-[61px] w-[1px] z-10 origin-bottom rotate-282"></span>
-  
-  
-    <div class="absolute section h-[121px] aspect-square rounded-full opacity-80 bg-conic-282 from-yellow-400 via-yellow-400 via-[21.66%] to-transparent to-[0%] outline-1 outline-black">
-    </div>
-    <div class="section-content absolute origin-center z-20 transform-[rotate(231deg)_translateX(35px)_rotate(-231deg)] flex flex-col justify-center">
-      <img src="assets/category_icons/icon_star.svg" alt="" 
-      class="h-4 aspect-square ">
-      <p class="italic text-[10px] font-semibold">25%</p>
-    </div>
-  </div>
 
-
-<div class="graph-tests mt-10 ml-100 border border-orange-300 h-[123px] aspect-square relative flex justify-center items-center">
+<div class="mx-auto h-[123px] aspect-square relative flex justify-center items-center">
 
     @if(graphInfos.isUnique){
         <div class="absolute section h-[121px] aspect-square rounded-full opacity-95 outline-1 outline-black"
@@ -67,7 +24,7 @@
             [ngStyle]="{'transform' : categoryInfos.iconStyle}">
                 <img src="assets/category_icons/{{categoryInfos.category.icon}}.svg" alt="" 
                 class="h-4 aspect-square">
-                <p class="italic text-[10px] font-semibold">{{categoryInfos.percentage.toFixed(0)}}%</p>
+                <p class="italic text-[10px] font-semibold text-[#F1F1F1]">{{categoryInfos.percentage.toFixed(0)}}%</p>
               </div>
         }
     }

@@ -123,7 +123,7 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
 
     this.categoryService.modifyCategoriesOrder(this.inventory.categories).pipe(takeUntil(this.destroy$)).subscribe({
       next:(res)=>{
-        // console.log(res)
+        this.notifyInventoryUpdated()
       },
       error:(err)=>{
         console.log(err)
@@ -140,7 +140,7 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
     // this.categoryService.addCategoriesUpdate(this.inventory.categories) // Persister changement
     this.categoryService.modifyCategoriesOrder(this.inventory.categories).pipe(takeUntil(this.destroy$)).subscribe({
       next:(res)=>{
-        // console.log(res)
+        this.notifyInventoryUpdated()
       },
       error:(err)=>{
         console.log(err)
