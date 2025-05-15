@@ -16,7 +16,7 @@ import { WeightGraphComponent } from "../../components/weight-graph/weight-graph
 
 @Component({
   selector: 'app-hike-details',
-  imports: [HikeDetailsCardComponent, HikeInventoryComponent, BasicLoaderComponent, WeightGraphComponent],
+  imports: [HikeDetailsCardComponent, HikeInventoryComponent, BasicLoaderComponent],
   templateUrl: './hike-details.component.html'
 })
 export class HikeDetailsComponent implements OnInit{
