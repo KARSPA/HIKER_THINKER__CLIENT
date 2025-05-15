@@ -1,7 +1,6 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Inventory } from '../../interfaces/Inventory';
 import { Hike } from '../../interfaces/hike/Hike';
-import { GraphCategory } from '../../interfaces/graph/GraphCategory';
 import { GraphInfos } from '../../interfaces/graph/GraphInfos';
 import { NgStyle } from '@angular/common';
 import { ICON_COLORS, IconKey } from '../../_helpers/records/icon_color';
@@ -20,11 +19,19 @@ export class WeightGraphComponent implements OnChanges{
   graphInfos : GraphInfos = {isUnique : true, infos : []}
 
   // Méthode ici pour construire les infos nécessaire à la construction du graph dans un objet spécifique ...
-  ngOnChanges(): void {
+  ngOnChanges(changes : SimpleChanges): void {
+    this.eraseGraph()
+    if (changes['inventory'] && !changes['inventory'].firstChange){
+      this.calculateGraphInfos()
+    }
     this.calculateGraphInfos();
     console.log(this.inventory)
     console.log(this.hike)
     console.log(this.graphInfos)
+  }
+  
+  eraseGraph(){
+    this.graphInfos = {isUnique : true, infos : []}
   }
 
 

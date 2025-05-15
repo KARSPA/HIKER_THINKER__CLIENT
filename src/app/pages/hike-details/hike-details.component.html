@@ -10,6 +10,7 @@
         <app-hike-inventory 
         [inventory]="inventory" 
         [hike]="hike"
+        (inventoryChange)="inventory = $event"
         />
     </div>
     <app-weight-graph [hike]="hike" [inventory]="inventory"/>

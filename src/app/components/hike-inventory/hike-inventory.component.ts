@@ -29,6 +29,8 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
   @Input() inventory : Inventory = {categories: [], equipments : []};
   @Input() hike !: Hike;
 
+  @Output() inventoryChange = new EventEmitter<Inventory>();
+
   private hikeService : HikeService = inject(HikeService)
   private inventoryService : InventoryService = inject(InventoryService)
   private categoryService : CategoryService = inject(CategoryService)
@@ -56,6 +58,8 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
         if(categoryIndex != -1) this.inventory.categories[categoryIndex].accumulatedWeight += equipment.weight;
 
         this.hike.totalWeight += equipment.weight
+
+        this.notifyInventoryUpdated();
       })
 
       // S'abonner au retrait d'équipement
@@ -71,7 +75,9 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
         const categoryIndex = this.inventory.categories.findIndex(cat => cat.id === equipment.categoryId);
         if(categoryIndex != -1) this.inventory.categories[categoryIndex].accumulatedWeight -= equipment.weight;
 
-        this.hike.totalWeight -= equipment.weight
+        this.hike.totalWeight -= equipment.weight;
+
+        this.notifyInventoryUpdated();
       })
 
 
@@ -80,6 +86,8 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
         let categoryIndex = this.inventory.categories.findIndex(cat => cat.id === category.id);
         if(categoryIndex != -1) this.inventory.categories.splice(categoryIndex, 1, category); // Si modification, on remplace 
         else this.inventory.categories.unshift(category) // SI ajout l'insérer au début (order à 0 à la création)  
+
+        this.notifyInventoryUpdated();
       })
 
       //S'abonner aux évènement de suppression d'une catégorie
@@ -95,6 +103,8 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
 
         let categoryIndex = this.inventory.categories.findIndex(cat => cat.id === categoryId);
         this.inventory.categories.splice(categoryIndex, 1)
+
+        this.notifyInventoryUpdated();
       })
   }
 
@@ -319,12 +329,22 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
     this.equipmentService.modifyEquipmentsPosition(updatePayload).subscribe({
       next:(res)=>{
         // console.log(res)
+        this.notifyInventoryUpdated();
       },
       error:(err)=>{
         console.log(err)
       }
     });
     
+  }
+
+
+  private notifyInventoryUpdated(){
+    this.inventory = {
+      categories : [...this.inventory.categories],
+      equipments : [...this.inventory.equipments]
+    };
+    this.inventoryChange.emit(this.inventory)
   }
 
 }
