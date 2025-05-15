@@ -16,10 +16,11 @@ import { InventoryService } from '../../services/inventory.service';
 import { Inventory } from '../../interfaces/Inventory';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Subject, takeUntil } from 'rxjs';
+import { ClickStopPropagationDirective } from '../../_helpers/directives/click-stop-propagation.directive';
 
 @Component({
   selector: 'app-hike-inventory',
-  imports: [EquipmentCardComponent, DragDropModule],
+  imports: [EquipmentCardComponent, DragDropModule, ClickStopPropagationDirective],
   templateUrl: './hike-inventory.component.html'
 })
 export class HikeInventoryComponent implements OnInit, OnDestroy{
