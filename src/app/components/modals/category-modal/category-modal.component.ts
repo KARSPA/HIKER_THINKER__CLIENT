@@ -79,7 +79,7 @@ export class CategoryModalComponent implements OnInit{
       ...this.categoryForm.value //On affecte les valeurs du formulaire qui viendront écrasées celle de la catégorie de base
     }
 
-    console.log(payload)
+    // console.log(payload)
 
     this.result.emit({
       action : this.category?.id ? 'update' : 'create',
