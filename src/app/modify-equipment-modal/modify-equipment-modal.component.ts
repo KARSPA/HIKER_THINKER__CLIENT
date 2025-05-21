@@ -30,7 +30,7 @@ export class ModifyEquipmentModalComponent {
         description : this.equipment.description
       })
 
-      console.log(this.equipment)
+      // console.log(this.equipment)
   }
 
   equipmentForm = new FormGroup({

@@ -25,9 +25,9 @@ export class WeightGraphComponent implements OnChanges{
       this.calculateGraphInfos()
     }
     this.calculateGraphInfos();
-    console.log(this.inventory)
-    console.log(this.hike)
-    console.log(this.graphInfos)
+    // console.log(this.inventory)
+    // console.log(this.hike)
+    // console.log(this.graphInfos)
   }
   
   eraseGraph(){
@@ -77,7 +77,7 @@ export class WeightGraphComponent implements OnChanges{
       let endAngle = Math.min(Math.ceil(baseAngle + percentage*3.6),360);
 
       let rotateAngle = (startAngle+endAngle)/2-90
-      console.log(rotateAngle)
+      // console.log(rotateAngle)
 
       this.graphInfos.infos.push({
               category : category,
