@@ -8,4 +8,6 @@ export interface GraphCategory{
     sectionStyle : string;
     endBorderRotationStyle : string;
     iconStyle : string;
+    iconFallbackStyle : string;
+    percentStyle : string;
 }

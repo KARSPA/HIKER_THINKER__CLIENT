@@ -20,13 +20,27 @@
             <span class="absolute -translate-y-1/2 bg-black h-[61px] w-[1px] z-10 origin-bottom"
             [ngStyle]="{'transform' : categoryInfos.endBorderRotationStyle}">
             </span>
-            <div class="section-content absolute origin-center z-20 flex flex-col justify-center"
-            [ngStyle]="{'transform' : categoryInfos.iconStyle}">
+
+            @if(categoryInfos.percentage > 10 ){
+                <div class="section-content absolute origin-center z-20 flex flex-col justify-center"
+                    [ngStyle]="{'transform' : categoryInfos.iconStyle}">
+                    <img src="assets/category_icons/{{categoryInfos.category.icon}}.svg" alt="" 
+                    class="h-4 aspect-square">
+                    <p class="italic text-[8px] font-semibold text-[#F1F1F1]">{{categoryInfos.percentage.toFixed(0)}}%</p>
+                </div>
+            }
+            @else{
                 <img src="assets/category_icons/{{categoryInfos.category.icon}}.svg" alt="" 
-                class="h-4 aspect-square">
-                <p class="italic text-[10px] font-semibold text-[#F1F1F1]">{{categoryInfos.percentage.toFixed(0)}}%</p>
-              </div>
+                class="h-4 aspect-square absolute origin-center z-20" [ngStyle]="{'transform' : categoryInfos.iconFallbackStyle}">
+                <p class="italic text-[10px] font-semibold text-[#F1F1F1] absolute origin-center z-20"
+                [ngStyle]="{'transform' : categoryInfos.percentStyle}">
+                {{categoryInfos.percentage.toFixed(0)}}%
+                </p>
+            }
+           
         }
     }
 
   </div>
+
+    
