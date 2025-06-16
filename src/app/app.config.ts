@@ -37,13 +37,14 @@ registerLocaleData(localeFr);
 export const appConfig: ApplicationConfig = {
   providers: [
     {
-      provide: APP_INITIALIZER,
-      useFactory: initializeApp,
-      deps: [AuthService, Router],
-      multi: true
+        provide: APP_INITIALIZER,
+        useFactory: initializeApp,
+        deps: [AuthService, Router],
+        multi: true
     },
     provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withComponentInputBinding()),
-    {provide: LOCALE_ID, useValue: 'fr-FR'}]
+    { provide: LOCALE_ID, useValue: 'fr-FR' }
+]
 };

@@ -1,0 +1,130 @@
+
+<div class="border border-stone-300 bg-gray-200 rounded-md p-2 flex flex-col gap-1 mt-6 mb-1 shadow-md">
+   <!-- Filtre par nom de produit -->
+  <div class="flex items-baseline justify-between gap-2">
+    <label for="sourcesNameFilter" class="text-sm w-[40%]">
+      Nom de l'équipement :
+    </label>
+    <input
+      id="sourcesNameFilter"
+      name="name"
+      type="text"
+      placeholder="Filtrer par nom"
+      class="border px-2 py-1 rounded flex-grow bg-white"
+      [value]="nameFilter()"
+      (change)="nameFilter.set($any($event.target).value)"
+    />
+  </div>
+
+   <!-- Filtre par nom de marque -->
+  <div class="flex items-baseline justify-between gap-2">
+    <label for="sourcesBrandFilter" class="text-sm w-[40%]">
+      Marque de l'équipement :
+    </label>
+    <input
+      id="sourcesBrandFilter"
+      name="brand"
+      type="text"
+      placeholder="Filtrer par marque"
+      class="border px-2 py-1 rounded flex-grow bg-white"
+      [value]="brandFilter()"
+      (change)="brandFilter.set($any($event.target).value)"
+    />
+  </div>
+  
+
+  <div class="flex gap-2">
+    <!-- Min weight -->
+    <div class="flex items-baseline justify-between flex-grow gap-1">
+      <label for="sourcesMinWeightFilter" class="text-sm w-[60%]">
+        Poids minimal (en g) :
+      </label>
+      <input
+        id="sourcesMinWeightFilter"
+        name="minWeight"
+        type="number"
+        class="w-20 border px-2 py-1 rounded flex-grow bg-white"
+        [value]="minWeight()"
+        (change)="minWeight.set($any($event.target).valueAsNumber)"
+      />
+    </div>
+    <!-- Max weight -->
+    <div class="flex items-baseline justify-between flex-grow gap-1">
+      <label for="sourcesMaxWeightFilter" class="text-sm w-[60%]">
+        Poids maximal (en g) :
+      </label>
+      <input
+        id="sourcesMaxWeightFilter"
+        name="maxWeight"
+        type="number"
+        class="w-20 border px-2 py-1 rounded flex-grow bg-white"
+        [value]="maxWeight()"
+        (change)="maxWeight.set($any($event.target).valueAsNumber)"
+      />
+    </div>
+  </div>
+
+</div>
+
+<div class="request-infos-navigation flex justify-between w-full min-w-0 my-2">
+
+  <p>{{resultsCount}} résultat{{[0,1].includes(resultsCount) ? '' : 's'}}</p>
+
+  <div class="order-buttons flex gap-3">
+    <div class="order-by flex gap-1">
+      <p>Tri :</p>
+      <label for="order" class="inline-flex items-center rounded-md cursor-pointer"
+        >
+        <input id="order" type="checkbox" class="hidden peer">
+        <span 
+        (click)="this.switchSortBy()"
+        class="px-2 py-1 text-xs rounded-l-md text-black bg-amber-500 peer-checked:bg-gray-300 peer-checked:text-gray-100 peer-checked:opacity-60">Alphabétique</span>
+        <span 
+        (click)="this.switchSortBy()"
+        class="px-2 py-1 text-xs rounded-r-md opacity-60 text-gray-100 bg-gray-300 peer-checked:bg-amber-500 peer-checked:text-black peer-checked:opacity-100">Poids</span>
+      </label>
+    </div>
+    <div class="ordering-buttons flex gap-1">
+      <label for="ordering" class="inline-flex items-center rounded-md cursor-pointer "
+        >
+        <input id="ordering" type="checkbox" class="hidden peer">
+
+        <span 
+        (click)="this.switchSortDir()"
+        class="px-2 py-1 text-sm rounded-l-md text-black bg-amber-500 peer-checked:bg-gray-300 peer-checked:text-gray-100 peer-checked:opacity-60">
+          <img src="assets/sort-descending_icon.svg" alt="Ordre décroissant" class="h-4">
+        </span>
+
+        <span 
+        (click)="this.switchSortDir()"
+        class="px-2 py-1 text-sm rounded-r-md opacity-60 text-gray-100 bg-gray-300 peer-checked:bg-amber-500 peer-checked:text-black peer-checked:opacity-100">
+          <img src="assets/sort-ascending_icon.svg" alt="Ordre croissant" class="h-4">
+      </span>
+      </label>
+    </div>
+  </div>
+
+  <div class="page-buttons min-w-[80px] flex justify-between gap-1">
+    <button 
+    [disabled]="this.pageNumber() <= 0" 
+    (click)="prevPage()" 
+    class=" disabled:bg-gray-400 disabled:opacity-30 not-disabled:cursor-pointer rounded-full 
+    flex items-center justify-center bg-amber-500 aspect-square shadow-sm">
+      <img src="assets/back-chevron.svg" alt="Bouton de page précédente" class="h-4">
+    </button>
+    <p>{{this.pageNumber()+1}}</p>
+    <button 
+    [disabled]="this.pageNumber() == this.numberOfPages()" 
+    (click)="nextPage()" 
+    class=" disabled:bg-gray-400 disabled:opacity-30 not-disabled:cursor-pointer rounded-full 
+    flex items-center justify-center bg-amber-500 aspect-square shadow-sm">
+      <img src="assets/back-chevron.svg" alt="Bouton de page suivante" class="h-4 rotate-180">
+    </button>
+  </div>
+</div>
+
+<div class="grid grid-cols-3 gap-2 h-[460px] overflow-y-scroll rounded-md">
+    @for(equipment of this.equipments; track equipment.id){
+        <app-source-equipment-card [sourceEquipment]="equipment" (choosedEquipment)="chooseEquipment($event)"/>
+    }
+</div>

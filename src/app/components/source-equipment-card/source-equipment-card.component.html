@@ -1,0 +1,22 @@
+
+    
+    <div class="bg-blue-200 h-full rounded-md bg-clip-padding backdrop-filter backdrop-blur-xl backdrop-opacity-50 border border-gray-100 px-3 pt-2 pb-3
+    flex flex-col justify-between gap-4">
+    
+        <div class="flex flex-col items-start gap-1 flex-grow">
+            <p class="font-semibold line-clamp-3 flex-grow">{{sourceEquipment.name}}</p>
+            <p>{{sourceEquipment.brand}}</p>
+            <p class="font-semibold italic">{{sourceEquipment.weight}} g</p>
+        </div>
+        <div class="links flex flex-col gap-1">
+            <a [href]="sourceEquipment.url" target="_blank" class="text-center px-2 py-1 rounded-sm bg-[#3643ba] text-white min-w-[100px] cursor-pointer hover:opacity-90 shadow-md shadow-stone-500 flex gap-2 justify-center items-center">
+                <p>Voir</p>
+                <img src="assets/out-link-white_icon.svg" alt="Voir l'équipement sur le site du forunisseur" class="h-4 rotate-90">
+            </a>
+            <button type="button"
+            (click)="emitChoosedEquipmentEvent()"
+            class="text-center px-2 py-1 rounded-sm bg-amber-500 text-white min-w-[100px] cursor-pointer hover:opacity-90 shadow-md shadow-stone-500">
+                Choisir
+            </button>
+        </div>
+    </div>

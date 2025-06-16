@@ -1,16 +1,16 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, effect, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { InventoryService } from '../../services/inventory.service';
 import { Category } from '../../interfaces/equipment/Category';
-import { EquipmentService } from '../../services/equipment.service';
 import { ModalService } from '../../services/modal.service';
 import { EquipmentEvent } from '../../interfaces/equipment/EquipmentEvent';
 import { AddEquipment } from '../../interfaces/equipment/AddEquipment';
+import { SourceEquipmentListComponent } from '../source-equipment-list/source-equipment-list.component';
+import { SourceEquipmentStore } from '../../services/stores/source-equipment-store';
 
 @Component({
   selector: 'app-inventory-equipment-modal',
-  imports: [ReactiveFormsModule],
-  templateUrl: './inventory-equipment-modal.component.html'
+  imports: [ReactiveFormsModule, SourceEquipmentListComponent],
+  templateUrl: './inventory-equipment-modal.component.html',
 })
 export class InventoryEquipmentModalComponent implements OnInit{
 
@@ -19,9 +19,25 @@ export class InventoryEquipmentModalComponent implements OnInit{
   @Output() result = new EventEmitter<EquipmentEvent>(); // Va remonter les évènements (au submit) pour déporter la logique métier
 
   
+  readonly sourceEquipmentStore = inject(SourceEquipmentStore);
   private modalService : ModalService = inject(ModalService);
 
   equipmentHttpError = null;
+
+  constructor() {
+    // Cet effect vit dans le contexte d’injection du constructeur
+    effect(() => {
+      const sel = this.sourceEquipmentStore.selected();
+      
+      this.equipmentForm.patchValue({
+        name : sel.name,
+        weight : sel.weight.toFixed(0),
+        description : sel.description,
+        brand : sel.brand,
+      });
+      
+    });
+  }
 
   ngOnInit(): void {
       this.equipmentForm.patchValue({
@@ -30,13 +46,16 @@ export class InventoryEquipmentModalComponent implements OnInit{
   }
 
   equipmentForm = new FormGroup({
-    name : new FormControl('', [Validators.required, Validators.maxLength(30)]),
+    name : new FormControl('', [Validators.required]),
     weight : new FormControl('', [Validators.required, Validators.pattern("^(?:[1-9]\\d{0,3}|10000)$")]),
     description : new FormControl('', [Validators.maxLength(500)]),
     brand : new FormControl('', [Validators.required, Validators.maxLength(20)]),
     categoryName : new FormControl('', [Validators.required]),
   })
 
+  reinitializeState(){
+    this.sourceEquipmentStore.clear()
+  }
 
 
   onSubmit(){
@@ -59,7 +78,8 @@ export class InventoryEquipmentModalComponent implements OnInit{
         action : 'create',
         equipment : payload
       })
-  
+
+      this.sourceEquipmentStore.clear();
       this.modalService.closeModal();
   }
 
