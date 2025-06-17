@@ -155,7 +155,7 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
   
     const requestType = category?.id ? 'Modification':'Ajout';
 
-    console.log('depuis page : ', category)
+    // console.log('depuis page : ', category)
 
     this.modalService.openModal<CategoryModalComponent, CategoryEvent>({
       component: CategoryModalComponent,

@@ -19,7 +19,7 @@ export class EquipmentCardComponent {
 
 
   onRemoveClick(){ // Transmet le clic du bouton au parent pour qu'il gère en fonctione de la page sur laquelle se situe ce composant.
-    console.log("Équipement : ", this.equipment)
+    // console.log("Équipement : ", this.equipment)
     this.delete.emit(this.equipment!)
   }
 

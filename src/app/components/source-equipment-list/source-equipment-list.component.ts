@@ -61,6 +61,31 @@ export class SourceEquipmentListComponent {
     this.store.select(equipment)
   }
 
+  changeInputValueAndResetPageNumber(signalName : "brand"|"name"|"minWeight"|"maxWeight", event : Event){
+
+    const input = event.target as HTMLInputElement;
+    const raw = input.value;
+
+    switch (signalName) {
+      case 'brand':
+        this.brandFilter.set(raw);
+        break;
+      case 'name':
+        this.nameFilter.set(raw);
+        break;
+      case 'minWeight':
+        this.minWeight.set(Number(raw) || NaN);
+        break;
+      case 'maxWeight':
+        this.maxWeight.set(Number(raw) || NaN);
+        break;
+    }
+    this.pageNumber.set(0)
+  }
+
+
+
+
   switchSortBy(){
     let newValue : 'name'|'weight' = (this.sortBy() == 'name' ? 'weight' : 'name');
     this.sortBy.set(newValue)

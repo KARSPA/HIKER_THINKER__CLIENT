@@ -12,7 +12,8 @@
       placeholder="Filtrer par nom"
       class="border px-2 py-1 rounded flex-grow bg-white"
       [value]="nameFilter()"
-      (change)="nameFilter.set($any($event.target).value)"
+      (change)="changeInputValueAndResetPageNumber('name', $event)"
+
     />
   </div>
 
@@ -28,7 +29,7 @@
       placeholder="Filtrer par marque"
       class="border px-2 py-1 rounded flex-grow bg-white"
       [value]="brandFilter()"
-      (change)="brandFilter.set($any($event.target).value)"
+      (change)="changeInputValueAndResetPageNumber('brand', $event)"
     />
   </div>
   
@@ -45,7 +46,8 @@
         type="number"
         class="w-20 border px-2 py-1 rounded flex-grow bg-white"
         [value]="minWeight()"
-        (change)="minWeight.set($any($event.target).valueAsNumber)"
+        (change)="changeInputValueAndResetPageNumber('minWeight', $event)"
+
       />
     </div>
     <!-- Max weight -->
@@ -59,7 +61,8 @@
         type="number"
         class="w-20 border px-2 py-1 rounded flex-grow bg-white"
         [value]="maxWeight()"
-        (change)="maxWeight.set($any($event.target).valueAsNumber)"
+        (change)="changeInputValueAndResetPageNumber('maxWeight', $event)"
+
       />
     </div>
   </div>

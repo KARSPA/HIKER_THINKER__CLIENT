@@ -32,9 +32,6 @@
                     @if ((name?.touched) && name?.hasError('required')) {
                         <p class="text-sm">{{getErrorMessage('required')}}</p>
                     }
-                    @if (name?.hasError('maxlength')) {
-                        <p class="text-sm">{{getErrorMessage('maxLength', 50)}}</p>
-                    }
                 </div>
             </div>
 

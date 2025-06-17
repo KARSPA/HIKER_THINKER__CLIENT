@@ -55,12 +55,10 @@ export class EquipmentService {
     }
   }
 
-  
 
   getEquipmentById(equipmentId : string) : Observable<ResponseModel<EquipmentDetails>>{
     return this.httpClient.get<ResponseModel<EquipmentDetails>>(this.url+`/${equipmentId}`)
   }
-
 
 
   addInventoryEquipment(equipmentFormValue : any) : Observable<ResponseModel<Equipment>>{
@@ -70,7 +68,7 @@ export class EquipmentService {
       description : equipmentFormValue.description,
       brand : equipmentFormValue.brand,
       categoryName : equipmentFormValue.categoryName,
-      sourceId : null
+      sourceId : equipmentFormValue.sourceId
     })
   }
 
