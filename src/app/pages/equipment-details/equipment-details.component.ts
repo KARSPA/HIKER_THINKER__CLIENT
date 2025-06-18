@@ -1,10 +1,10 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { Equipment } from '../../interfaces/equipment/Equipment';
 import { EquipmentService } from '../../services/equipment.service';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterLink } from '@angular/router';
 import { EquipmentCardComponent } from '../../components/equipment-card/equipment-card.component';
 import { ModalService } from '../../services/modal.service';
-import { RemoveEquipmentConfirmModalComponent } from '../../components/remove-equipment-confirm-modal/remove-equipment-confirm-modal.component';
+
 import { InventoryService } from '../../services/inventory.service';
 import { EquipmentDetails } from '../../interfaces/equipment/EquipmentDetails';
 import { StatisticsService } from '../../services/statistics.service';
@@ -12,19 +12,22 @@ import { EquipmentStats } from '../../interfaces/statistics/EquipmentStats';
 import { BasicLoaderComponent } from '../../_partials/basic-loader/basic-loader.component';
 import { NumberFormatPipe } from '../../_helpers/pipes/number-format.pipe';
 import { DecimalPipe, Location, PercentPipe } from '@angular/common';
-import { filter } from 'rxjs';
-import { ModifyEquipmentModalComponent } from '../../modify-equipment-modal/modify-equipment-modal.component';
+import { filter, Subject, takeUntil } from 'rxjs';
 import { Category } from '../../interfaces/equipment/Category';
 import { CategoryService } from '../../services/category.service';
 import { ModifyEquipmentEvent } from '../../interfaces/equipment/ModifyEquipmentEvent';
 import { EquipmentEvent } from '../../interfaces/equipment/EquipmentEvent';
+import { ModifyEquipmentModalComponent } from '../../components/modals/modify-equipment-modal/modify-equipment-modal.component';
+import { RemoveEquipmentConfirmModalComponent } from '../../components/modals/remove-equipment-confirm-modal/remove-equipment-confirm-modal.component';
 
 @Component({
   selector: 'app-equipment-details',
   imports: [RouterLink, BasicLoaderComponent, DecimalPipe],
   templateUrl: './equipment-details.component.html'
 })
-export class EquipmentDetailsComponent implements OnInit{
+export class EquipmentDetailsComponent implements OnInit, OnDestroy{
+  
+  private destroy$ = new Subject<void>();
   
   private equipmentService = inject(EquipmentService);
   private inventoryService = inject(InventoryService);
@@ -41,6 +44,11 @@ export class EquipmentDetailsComponent implements OnInit{
   categories ?: Category[];
 
   loaderActive : boolean = true;
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   ngOnInit(): void {
 
@@ -78,10 +86,8 @@ export class EquipmentDetailsComponent implements OnInit{
     });
 
     
-
-
     // S'abonner à la suppression
-    this.inventoryService.equipmentRemove$.subscribe({
+    this.inventoryService.equipmentRemove$.pipe(takeUntil(this.destroy$)).subscribe({
       next:(equipmentId)=>{
         this.router.navigate(['/inventory'])
       }

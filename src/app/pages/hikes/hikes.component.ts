@@ -3,7 +3,7 @@ import { HikeService } from '../../services/hike.service';
 import { Hike } from '../../interfaces/hike/Hike';
 import { HikeCardComponent } from '../../components/hike-card/hike-card.component';
 import { ModalService } from '../../services/modal.service';
-import { HikeModalComponent } from '../../components/hike-modal/hike-modal.component';
+import { HikeModalComponent } from '../../components/modals/hike-modal/hike-modal.component';
 import { HikeEvent } from '../../interfaces/hike/HikeEvent';
 import { BasicLoaderComponent } from "../../_partials/basic-loader/basic-loader.component";
 

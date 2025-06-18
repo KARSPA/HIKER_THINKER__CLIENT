@@ -1,11 +1,11 @@
 import { Component, effect, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Category } from '../../interfaces/equipment/Category';
-import { ModalService } from '../../services/modal.service';
-import { EquipmentEvent } from '../../interfaces/equipment/EquipmentEvent';
-import { AddEquipment } from '../../interfaces/equipment/AddEquipment';
-import { SourceEquipmentListComponent } from '../source-equipment-list/source-equipment-list.component';
-import { SourceEquipmentStore } from '../../services/stores/source-equipment-store';
+import { Category } from '../../../interfaces/equipment/Category';
+import { ModalService } from '../../../services/modal.service';
+import { EquipmentEvent } from '../../../interfaces/equipment/EquipmentEvent';
+import { AddEquipment } from '../../../interfaces/equipment/AddEquipment';
+import { SourceEquipmentListComponent } from '../../source-equipment-list/source-equipment-list.component';
+import { SourceEquipmentStore } from '../../../services/stores/source-equipment-store';
 
 @Component({
   selector: 'app-inventory-equipment-modal',

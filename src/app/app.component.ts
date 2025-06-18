@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./_partials/header/header.component";
 import { ModalContainerComponent } from './components/modals/modal-container/modal-container.component';
+import { environment } from '../environments/environment.development';
 
 @Component({
   selector: 'app-root',
@@ -9,5 +10,4 @@ import { ModalContainerComponent } from './components/modals/modal-container/mod
   templateUrl: './app.component.html'
 })
 export class AppComponent{
-  title = 'HikerThinker';
 }

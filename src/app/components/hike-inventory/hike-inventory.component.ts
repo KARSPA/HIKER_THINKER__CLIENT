@@ -9,7 +9,7 @@ import { ModalService } from '../../services/modal.service';
 import { CategoryModalComponent } from '../modals/category-modal/category-modal.component';
 import { CategoryEvent } from '../../interfaces/equipment/CategoryEvent';
 import { HikeService } from '../../services/hike.service';
-import { AddEquipmentModalComponent } from '../add-equipment-modal/add-equipment-modal.component';
+import { AddEquipmentModalComponent } from '../modals/add-equipment-modal/add-equipment-modal.component';
 import { EquipmentEvent } from '../../interfaces/equipment/EquipmentEvent';
 import { RefEquipment } from '../../interfaces/equipment/RefEquipment';
 import { InventoryService } from '../../services/inventory.service';

@@ -1,10 +1,10 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { Hike } from '../../interfaces/hike/Hike';
+import { Hike } from '../../../interfaces/hike/Hike';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { validDurationUnit } from '../../_helpers/validators/durationUnit';
-import { HikeService } from '../../services/hike.service';
-import { ModalService } from '../../services/modal.service';
-import { HikeEvent } from '../../interfaces/hike/HikeEvent';
+import { validDurationUnit } from '../../../_helpers/validators/durationUnit';
+import { HikeService } from '../../../services/hike.service';
+import { ModalService } from '../../../services/modal.service';
+import { HikeEvent } from '../../../interfaces/hike/HikeEvent';
 
 @Component({
   selector: 'app-hike-modal',
@@ -28,12 +28,12 @@ export class HikeModalComponent implements OnInit{
   hikeForm = new FormGroup({
     title: new FormControl('', [Validators.required, Validators.maxLength(30)]),
     distance: new FormControl('', [Validators.required, Validators.pattern("^(?:(?:[1-9]\\d{0,3}(?:\\.\\d{1,2})?)|(?:10000(?:\\.0{1,2})?))$")]),
-    positive: new FormControl('', [Validators.required, Validators.pattern("^(?:[1-9]\\d{0,4}|100000)$")]),
-    negative: new FormControl('', [Validators.required, Validators.pattern("^(?:[1-9]\\d{0,4}|100000)$")]),
+    positive: new FormControl('', [Validators.required, Validators.pattern("^(?:[1-9]\\d{0,5}|1000000)$")]),
+    negative: new FormControl('', [Validators.required, Validators.pattern("^(?:[1-9]\\d{0,5}|1000000)$")]),
     duration: new FormControl('', [Validators.required, Validators.pattern("^(?:[1-9]\\d{0,2}|1000)$")]),
     durationUnit: new FormControl('jours', [Validators.required, validDurationUnit()]),
     date : new FormControl('', [Validators.required]),
-    weightCorrection : new FormControl('')
+    weightCorrection : new FormControl('', [Validators.pattern("^-?(?:[1-9]\\d{0,3}|10000|0)$")])
   })
 
 
@@ -116,6 +116,9 @@ export class HikeModalComponent implements OnInit{
   get date(){
     return this.hikeForm.get('date');
   }
+  get weightCorrection(){
+    return this.hikeForm.get('weightCorrection');
+  }
 
   getErrorMessage(reason : string, length ?: number, format ?: string, unit ?: string) : string{
 
@@ -133,6 +136,9 @@ export class HikeModalComponent implements OnInit{
         break;
       case 'number':
         errorMessage = `Entrez une donnée valide. Maximum ${length} ${unit ? '('+unit+')' : ''}.`;
+        break;
+      case 'number_neg':
+        errorMessage = `Entrez une donnée valide. Entre -${length} et ${length} ${unit ? '('+unit+')' : ''}.`;
         break;
     }
 

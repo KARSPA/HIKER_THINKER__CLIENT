@@ -8,7 +8,7 @@ import { Category } from '../../interfaces/equipment/Category';
 import { Equipment } from '../../interfaces/equipment/Equipment';
 import { InventoryService } from '../../services/inventory.service';
 import { HikeInventoryComponent } from '../../components/hike-inventory/hike-inventory.component';
-import { HikeModalComponent } from '../../components/hike-modal/hike-modal.component';
+import { HikeModalComponent } from '../../components/modals/hike-modal/hike-modal.component';
 import { HikeEvent } from '../../interfaces/hike/HikeEvent';
 import { BasicLoaderComponent } from "../../_partials/basic-loader/basic-loader.component";
 import { Inventory } from '../../interfaces/Inventory';
@@ -116,5 +116,11 @@ export class HikeDetailsComponent implements OnInit{
           this.router.navigate(['/error404'], { state: { message: err.error.message } });
         }
       });
+    }
+
+
+    modifyInventory(event : any){
+      console.log("Évènement reçu : ", event)
+      // TODO : modifier inventaire actuel par celui reçu
     }
 }

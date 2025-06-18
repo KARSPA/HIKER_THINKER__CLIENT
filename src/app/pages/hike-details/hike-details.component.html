@@ -10,7 +10,7 @@
         <app-hike-inventory 
         [inventory]="inventory" 
         [hike]="hike"
-        (inventoryChange)="inventory = $event"
+        (inventoryChange)="modifyInventory($event)"
         />
     </div>
 }

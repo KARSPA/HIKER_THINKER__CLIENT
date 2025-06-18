@@ -1,10 +1,10 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { EquipmentEvent } from '../interfaces/equipment/EquipmentEvent';
-import { Category } from '../interfaces/equipment/Category';
-import { ModalService } from '../services/modal.service';
+import { EquipmentEvent } from '../../../interfaces/equipment/EquipmentEvent';
+import { Category } from '../../../interfaces/equipment/Category';
+import { ModalService } from '../../../services/modal.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Equipment } from '../interfaces/equipment/Equipment';
-import { ModifyEquipmentEvent } from '../interfaces/equipment/ModifyEquipmentEvent';
+import { Equipment } from '../../../interfaces/equipment/Equipment';
+import { ModifyEquipmentEvent } from '../../../interfaces/equipment/ModifyEquipmentEvent';
 
 @Component({
   selector: 'app-modify-equipment-modal',

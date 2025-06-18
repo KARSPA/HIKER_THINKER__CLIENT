@@ -11,21 +11,61 @@ import { HikesComponent } from './pages/hikes/hikes.component';
 import { HikeDetailsComponent } from './pages/hike-details/hike-details.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { blockingGuard } from './_helpers/guards/blocking.guard';
+import { environment } from '../environments/environment';
 
 export const routes: Routes = [
     {path: '', pathMatch: 'full', redirectTo: 'home'}, 
-    {path:'home', component: HomeComponent},
-    {path:'login', component: LoginComponent, canActivate: [authGuard], data: {requiresAuth : false}},
-    {path:'logout', component: LogoutComponent, canActivate: [authGuard], data: {requiresAuth : true}},
-    {path:'register', component: RegisterComponent, canActivate: [authGuard], data: {requiresAuth : false}},
-    {path:'error404', component: Error404Component},
-    {path:'inventory', component: InventoryComponent, canActivate: [authGuard], data: {requiresAuth : true}},
-    {path:'inventory/equipments/:equipmentId', component: EquipmentDetailsComponent, canActivate: [authGuard], data: {requiresAuth : true}},
-    {path:'hikes', component: HikesComponent, canActivate: [authGuard], data: {requiresAuth : true}},
-    {path:'hikes/:hikeId', component: HikeDetailsComponent, canActivate: [authGuard], data: {requiresAuth : true}},
-    {path:'profile', component: ProfileComponent, canActivate: [authGuard], data: {requiresAuth : true}},
-    // {path:'hikes/create', component: CreateHikeComponent, canActivate: [authGuard]},
-    {path:'models', component: HikesComponent, canActivate: [blockingGuard]},
-    // {path:'contact', component: ContactComponent},
+    {
+        path:'home',
+        component: HomeComponent,
+        title : `${environment.title} - Accueil`},
+    {
+        path:'login',
+        component: LoginComponent, canActivate: [authGuard], data: {requiresAuth : false},
+        title : `${environment.title} - Connexion`},
+    {
+        path:'logout',
+        component: LogoutComponent, canActivate: [authGuard], data: {requiresAuth : true},
+        title : `${environment.title}`},
+    {
+        path:'register',
+        component: RegisterComponent, canActivate: [authGuard], data: {requiresAuth : false},
+        title : `${environment.title} - Inscription`},
+    {
+        path:'error404',
+        component: Error404Component,
+        title : `${environment.title} - Erreur`},
+    {
+        path:'inventory',
+        component: InventoryComponent, canActivate: [authGuard], data: {requiresAuth : true},
+        title : `${environment.title} - Inventaire`},
+    {
+        path:'inventory/equipments/:equipmentId',
+        component: EquipmentDetailsComponent, canActivate: [authGuard], data: {requiresAuth : true},
+        title : `${environment.title} - Équipement`},
+    {
+        path:'hikes',
+        component: HikesComponent, canActivate: [authGuard], data: {requiresAuth : true},
+        title : `${environment.title} - Randonnées`},
+    {
+        path:'hikes/:hikeId',
+        component: HikeDetailsComponent, canActivate: [authGuard], data: {requiresAuth : true},
+        title : `${environment.title} - Randonnées`},
+    {
+        path:'profile',
+        component: ProfileComponent, canActivate: [authGuard], data: {requiresAuth : true},
+        title : `${environment.title} - Profil`},
+    
+     // {path:'hikes/create',
+//      component: CreateHikeComponent, canActivate: [authGuard],
+        //  title : `${environment.title}`},
+    {
+        path:'models',
+        component: HikesComponent, canActivate: [blockingGuard],
+        title : `${environment.title} - Modèles`},
+    
+         // {path:'contact',
+    //  component: ContactComponent,
+    //  title : `${environment.title}`},
 
 ];

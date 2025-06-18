@@ -1,9 +1,9 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { Equipment } from '../../interfaces/equipment/Equipment';
-import { Category } from '../../interfaces/equipment/Category';
-import { InventoryService } from '../../services/inventory.service';
-import { RefEquipment } from '../../interfaces/equipment/RefEquipment';
-import { Inventory } from '../../interfaces/Inventory';
+import { Equipment } from '../../../interfaces/equipment/Equipment';
+import { Category } from '../../../interfaces/equipment/Category';
+import { InventoryService } from '../../../services/inventory.service';
+import { RefEquipment } from '../../../interfaces/equipment/RefEquipment';
+import { Inventory } from '../../../interfaces/Inventory';
 import { RouterLink } from '@angular/router';
 
 @Component({

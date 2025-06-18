@@ -1,9 +1,9 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { Equipment } from '../../interfaces/equipment/Equipment';
-import { EquipmentService } from '../../services/equipment.service';
-import { InventoryService } from '../../services/inventory.service';
-import { ModalService } from '../../services/modal.service';
-import { EquipmentEvent } from '../../interfaces/equipment/EquipmentEvent';
+import { Equipment } from '../../../interfaces/equipment/Equipment';
+import { EquipmentService } from '../../../services/equipment.service';
+import { InventoryService } from '../../../services/inventory.service';
+import { ModalService } from '../../../services/modal.service';
+import { EquipmentEvent } from '../../../interfaces/equipment/EquipmentEvent';
 
 @Component({
   selector: 'app-remove-equipment-confirm-modal',

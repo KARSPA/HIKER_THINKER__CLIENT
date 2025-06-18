@@ -7,14 +7,14 @@ import { Category } from '../../interfaces/equipment/Category';
 import { Equipment } from '../../interfaces/equipment/Equipment';
 import { ModalService } from '../../services/modal.service';
 import { CategoryModalComponent } from '../../components/modals/category-modal/category-modal.component';
-import { InventoryEquipmentModalComponent } from '../../components/inventory-equipment-modal/inventory-equipment-modal.component';
+import { InventoryEquipmentModalComponent } from '../../components/modals/inventory-equipment-modal/inventory-equipment-modal.component';
 import { ClickStopPropagationDirective } from '../../_helpers/directives/click-stop-propagation.directive';
 import { CategoryEvent } from '../../interfaces/equipment/CategoryEvent';
 import { CategoryService } from '../../services/category.service';
 import { EquipmentService } from '../../services/equipment.service';
 import { EquipmentEvent } from '../../interfaces/equipment/EquipmentEvent';
 import { AddEquipment } from '../../interfaces/equipment/AddEquipment';
-import { RemoveEquipmentConfirmModalComponent } from '../../components/remove-equipment-confirm-modal/remove-equipment-confirm-modal.component';
+import { RemoveEquipmentConfirmModalComponent } from '../../components/modals/remove-equipment-confirm-modal/remove-equipment-confirm-modal.component';
 import { filter } from 'rxjs/internal/operators/filter';
 import { BasicLoaderComponent } from "../../_partials/basic-loader/basic-loader.component";
 import { Subject, takeUntil } from 'rxjs';
@@ -84,6 +84,7 @@ export class InventoryComponent implements OnInit, OnDestroy{
     this.inventoryService.equipmentRemove$.pipe(takeUntil(this.destroy$)).subscribe((equipmentId)=>{
       const equipmentIndex = this.inventory.equipments.findIndex(eq => eq.id === equipmentId);
       this.inventory.equipments.splice(equipmentIndex, 1)
+      console.log("ACTIVÉ dans INVENTAIRE GLOBAL !")
     })
 
   }
