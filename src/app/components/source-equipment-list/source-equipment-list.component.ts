@@ -1,21 +1,29 @@
 import { httpResource } from '@angular/common/http';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, Input, OnInit, Output, output, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { ResponseModel } from '../../interfaces/ResponseModel';
-import { SourceEquipment } from '../../interfaces/equipment/sources/SourceEquipment';
 import { SourceEquipmentCardComponent } from "../source-equipment-card/source-equipment-card.component";
 import { ReactiveFormsModule } from '@angular/forms';
 import { ListSourceEquipmentResponse } from '../../interfaces/equipment/sources/ListSourceEquipmentResponse';
 import { SourceEquipmentStore } from '../../services/stores/source-equipment-store';
+import { EquipmentCardComponent } from "../equipment-card/equipment-card.component";
+import { Equipment } from '../../interfaces/equipment/Equipment';
+import { SourceEquipment } from '../../interfaces/equipment/sources/SourceEquipment';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-source-equipment-list',
-  imports: [SourceEquipmentCardComponent, ReactiveFormsModule],
+  imports: [SourceEquipmentCardComponent, ReactiveFormsModule, RouterLink],
   templateUrl: './source-equipment-list.component.html',
 })
 export class SourceEquipmentListComponent {
-
+  
   readonly store = inject(SourceEquipmentStore)
+
+  @Input() mode : "source"|"inventory" = "source";
+  @Input() alreadyInEquipments : Equipment[] = [];
+
+  choosedEquipment = output<SourceEquipment|Equipment>()
 
   readonly pageSize = 20;
 
@@ -32,7 +40,9 @@ export class SourceEquipmentListComponent {
 
 
   sourceEquipmentResource = httpResource<ResponseModel<ListSourceEquipmentResponse>>(()=>({
-    url : `${environment.apiUrl}/equipments`,
+    url : this.mode === 'source'
+    ? `${environment.apiUrl}/equipments`
+    : `${environment.apiUrl}/inventory`,
     params : {
       name : this.nameFilter(),
       brand : this.brandFilter(),
@@ -53,12 +63,27 @@ export class SourceEquipmentListComponent {
     return this.sourceEquipmentResource.value()?.data.equipments ?? [];
   }
 
+  get choosableEquipments(){
+    if(this.mode === "inventory"){
+      return this.equipments.filter(eq => {
+        return !this.alreadyInEquipments.some(existingEq => existingEq.id === eq.id) // On ne garde que ceux qui ne sont pas dans le tableaux des équipements déja présents
+      });
+    }else{
+      return this.equipments
+    }
+  }
+
   get resultsCount(){
     return this.sourceEquipmentResource.value()?.data.totalCount ?? 0;
   }
 
-  chooseEquipment(equipment : SourceEquipment){
-    this.store.select(equipment)
+  chooseEquipment(equipment : SourceEquipment|Equipment){
+    if('url' in equipment){
+      this.store.select(equipment)
+    }
+    else{
+      this.choosedEquipment.emit(equipment)
+    }
   }
 
   changeInputValueAndResetPageNumber(signalName : "brand"|"name"|"minWeight"|"maxWeight", event : Event){

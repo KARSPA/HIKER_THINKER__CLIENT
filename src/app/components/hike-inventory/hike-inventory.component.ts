@@ -45,8 +45,6 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
 
-    // console.log("Dans composant inventaire : ",this.inventory)
-
       //Mettre le mode du service à 'hike'
       this.equipmentService.setMode('hike', this.hike.id ?? '');
       this.categoryService.setMode('hike', this.hike.id ?? '');
@@ -345,6 +343,8 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
       categories : [...this.inventory.categories],
       equipments : [...this.inventory.equipments]
     };
+
+    // console.log('INVENTAIRE depuis rando : ', this.inventory)
     this.inventoryChange.emit(this.inventory)
   }
 

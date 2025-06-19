@@ -21,7 +21,6 @@ import { Inventory } from '../../interfaces/Inventory';
 export class HikeDetailsComponent implements OnInit{
 
     private hikeService : HikeService = inject(HikeService);
-    private inventoryService : InventoryService = inject(InventoryService);
     private modalService : ModalService = inject(ModalService);
     private router : Router = inject(Router);
     private route : ActivatedRoute = inject(ActivatedRoute);
@@ -119,8 +118,8 @@ export class HikeDetailsComponent implements OnInit{
     }
 
 
-    modifyInventory(event : any){
-      console.log("Évènement reçu : ", event)
-      // TODO : modifier inventaire actuel par celui reçu
+    modifyInventory(event : Inventory){
+      // console.log("Évènement reçu : ", event)
+      this.inventory = event
     }
 }

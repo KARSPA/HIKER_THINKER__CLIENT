@@ -4,3 +4,4 @@ export interface Equipment extends AddEquipment{
     id: string;
     categoryId: string;
 }
+

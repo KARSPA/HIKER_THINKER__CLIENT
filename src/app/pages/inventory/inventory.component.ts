@@ -84,7 +84,6 @@ export class InventoryComponent implements OnInit, OnDestroy{
     this.inventoryService.equipmentRemove$.pipe(takeUntil(this.destroy$)).subscribe((equipmentId)=>{
       const equipmentIndex = this.inventory.equipments.findIndex(eq => eq.id === equipmentId);
       this.inventory.equipments.splice(equipmentIndex, 1)
-      console.log("ACTIVÉ dans INVENTAIRE GLOBAL !")
     })
 
   }
