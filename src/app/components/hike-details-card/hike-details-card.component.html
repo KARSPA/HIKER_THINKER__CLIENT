@@ -8,7 +8,7 @@
         <img src="assets/modifyIcon.svg" alt="" class="h-5 aspect-square rounded-sm cursor-pointer outline-1 outline-stone-500 hover:opacity-60 hover:outline-amber-500 transition-all duration-300 ease-out">
     </button>
 
-    <div class="infos-container grid grid-cols-[4fr_1fr] gap-10">
+    <div class="infos-container grid grid-cols-[8fr_2fr] gap-10">
 
         <div class="flex flex-col gap-2" >
 
@@ -16,7 +16,7 @@
                 <p class="font-semibold text-lg">{{hike.title}}</p>
             </div>
 
-            <div class="flex justify-between items-center gap-10">
+            <div class="flex justify-between items-center gap-6">
 
                 <div class="flex gap-2">
                     <img src="assets/hike_icons/path_icon.svg" alt="" class="h-6 aspect-square">
@@ -46,7 +46,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="min-w-[120px]">
                     <div class="flex gap-2">
                         <img src="assets/hike_icons/weight-bis_icon.png" alt="" class="h-6 aspect-square">
                         <p>{{((hike.totalWeight) + (hike.weightCorrection)) / 1000}} kg</p>

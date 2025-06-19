@@ -24,19 +24,16 @@ export class AddEquipmentModalComponent implements OnInit{
 
   @Output() result = new EventEmitter<RefEquipment>();
 
-  
-  filteredEquipments : Equipment[] = [];
 
   private inventoryService : InventoryService = inject(InventoryService);
 
 
   ngOnInit(): void {
-  
       // Abonnement aux changements d'équipements pour actualiser la liste (lors de l'ajout de l'un d'eux par exemple)
       this.inventoryService.equipmentChange$.subscribe((newEquip) => {
-        this.filteredEquipments = this.filteredEquipments.filter(
-          eq => eq.id !== newEquip.id
-        );
+        if(!this.alreadyInEquipments.some(eq => eq.id === newEquip.id)){
+          this.alreadyInEquipments.push(newEquip)
+        }
       });
   }
 
@@ -49,7 +46,4 @@ export class AddEquipmentModalComponent implements OnInit{
 
     this.result.emit(payload)
   }
-
-
-
 }

@@ -71,7 +71,7 @@
 
 <div class="request-infos-navigation flex justify-between w-full min-w-0 my-2">
 
-  <p>{{resultsCount}} résultat{{[0,1].includes(resultsCount) ? '' : 's'}}</p>
+  <p>{{resultsCount - alreadyInEquipments.length}} résultat{{[0,1].includes(resultsCount) ? '' : 's'}}</p>
 
   <div class="order-buttons flex gap-3">
     <div class="order-by flex gap-1">
@@ -126,12 +126,12 @@
   </div>
 </div>
 
-<div class="grid grid-cols-3 gap-2 h-[460px] overflow-y-scroll rounded-md py-4 px-2">
+<div class="grid {{this.mode === 'inventory' ? 'grid-cols-4' : 'grid-cols-3'}} gap-2 h-[460px] overflow-y-scroll rounded-md py-4 px-2">
     @for(equipment of this.choosableEquipments; track equipment.id){
-      <app-source-equipment-card [equipment]="equipment" (choosedEquipment)="chooseEquipment($event)"/>
+      <app-source-equipment-card [equipment]="equipment" (choosedEquipment)="chooseEquipment($event)" [mode]="this.mode"/>
     }
     @if(this.mode === "inventory"){
-        <div class="p-2 rounded-md outline-1 outline-stone-300 shadow-sm shadow-stone-400 h-full max-h-[270px] flex flex-col justify-between">
+        <div class="p-2 rounded-md outline-1 outline-stone-300 shadow-sm shadow-stone-400 h-[250px] flex flex-col justify-between">
             <p class="font-semibold text-sm">Vous ne trouvez pas l'équipement souhaité ?</p>
             <p class="text-xs">Il n'est peut être pas dans votre inventaire. <br> Ajoutez-le pour le retrouver dans cette liste.</p>
             <a [routerLink]="['/inventory']" class="text-center px-2 py-1 rounded-sm bg-amber-800 text-white mx-auto w-[150px] cursor-pointer hover:opacity-80 shadow-md shadow-stone-500">

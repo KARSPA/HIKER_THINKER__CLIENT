@@ -153,8 +153,6 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
   
     const requestType = category?.id ? 'Modification':'Ajout';
 
-    // console.log('depuis page : ', category)
-
     this.modalService.openModal<CategoryModalComponent, CategoryEvent>({
       component: CategoryModalComponent,
       data: {
@@ -183,7 +181,6 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
       }
     })
     .subscribe((refEquipment)=>{
-      // console.log(refEquipment)
       this.equipmentService.addHikeEquipment(refEquipment).subscribe({
         next:(res)=>{
           this.inventoryService.notifyEquipmentChange(res.data)
@@ -200,7 +197,6 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
 
     this.equipmentService.removeHikeEquipment(equipment.id).subscribe({
       next:(res)=>{
-        // console.log(res)
         this.inventoryService.notifyEquipmentRemove(res.data)
       }
     })
@@ -344,7 +340,6 @@ export class HikeInventoryComponent implements OnInit, OnDestroy{
       equipments : [...this.inventory.equipments]
     };
 
-    // console.log('INVENTAIRE depuis rando : ', this.inventory)
     this.inventoryChange.emit(this.inventory)
   }
 

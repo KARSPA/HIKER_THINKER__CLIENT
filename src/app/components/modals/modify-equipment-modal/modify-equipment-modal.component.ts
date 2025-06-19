@@ -29,8 +29,6 @@ export class ModifyEquipmentModalComponent {
         brand : this.equipment.brand,
         description : this.equipment.description
       })
-
-      // console.log(this.equipment)
   }
 
   equipmentForm = new FormGroup({

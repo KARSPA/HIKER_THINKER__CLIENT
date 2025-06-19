@@ -42,7 +42,7 @@ export class SourceEquipmentListComponent {
   sourceEquipmentResource = httpResource<ResponseModel<ListSourceEquipmentResponse>>(()=>({
     url : this.mode === 'source'
     ? `${environment.apiUrl}/equipments`
-    : `${environment.apiUrl}/inventory`,
+    : `${environment.apiUrl}/inventory/filtered`,
     params : {
       name : this.nameFilter(),
       brand : this.brandFilter(),
@@ -82,6 +82,7 @@ export class SourceEquipmentListComponent {
       this.store.select(equipment)
     }
     else{
+      // this.alreadyInEquipments.push(equipment) // PROBLÈME DOUBLEMENT D'ÉQUIPEMENT CAR MODIF PAR RÉFÉRENCE !!!
       this.choosedEquipment.emit(equipment)
     }
   }

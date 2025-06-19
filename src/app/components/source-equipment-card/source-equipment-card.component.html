@@ -1,6 +1,6 @@
 
 
-<div class="bg-[#91ba59] h-full max-h-[270px] rounded-md bg-clip-padding backdrop-filter backdrop-blur-xl backdrop-opacity-50 border border-gray-100 px-3 pt-2 pb-3
+<div class="{{this.mode === 'inventory' ? 'bg-[#DEB887]' : 'bg-[#91ba59]'}} h-[250px] rounded-md bg-clip-padding backdrop-filter backdrop-blur-xl backdrop-opacity-50 border border-gray-100 px-3 pt-2 pb-3
 flex flex-col justify-between gap-4">
 
     <div class="flex flex-col justify-between items-start gap-1 flex-grow">
@@ -24,7 +24,7 @@ flex flex-col justify-between gap-4">
         <button type="button"
             (click)="emitChoosedEquipmentEvent()"
             class="text-center px-2 py-1 rounded-sm bg-amber-500 text-white min-w-[100px] cursor-pointer hover:opacity-90 shadow-md shadow-stone-500">
-        Choisir
+        {{this.mode === 'inventory' ?  'Ajouter' : 'Choisir'}}
         </button>
     </div>
 </div>

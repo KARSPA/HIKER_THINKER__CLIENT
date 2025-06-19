@@ -119,7 +119,6 @@ export class HikeDetailsComponent implements OnInit{
 
 
     modifyInventory(event : Inventory){
-      // console.log("Évènement reçu : ", event)
       this.inventory = event
     }
 }
