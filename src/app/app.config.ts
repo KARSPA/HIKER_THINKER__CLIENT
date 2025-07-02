@@ -12,7 +12,7 @@ import localeFr from '@angular/common/locales/fr';
 
 
 
-function initializeApp(authService : AuthService, router : Router) {
+export function initializeApp(authService : AuthService, router : Router) {
     const publicRoutes = ['/', '/home', '/register'];
     const currentPath = window.location.pathname;
     
