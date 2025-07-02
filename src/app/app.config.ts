@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, ApplicationConfig, LOCALE_ID, provideZoneChangeDetection } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, inject, LOCALE_ID, provideAppInitializer, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, Router, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
@@ -13,7 +13,6 @@ import localeFr from '@angular/common/locales/fr';
 
 
 function initializeApp(authService : AuthService, router : Router) {
-  return () => {
     const publicRoutes = ['/', '/home', '/register'];
     const currentPath = window.location.pathname;
     
@@ -29,19 +28,13 @@ function initializeApp(authService : AuthService, router : Router) {
     return firstValueFrom(authService.verifyConnected())
       .then(response => authService.handleLoginSuccess(response.data))
       .catch(() => authService.logout());
-  };
 }
 
 registerLocaleData(localeFr);
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    {
-        provide: APP_INITIALIZER,
-        useFactory: initializeApp,
-        deps: [AuthService, Router],
-        multi: true
-    },
+    provideAppInitializer(()=>initializeApp(inject(AuthService), inject(Router))),
     provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withComponentInputBinding()),
